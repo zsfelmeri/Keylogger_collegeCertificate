@@ -1,0 +1,14 @@
+*/__pycache__/*
+src/screenshot*
+logs/*
+*.exe
+*.iso
+*.pif
+*~*
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.gz
+*.toc
