@@ -1,17 +1,21 @@
-\documentclass{article}
+\documentclass[a4paper, 11pt]{article}
 
 \title{Keylogger}
 \author{Felmeri Zsolt}
 \date{}
 
 \usepackage{graphicx}
-\usepackage[left=4cm, right=2cm, top=3cm]{geometry}
+\usepackage{float}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage[left=4cm, right=3cm, top=3cm]{geometry}
 
 
 \begin{document} 
 % title page (ro)
 \begin{titlepage}
-\rule[10pt]{\textwidth}{1pt}
+\rule[20pt]{\textwidth}{1pt}
 \begin{centering}
 \vspace{4pt}
 {\fontsize{18pt}{1} \textbf{UNIVERSITATEA SAPIENTIA DIN CLUJ-NAPOCA}}\\ \vspace{4pt}
@@ -43,40 +47,231 @@ SPECIALIZAREA CALCULATOARE}}\\
 \vspace{5em}
 \centering
 {\fontsize{28pt}{1} \textbf{2020}}
+\end{titlepage}
 
-%\begin{flushleft}
-%{\fontsize{16pt}{1} \textbf{Coordonator ştiințific:}}\\
-%\hspace{4pt}
-%{\fontsize{14pt}{1} \textbf{Témavezető tanár neve}}
-%\end{flushleft}
+% Declaratie tip a.
+\begin{titlepage}
+\rule[10pt]{\textwidth}{1pt}
+\begin{flushright}
+{\fontsize{12pt}{1} \textbf{Model tip a.}}
+\end{flushright}
 
-%\begin{flushright}
-%{\fontsize{16pt}{1} \textbf{Coordonator ştiințific:}}\\
-%\hspace{4pt}
-%{\fontsize{14pt}{1} \textbf{Témavezető tanár neve}}
-%\end{flushright}
+\vspace{7em}
+\begin{center}
+{\fontsize{12pt}{1} \textbf{Declaraţie}}\\
+\end{center}
+
+\vspace{4em}
+\doublespacing
+\justify{\large Subsemnata/ul ............................................................., absolvent(ă) al/a \\specializării …………………………, promoţia………… cunoscând prevederile Legii Educaţiei Naţionale 1/2011 şi a Codului de etică şi deontologie profesională a Universităţii Sapientia cu privire la furt intelectual declar pe propria răspundere că prezenta lucrare de licenţă/proiect de diplomă/disertaţie se bazează pe activitatea personală, cercetarea/proiectarea este efectuată de mine, informaţiile şi datele preluate din literatura de specialitate sunt citate în mod corespunzător.}
+
+\vspace{15em}
+\begin{flushleft}
+{\large Localitatea,\\
+Data:}
+\end{flushleft}
+
+\begin{flushright}
+{\large Absolvent\\
+Semnătura…………………}
+\end{flushright}
 
 \end{titlepage}
-%\maketitle
+
+% Declaratie tip b.
+\begin{titlepage}
+\rule[10pt]{\textwidth}{1pt}
+\begin{flushright}
+{\fontsize{12pt}{1} \textbf{Model tip b.}}
+\end{flushright}
+
+\vspace{7em}
+\begin{center}
+{\fontsize{12pt}{1} \textbf{Declaraţie}}\\
+\end{center}
+
+\vspace{4em}
+\doublespacing
+\justify{\large Subsemnata/Subsemnatul ..........................................., funcţia………………, titlul ştiinţific………………… declar pe propria răspundere că\\ ........................................., absolvent al specializării ............................ a întocmit prezenta lucrare sub îndrumarea mea.
+\par În urma verificării formei finale constat că lucrarea de licenţă/proiectul de\\ diplomă/disertaţia corespunde cerințelor de formă şi conținut aprobate de Consiliul Facultăţii de Științe Tehnice și Umaniste din Târgu Mureș în baza reglementărilor Universităţii Sapientia. Luând în considerare şi Raportul generat din aplicaţia antiplagiat ''Turnitin'' consider că sunt îndeplinite cerințele referitoare la originalitatea lucrării impuse de Legea educației naționale nr. 1/2011 şi de Codul de etică şi deontologie profesională a Universităţii Sapientia, şi ca atare sunt de acord cu prezentarea şi susținerea lucrării în fața comisiei de examen de licență/diplomă/disertaţie.}
+
+\vspace{5em}
+\begin{flushleft}
+{\large Localitatea,\\
+Data:}
+\end{flushleft}
+
+\begin{flushright}
+{\large Semnătura îndrumătorului}
+\end{flushright}
+
+\end{titlepage}
+
+% Turnitin similarity report
+\begin{titlepage}
+\rule[10pt]{\textwidth}{1pt}
+\end{titlepage}
 
 % table of contents
 \rule[10pt]{\textwidth}{1pt}
 \renewcommand{\contentsname}{Tartalomjegyzék}
 \tableofcontents
 \thispagestyle{empty}
-
-
 \cleardoublepage
-\setcounter{page}{1}
 
-% content section
+% table of figures
+\renewcommand{\listfigurename}{Ábrák jegyzéke}
+\listoffigures
+\thispagestyle{empty}
+\cleardoublepage
+
+% table of tables
+\renewcommand{\listtablename}{Táblázatok jegyzéke}
+\listoftables
+\thispagestyle{empty}
+\cleardoublepage
+
+% content section (body)
+\setcounter{page}{1}
+\setlength{\parindent}{0.5cm}
 \section{Bevezető}\label{sec:intro}
+\subsection{Téma}
+Témaként a keylogger-t, vagy teljes nevén keystrokelogger-t, dolgoztam ki, amely a számítógéphez csatlakoztatott billentyűzet naplózásával foglalkozik egy ``hacker'' szemszögéből nézve a dolgokat. A hackerek vagy támadók arra törekednek, hogy bizalmas információt lopjanak az áldozatuktól, mint például bejelentkezési adatok, bankkártya adatok stb.
+
+\subsection{Célkitűzés}
+Célom az volt, hogy egy támadó szerepkörébe képzeljem magam, ez által jobban megismerkedni egy támadó gondolatmenetével, hogy a későbbiekben fel tudjam használni ezt a tudást nagyobb rendszerek védelme érdekében.
 
 \section{Elméleti megalapozás és bibliográfiai tanulmány (a téma pontos körülhatárolása érdekében végzett dokumentálódás)}\label{sec:bibl}
 
 \section{A rendszer specifikációi és architektúrája (szoftverek és hardverek esetében)}\label{sec:specs_and_arch}
 
 \section{A részletes tervezés}\label{sec:plan}
+A projekt három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/class\ diagram}
+\caption{osztály diagram}
+\label{fig:classdia}
+\end{figure}
+\subsection{Szerver}\label{subsec:server}
+Előszőr, hogy működjön a gyakori operációs rendszereken (Windows, Linux, MacOS) meg kell nézni, hogy melyiken futtatjuk. Ezt a platform modul system függvény segítségével tudjuk megnézni:
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture}
+\caption{rendszernév}
+\label{fig:sysname}
+\end{figure}
+
+\noindent Ha nem a három operációs rendszer közé tartozik, akkor kilép a program. Itt a rendszer neve meghatározza a $temp\_path$ változót, ami a későbbiekben arra lesz használva, hogy bizonyos adatokat elmentsen. A $temp\_path$ változó a temporális mappa elérhetőségét tartalmazza. Ez linux és darwin (MacOS) rendszereken megegyező, míg windows rendszeren különbözik.
+
+Ahogyan a Figure \ref{fig:classdia}-en látható, a szerver oldalon három osztály talalható (Server, Keylogger, MenuHandler) és ehez még hozzácsatolódik a GUI rész is.
+
+\subsubsection{Server osztály}\label{subsubsec:serverclass}
+A Server osztály fogja hallgat egy bizonyos portot, és várja, hogy a klienssel kapcsolatot létesítsen. Az osztálynak három attribútumja van: egy ip cím, port és maga a szerver, amely megmondja, hogy milyen kapcsolatot hoz létre, ebben az esetben TCP kapcsolat. A kapcsolat létesítésében a $connect$ függvény játszik szerepet.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture0}
+\caption{ctor Server}
+\label{fig:ctorserver}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture1}
+\caption{connect}
+\label{fig:connect}
+\end{figure}
+
+\subsubsection{Keylogger osztály}\label{subsubsec:keyloggerclass}
+A keylogger osztályt a $Thread$ osztályból van származtatva, mert egy külön szálon kell, hogy fusson a GUI miatt. A GUI csak a fő szálon van engedélyezve. Ennek az osztálynak öt attribútumja van: a létrejött kapcsolat a szerver és a kliens között, a GUI, gmail cím, a hozzá tartozó jelszó és a gmail server api címe. A $connection$ és a $gui$ paraméterek egy-egy osztályt várnak, ezért kapcsolatot és a GUI-t ellenőrizni kell, hogy jó osztály került-e átadásra.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture2}
+\caption{ctor Keylogger}
+\label{fig:ctorkeylogger}
+\end{figure}
+
+\justify{A $Keylogger$, a fő osztály, amelyre épül a program, kezeli a billentyűzet gombjai lenyomását. Amíg a TCP kapcsolat él, addig azon keresztül küldi a lenyomott karaktereket, amit elment a log.csv állományba a szerver oldalon, hogy a későbbiekben újra megtekinthető legyen. A log.csv állomány formátuma lenyomott billentyű ideje, karakter. Ahol az idő ``nap/hónap/év $|$ óra:perc:másodperc'' formátumu. Fentakadhat egy olyan probléma. hogy a kapcsolat valami oknál fogva megszakad, ekkor e-mail-en keresztül küldi át az adatokat. Erre kell a Figure \ref{fig:sysname}-ön látható $temp\_path$ változó, hogy a lenyomott billentyűket eltudja menteni a kliens számítógépén és azt e-mail-en keresztül elküldje. Erre szolgál a \pageref{subsubsec:keyloggerclass}. oldalon a 4.1.2 alatt megemlített gmail cím és a hozzá kapcsolódó jelszó.}
+
+Itt megkellett tervezni egy protokollt, ami a kommunikáció alapja. A protokoll a következő képpen néz ki:
+\begin{table}[H]
+\centering
+\label{tab:protocol}
+\caption{protokoll}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{type} & \textbf{time} & \textbf{information} \\
+\hline
+4-5 & 11 & ? \\
+\hline
+\end{tabular}
+\end{table}
+A $type$ mező megmondja, hogy milyen típusu adat fog jönni az $information$ mezőben. Ez 4 vagy 5 bájt lehet. Előfodulható lehetőségek:
+\begin{itemize}
+\item char - egy karakter
+\item image - egy képernyőkép bájtsorozata
+\item wcpic - egy webkamera kép bájtsorozata
+\item audio - egy audio állomány bájtsorozata
+\end{itemize}
+A $time$ mezőben egy időbéjeg található, amely megmondja, hogy a csomag mikor érkezett. Ez 11 bájt lehet. Formátuma: ``nap\_óra\_perc\_másodperc''.\\
+Az $information$ mezőben vannak azok az adatok amelyeket a szerver fel kell dolgozzon.
+
+A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture3}
+\caption{kép}
+\label{fig:imgprocess}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture4}
+\caption{karakter}
+\label{fig:charprocess}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture5}
+\caption{webkamera}
+\label{fig:webcamprocess}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture6}
+\caption{audio}
+\label{fig:audioprocess}
+\end{figure}
+
+Ha a TCP kapcsolat felbomlik, akkor e-mail-en keresztül lesz továbbítva az adat csatolmányban. Ahoz, hogy írni és olvasni is tudjunk e-mail-t python kódból, a google fióknál be kell legyen kapcsolva a ``Less secure app access''. A gmail fióknál pedig a következőt kell engedélyezni: Settings $\rightarrow$ See all settings $\rightarrow$ Forwarding and POP/IMAP $\rightarrow$ IMAP access $\rightarrow$ Enable IMAP.
+
+Előszőr csatlakozni kell a megadott gmail címhez. Ez után megnézzük, hogy jött-e olyan e-mail, amit még nem láttunk, ha igen, akkor ellenőrizzük, hogy a saját gmail címünkről jott-e. Ha minden feltétel teljesül, akkor megnyitjuk az e-mail-t és letöltjük a csatolmányokat. Itt két csatolmány érkezik: egy képernyőkép és egy log állomány, amelyben a lenyomott billentyűk vannak naplózva. Ezt a folyamatot ismételjük addig, amíg nincsen hiba. Hiba alatt a következőket lehet érteni: nem engedi a csatlakozást a gmail api szerver, nem tudja megnyitni az elküldött csatolmányokat.
+
+A $get\_attachments$ függvény segítségével tölti le a csatolmányokat, amelynek egy paramétere van: az üzenet. Az üzenet tartalmazza a teljes üzenetet bájtokban, tehát, hogy kiől jött az üzenet, kinek küldték, a téma, maga az üzenet törzse, a csatolmányok. A függvény ezen az üzeneten megy végig és ha talal csatolmányt azt letölti, más szóval megnyit egy állományt binárisan és beleírja a tartalmát.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture7}
+\caption{get\_attachments}
+\label{fig:getatt}
+\end{figure}
+
+A harmadik osztály a $MenuHandler$, amely segítségével más feladatot is adhatunk a kliensnek a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás. Ennek az osztálynak egy attribútumja van: a kapcsolat. Ez a kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
+\begin{itemize}
+\item 1) Take screenshot - képernyőkép
+\item 2) Webcam picture - webkamerakép
+\item 3) Record audio - audio felvétel
+\item 4) Exit - bezárja a TCP kapcsolatot
+\end{itemize}
+Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy üzenetet ír ki: ``Wrong option!'', vagy ha csak lenyomjuk az ENTER karaktert, akkor egyszerűen új sórba ugrik.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture8}
+\caption{ctor MenuHandler}
+\label{fig:ctormenu}
+\end{figure}
+
+\subsection{Kliens}\label{subsec:client}
+
+\subsection{GUI}\label{subsec:gui}
 
 \section{A rendszer felhasználása (szoftverek és hardverek esetében)}\label{sec:useage}
 
