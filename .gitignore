@@ -12,3 +12,6 @@ logs/*
 *.snm
 *.gz
 *.toc
+*.lof
+*.lot
+images/Capture*
