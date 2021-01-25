@@ -37,7 +37,7 @@ def get_system_information(system_name):
 '''
 Gets current time
 
-@return: time in dd/mm/yyyy | (HH:MM:SS) format
+@return: time in dd/mm/yyyy | HH:MM:SS format
 '''
 def get_time():
 	date_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
@@ -56,7 +56,8 @@ def write_file(filename, data):
 
 
 '''
-Takes screenshot which is saved into Temp folder on Windows systems
+Takes screenshot which is saved into Temp folder on Windows systems or
+tmp folder on linux/darwin systems
 
 @save_path: path where to save the screenshot
 @return: True if could have taken the screenshot otherwise False
