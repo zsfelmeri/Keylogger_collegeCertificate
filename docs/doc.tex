@@ -167,7 +167,7 @@ Előszőr, hogy működjön a gyakori operációs rendszereken (Windows, Linux, 
 Ahogyan a Figure \ref{fig:classdia}-en látható, a szerver oldalon három osztály talalható (Server, Keylogger, MenuHandler) és ehez még hozzácsatolódik a GUI rész is.
 
 \subsubsection{Server osztály}\label{subsubsec:serverclass}
-A Server osztály fogja hallgat egy bizonyos portot, és várja, hogy a klienssel kapcsolatot létesítsen. Az osztálynak három attribútumja van: egy ip cím, port és maga a szerver, amely megmondja, hogy milyen kapcsolatot hoz létre, ebben az esetben TCP kapcsolat. A kapcsolat létesítésében a $connect$ függvény játszik szerepet.
+A Server osztály fogja hallgat egy bizonyos portot, és várja, hogy a klienssel kapcsolatot létesítsen. Az osztálynak három attribútumja van: egy ip cím, port és maga a szerver, amely megmondja, hogy milyen kapcsolatot hoz létre, ebben az esetben TCP kapcsolat. Az ip címnek egy üres karakterláncot kell megadni példányosításkor. A kapcsolat létesítésében a $connect$ függvény játszik szerepet.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture0}
@@ -178,7 +178,7 @@ A Server osztály fogja hallgat egy bizonyos portot, és várja, hogy a kliensse
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture1}
-\caption{connect}
+\caption{connect Server}
 \label{fig:connect}
 \end{figure}
 
@@ -270,6 +270,145 @@ Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy
 \end{figure}
 
 \subsection{Kliens}\label{subsec:client}
+A kliensnél nagyjából ugyan az a felállítás, mint a szerver oldalon. Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva, lásd Figure \ref{fig:sysname}. Ez után létre van hozva a ``Client'' osztály, amelynek négy attribútumja van: ip cím, port, a kliens és a gép ip címje. Példányosításkor a szerver ip címét kell megadni. A kliens attribútum megmondja, hogy milyen kapcsolatot hozunk létre, ebben az esetben TCP, mert a szerver is TCP.
+\subsubsection{Client osztály}\label{subsubsec:clinetclass}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture9}
+\caption{ctor Client}
+\label{ctorclient}
+\end{figure}
+A kapcsolat létesítésében a $connect$ függvény játszik szerepet. A $socket$ modul $gethostname$ függvényét alkalmazva megkapjuk a gép ip címjét, amely csak egy lokális ip cím. A darwin rendszereknél hozzá kell fűzni a ``.local'' karakterláncot, másképp egy exception lép fel.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture10}
+\caption{connect Clinet}
+\label{fig:connectclient}
+\end{figure}
+
+\subsubsection{KeyLoggerClient osztály}\label{subsubsec:keyloggerclientclass}
+Ez az osztály valósítsa meg a lenyomott billentyűk kezelését. Hat attribútumot tartalmazó osztály: a kapcsolat, gmail cím, gmail jelszó, gmail api, gmail port és a lenyomott billentyűt tartalmazó változó.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture11}
+\caption{ctor KeyLoggerClient}
+\label{fig:ctorkeyloggerclient}
+\end{figure}
+Az első adat nem követi a megállapított protokolt. Ez az adat tartalmazza a kliens rendszerének információit:
+\begin{itemize}
+\item system name
+\item device name
+\item release
+\item version
+\item architecture
+\item cpu info
+\item user name
+\item ip address
+\end{itemize}
+Ezek után el lesz indítva egy halgató, amely lehalgatja a számítógéphez csatlakoztatott billentyűzetet, amely akkor írja felül a $keys$ attribútumot, amikor a felhaszáló elengedi a billentyűt. Az attribútum felülírásáról az $on\_release$ függveny gondoskodik.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture12}
+\caption{Listener}
+\label{fig:listener}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics{../images/Capture13}
+\caption{on\_release}
+\label{fig:onrelease}
+\end{figure}
+
+A billentyűzet lehalgató után egy végtelen ciklusban felépítődik az adat, amit a kapcsolaton keresztül elküld. Minden adatépítés után a $keys$ változó a $None$ értéket veszi fel. Adatépítésre és küldésre csak akkor kerül sor, ha a $keys$ változó nem $None$.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture14}
+\caption{adatépítés}
+\label{fig:databuild}
+\end{figure}
+\justify{A $get\_time$ függvény visszatéríti az adott időt ``nap/hónap/év | óra:perc:másodperc'' formátumban.}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture15}
+\caption{get\_time}
+\label{fig:gettime}
+\end{figure}
+\justify{A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: ENTER, SPACE, F1, F2, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.}
+
+Ha a kapcsolat felbomlott, akkor e-mail-en keresztül küldi tovább az adatokat óránként. Itt lépnek érvénybe a gmail cím, a jelszó, a gmail api, és a gmail port, lásd Figure \ref{fig:ctorkeyloggerclient}. Az adat felépítése ugyan úgy zajlik, mint eddig, lásd Figure \ref{fig:databuild}. Ebben az esetben a lenyomott billentyűket összegyűjtjük egy állományba és azt csatoljuk később az e-mail-hez a képernyőképpel együtt. Egy e-mail felépítése python-ban:
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture16}
+\caption{e-mail törzse}
+\label{fig:emailbody}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture17}
+\caption{e-mail csatolmányok}
+\label{fig:emailattach}
+\end{figure}
+Miután felépítettük az e-mail-t, kell csatlakozni a gmail szerverhez és elküldeni azt. Ha az e-mail sikeresen el lett küldve, akkor az az állomány, amelybe a lenyomott billentyűket mentettük, törlésre kerül, hogy ne küldjük el ugyan azt mégegyszer. A $content$ változó tartalmazza a teljes e-mail-t a csatolmányokkal együtt.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture18}
+\caption{e-mail küldés}
+\label{fig:sendemail}
+\end{figure}
+
+\subsubsection{MenuHandlerClient osztály}\label{subsubsec:menuhandlerclinet}
+A $MenuHandlerClient$ osztály foglalkozik az opciók fogadásával, és az opciók által elvégzett feladatokkal. Ez az osztály egy külön szálon kell, hogy fusson, máskülönben blokkolná a fő szálat, ahol a billentyűzetet hallgató osztály fut, lasd \pageref{subsubsec:keyloggerclientclass}. oldal 4.2.2, ezért a $Thread$ osztályból származtatjuk.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture19}
+\caption{ctor MenuHandlerClient}
+\label{fig:ctormenuhandlerclient}
+\end{figure}
+A szervertől kapott opciók döntik el, hogy milyen adatot épít fel, és küldi el a program:
+\begin{itemize}
+\item 1 - képernyőkép
+\item 2 - webkamerakép
+\item 3 - hangrögzítés
+\item 4 - felbontja a kapcsolatot
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture20}
+\caption{képernyőkép}
+\label{fig:image}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture21}
+\caption{webkamerakép}
+\label{fig:wcpic}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture22}
+\caption{hangrögzítés}
+\label{fig:audio}
+\end{figure}
+
+A Figure \ref{fig:image} $take\_screenshot$ függvénye fogja megcsinálni a képernyőképet. Ugyan ez érvényes a Figure \ref{fig:wcpic} $take\_webcam\_picture$ és a Figure \ref{fig:audio} $record\_audio$ függvényekre is:
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture23}
+\caption{take\_screenshot}
+\label{fig:takeimage}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture24}
+\caption{take\_webcam\_picture}
+\label{fig:takewcpic}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture25}
+\caption{record\_audio}
+\label{fig:recordaud}
+\end{figure}
 
 \subsection{GUI}\label{subsec:gui}
 
