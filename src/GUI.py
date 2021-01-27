@@ -1,4 +1,5 @@
 from tkinter import Tk, Button, Label, ttk, Listbox, Scrollbar
+import os
 
 class GUIWindow:
 	def __init__(self, title):
@@ -58,41 +59,43 @@ class GUIWindow:
 
 	#Reads in the logged characters from the 'log.csv' file and shows them in the main window
 	def read_characters(self):
-		file = open("../logs/log.csv", "r")
-		while True:
-			tmp = file.readline().split(",")
-			if tmp[0] == "":
-				break
+		if os.path.isfile("../logs/log.csv"):
+			file = open("../logs/log.csv", "r")
+			while True:
+				tmp = file.readline().split(",")
+				if tmp[0] == "":
+					break
 
-			tmp[0] = tmp[0].strip()
-			tmp[1] = tmp[1].strip()
-			self.insert_listbox(tmp[0], tmp[1])
-		file.close()
+				tmp[0] = tmp[0].strip()
+				tmp[1] = tmp[1].strip()
+				self.insert_listbox(tmp[0], tmp[1])
+			file.close()
 
 
 	#Reads in the logged words from the 'log.csv' file and shows them in the main window
 	def read_words(self):
-		file = open("../logs/log.csv", "r")
-		word = ""
-		date = ""
+		if os.path.isfile("../logs.log.csv"):
+			file = open("../logs/log.csv", "r")
+			word = ""
+			date = ""
 
-		while True:
-			tmp = file.readline().split(",")
-			if tmp[0] == "":
-				break
+			while True:
+				tmp = file.readline().split(",")
+				if tmp[0] == "":
+					break
 
-			tmp[0] = tmp[0].strip()
-			date = tmp[0]
-			tmp[1] = tmp[1].strip()
-			if tmp[1].isalpha and len(tmp[1]) == 1:
-				word += tmp[1]
-			elif word != "":
-				self.insert_listbox(tmp[0], word)
-				word = ""
+				tmp[0] = tmp[0].strip()
+				date = tmp[0]
+				tmp[1] = tmp[1].strip()
+				if (tmp[1].isalpha or tmp[1].isnumeric or tmp[1] in '~!@#$%^&*()_-+=[]{}\\|;:\'",.></?') and len(tmp[1]) == 1:
+					word += tmp[1]
+				elif word != "":
+					self.insert_listbox(tmp[0], word)
+					word = ""
 
-		if word != "":
-			self.insert_listbox(date, word)
-		file.close()
+			if word != "":
+				self.insert_listbox(date, word)
+			file.close()
 
 
 	#Processes the data given in argument and calls the insertData function
@@ -122,7 +125,7 @@ class GUIWindow:
 	#Refreshes the listbox, to show words
 	def words_clicked(self):
 		if not self.is_characters:
-			return
+			return None
 
 		self.is_characters = False
 		self.listbox.delete(0, 'end')
@@ -133,7 +136,7 @@ class GUIWindow:
 	#Refreshes the listbox, to show characters
 	def characters_clicked(self):
 		if self.is_characters:
-			return
+			return None
 
 		self.is_characters = True
 		self.listbox.delete(0, 'end')
