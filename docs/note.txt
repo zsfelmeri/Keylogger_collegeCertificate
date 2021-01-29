@@ -1,0 +1,84 @@
+@article{ahmed2014survey,
+  title={Survey of Keylogger technologies},
+  author={Ahmed, Yahye Abukar and Maarof, Mohd Aizaini and Hassan, Fuad Mire and Abshir, Mohamed Muse},
+  journal={Int J Comput Sci Telecommun},
+  volume={5},
+  number={2},
+  pages={31},
+  year={2014}
+}
+https://www.ijcst.org/Volume5/Issue2/p5_5_2.pdf 
+
+
+Keyloggers are type of a rootkit malware that capture typed keystroke events of the keyboard and save into log file, therefore, it is able to intercept sensitive information such as usernames, PINs, and passwords.
+
+
+MALWARE is termed by numerous names, such as
+malicious code (MC), malicious software and malcode.
+Numerous [20], McGraw and Morrisett [21] define
+malicious code as “any code added, changed, or removed from
+a software system in order to intentionally cause harm or
+subvert the intended function of the system”,
+
+		[20] N. I. a. P.Mathur."A Survey of Malware Detection
+		Techniques".Department of Computer Science Purdue University,
+		West Lafayette, IN 47907.2007.
+		[21] G. McGraw and G. Morrisett. Attacking malicious code: A report
+		to the infosec research council. IEEE Software, 17(5):33–44,
+		2000.
+
+
+KEYLOGGER types:
+Wireless keylogger:
+	Wireless keylogger exploits Bluetooth interfaces to transfer captured data to a log file up to the distance of 100M.
+
+Hardware keylogger:
+	Hardware keylogger is physical device located between the keyboard and the computer.
+	
+Software keylogger:
+	Software keylogger intercept data travelling along the keyboard and the operating system. It collects keystroke events, stores them in a remote location, and then transmits to the attacker who installed the keylogger.
+	
+Acoustic keylogger:
+	Unlike hardware keylogger, Acoustic keylogger on analysis and captures the sound of individual keystrokes. Special equipment is required to listen to the sound of the user’s typing
+	
+	
+----------------------------------------------------------------------------------------------------
+@article{tuli2013system,
+  title={System monitoring and security using keylogger},
+  author={Tuli, Preeti and Sahu, Priyanka},
+  journal={International Journal of Computer Science and Mobile Computing},
+  volume={2},
+  number={3},
+  pages={106--111},
+  year={2013}
+}
+V2I3201322.pdf
+
+
+Keylogging programs, commonly known as keyloggers, are a type of malware that maliciously track user input from the keyboard in an attempt to retrieve personal and private information. Keystroke logging, also known as key logging, is the capture of typed characters/number. The data captured can include document content, passwords, user ID’s, and other potentially sensitive bits of
+information.
+
+Signature based keylogger.
+	These are applications that typically identify a keylogger based on the
+	files or DLLs that it installs, and the registry entries that it makes. Although it successfully identifies known keyloggers, it fails to identify a keylogger whose signature is not stored in its database. Some anti-spyware applications use this approach, with varying degrees of success. Most of the anti-virus software’s detect Keylogger application based on this approach.
+	
+Hook based keyloggers.
+	A hook process in Windows uses the function SetWindowsHookEx (), the
+	same functions that hook based keyloggers use. This is used to monitor the system for certain types of events, for instance a keypress/mouse-click — however, hook based anti-keyloggers block this passing of control from one hook procedure to another. This results in the keylogging software generating no logs at all of the keystroke capture. Although hook based anti-keyloggers are better than signature based anti-keyloggers, note that they still are incapable of stopping kernel-based keyloggers.
+	
+The mechanism used to intercept events using specific functions (e.g. sending Windows messages, data input via the mouse or keyboard) in Microsoft Windows is called 'hooking'. This function can react to an event and, in certain cases, modify or delete events.
+
+A log is a record of the events occurring within an organization’s systems and networks. Logs are composed of log entries; each entry contains information related to a specific event that has occurred within a system or network. Logs were used primarily for troubleshooting problems, but logs now serve many functions within most organizations, such as optimizing system and network performance, recording the actions of users, and providing data useful for investigating malicious activity.
+
+----------------------------------------------------------------------------------------------------
+@inproceedings{wood2010keyloggers,
+  title={Keyloggers in Cybersecurity Education.},
+  author={Wood, Christopher and Raj, Rajendra},
+  booktitle={Security and Management},
+  pages={293--299},
+  year={2010},
+  organization={Citeseer}
+}
+
+
+Malware detection is often viewed as being static or dynamic. Static detection involves signature-based pattern recognition while dynamic detection involves behavioraland operational-based monitoring. Static detection requires malware detection software to monitor a system for recognizable malicious signatures or checksums. These signatures are essentially sequences of machine instructions that correspond to suspicious activity performed by a program on the host machine [12]. There are two significant but related problems with this technique: (a) the malware detection program needs to be constantly updated with new malware definitions and (b) no protection is provided against malware whose signature is not present in the repository. This is highly relevant to keylogging malware because they typically do not have a unique signature. Therefore, dynamic detection techniques must be employed to detect keylogging malware.
