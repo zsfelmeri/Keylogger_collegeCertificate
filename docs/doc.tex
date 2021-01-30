@@ -9,7 +9,22 @@
 \usepackage{ragged2e}
 \usepackage{setspace}
 \usepackage{indentfirst}
+\usepackage{algpseudocode}
 \usepackage[left=4cm, right=3cm, top=3cm]{geometry}
+
+\algnewcommand{\algorithmicand}{\textbf{ and }}
+\algnewcommand{\algorithmicor}{\textbf{ or }}
+\algnewcommand{\OR}{\algorithmicor}
+\algnewcommand{\AND}{\algorithmicand}
+\algblock[TryCatchFinally]{try}{endtry}
+\algcblockdefx[TryCatchFinally]{TryCatchFinally}{catch}{endtry}
+	[1]{\textbf{catch} #1}
+	{\textbf{end try}}
+
+% pszeudo kod képek helyett
+% nem egyertemu a klines clinet stb
+% server
+% class diagram
 
 
 \begin{document} 
@@ -162,6 +177,18 @@ Előszőr, hogy működjön a gyakori operációs rendszereken (Windows, Linux, 
 \label{fig:sysname}
 \end{figure}
 
+\begin{algorithmic}[H]
+\State $sys\_name \gets rendszer neve$
+\If{$sys\_name =\ 'windows'$}
+	\State $temp\_path \gets$ folder, amely tartalmazza a temporális állományokat windows-on
+\ElsIf{$sys\_name =\ 'linux' \OR sys\_name =\ 'darwin'$}
+	\State $temp\_path \gets$ folder, amely tartalmazza a temporális állományokat linux-on és macos-on
+\Else
+	\State \textbf{kiír:} $Unknown\ system!$
+	\State \textbf{kiír:} $Exiting...$
+\EndIf
+\end{algorithmic}
+
 \noindent Ha nem a három operációs rendszer közé tartozik, akkor kilép a program. Itt a rendszer neve meghatározza a $temp\_path$ változót, ami a későbbiekben arra lesz használva, hogy bizonyos adatokat elmentsen. A $temp\_path$ változó a temporális mappa elérhetőségét tartalmazza. Ez linux és darwin (MacOS) rendszereken megegyező, míg windows rendszeren különbözik.
 
 Ahogyan a Figure \ref{fig:classdia}-en látható, a szerver oldalon három osztály talalható (Server, Keylogger, MenuHandler) és ehez még hozzácsatolódik a GUI rész is.
@@ -175,12 +202,33 @@ A Server osztály fogja hallgat egy bizonyos portot, és várja, hogy a kliensse
 \label{fig:ctorserver}
 \end{figure}
 
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self, ip\_address, port$}
+	\State $self.ip\_address \gets ip\_address$
+	\State $self.port \gets port$
+	\State $self.server \gets$ TCP kapcsolat
+\EndFunction
+\end{algorithmic}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture1}
 \caption{connect Server}
 \label{fig:connect}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{connect}{$self$}
+	\State beállítja az opciókat
+	\State összeköti a ip címet a porttal
+	\State csak egy klienst hallgat
+	\try
+		\State várakozik a kliensre, amíg a klines csatlakozik
+	\catch{socket.error}
+		\State \textbf{raise} socket.error
+	\endtry
+\EndFunction
+\end{algorithmic}
 
 \subsubsection{Keylogger osztály}\label{subsubsec:keyloggerclass}
 A keylogger osztályt a $Thread$ osztályból van származtatva, mert egy külön szálon kell, hogy fusson a GUI miatt. A GUI csak a fő szálon van engedélyezve. Ennek az osztálynak öt attribútumja van: a létrejött kapcsolat a szerver és a kliens között, a GUI, gmail cím, a hozzá tartozó jelszó és a gmail server api címe. A $connection$ és a $gui$ paraméterek egy-egy osztályt várnak, ezért kapcsolatot és a GUI-t ellenőrizni kell, hogy jó osztály került-e átadásra.
@@ -190,6 +238,25 @@ A keylogger osztályt a $Thread$ osztályból van származtatva, mert egy külö
 \caption{ctor Keylogger}
 \label{fig:ctorkeylogger}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self,connection,gui,email\_address,email\_password$}
+	\State a bővített osztály konstruktor hívása
+	\State $self.email\_address \gets email\_address$
+	\State $self.email\_password \gets email\_password$
+	\State $self.imap_alias \gets\ 'imap.gmail.com'$
+	\If{$connection\ \textbf{is}\ Server$}
+		\State $self.connection \gets connection$
+	\Else
+		\State \textbf{raise} $TypeError$
+	\EndIf
+	\If{$gui\ \textbf{is}\ GUIWindow$}
+		\State $self.gui \gets gui$
+	\Else
+		\State \textbf{raise} $TypeError$
+	\EndIf
+\EndFunction
+\end{algorithmic}
 
 \justify{A $Keylogger$, a fő osztály, amelyre épül a program, kezeli a billentyűzet gombjai lenyomását. Amíg a TCP kapcsolat él, addig azon keresztül küldi a lenyomott karaktereket, amit elment a log.csv állományba a szerver oldalon, hogy a későbbiekben újra megtekinthető legyen. A log.csv állomány formátuma lenyomott billentyű ideje, karakter. Ahol az idő ``nap/hónap/év $|$ óra:perc:másodperc'' formátumu. Fentakadhat egy olyan probléma. hogy a kapcsolat valami oknál fogva megszakad, ekkor e-mail-en keresztül küldi át az adatokat. Erre kell a Figure \ref{fig:sysname}-ön látható $temp\_path$ változó, hogy a lenyomott billentyűket eltudja menteni a kliens számítógépén és azt e-mail-en keresztül elküldje. Erre szolgál a \pageref{subsubsec:keyloggerclass}. oldalon a 4.1.2 alatt megemlített gmail cím és a hozzá kapcsolódó jelszó.}
 
@@ -214,9 +281,9 @@ A $type$ mező megmondja, hogy milyen típusu adat fog jönni az $information$ m
 \item audio - egy audio állomány bájtsorozata
 \end{itemize}
 A $time$ mezőben egy időbéjeg található, amely megmondja, hogy a csomag mikor érkezett. Ez 11 bájt lehet. Formátuma: ``nap\_óra\_perc\_másodperc''.\\
-Az $information$ mezőben vannak azok az adatok amelyeket a szerver fel kell dolgozzon.
+Az $information$ mezőben vannak azok az adatok amelyeket a szerver fel kell dolgozzon. Ezt a ennek a mezőnek nem lehet pontos méretet adni, mert nem tudjuk előre megmondani, hogy mekkora adatot küld, kivétel a karakter. A python nyelvben nincsenek korlátok ebből a szempontból.
 
-A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot.
+A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot. A $data$ változó tartalmazza a protokill által található információt.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture3}
@@ -242,6 +309,27 @@ A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerül
 \label{fig:audioprocess}
 \end{figure}
 
+\begin{algorithmic}[H]
+\If{$data[0] = 'image'$}
+	\If{$data[2] \neq Error$}
+		\State beírja egy új állományba a $data[2]$ tartalmát
+	\EndIf
+\ElsIf{data[0] = 'char'}
+	\State beírja a $log.csv$ állományba az információt
+	\If{a gui fut}
+		\State beírja a guiba
+	\EndIf
+\ElsIf{data[0] = 'wcpic'}
+	\If{$data[2] \neq Error$}
+		\State beírja egy új állományba a $data[2]$ tartalmát
+	\EndIf
+\ElsIf{data[0] = 'audio'}
+	\If{$data[2] \neq Error$}
+		\State beírja egy új állományba a $data[2]$ tartalmát
+	\EndIf
+\EndIf
+\end{algorithmic}
+
 Ha a TCP kapcsolat felbomlik, akkor e-mail-en keresztül lesz továbbítva az adat csatolmányban. Ahoz, hogy írni és olvasni is tudjunk e-mail-t python kódból, a google fióknál be kell legyen kapcsolva a ``Less secure app access''. A gmail fióknál pedig a következőt kell engedélyezni: Settings $\rightarrow$ See all settings $\rightarrow$ Forwarding and POP/IMAP $\rightarrow$ IMAP access $\rightarrow$ Enable IMAP.
 
 Előszőr csatlakozni kell a megadott gmail címhez. Ez után megnézzük, hogy jött-e olyan e-mail, amit még nem láttunk, ha igen, akkor ellenőrizzük, hogy a saját gmail címünkről jott-e. Ha minden feltétel teljesül, akkor megnyitjuk az e-mail-t és letöltjük a csatolmányokat. Itt két csatolmány érkezik: egy képernyőkép és egy log állomány, amelyben a lenyomott billentyűk vannak naplózva. Ezt a folyamatot ismételjük addig, amíg nincsen hiba. Hiba alatt a következőket lehet érteni: nem engedi a csatlakozást a gmail api szerver, nem tudja megnyitni az elküldött csatolmányokat.
@@ -253,6 +341,24 @@ A $get\_attachments$ függvény segítségével tölti le a csatolmányokat, ame
 \caption{get\_attachments}
 \label{fig:getatt}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{get\_attachments}{$self,msg$}
+	\For{$part \gets \Call{msg.walk}{}$}
+		\If{$\Call{part.get\_content\_maintype}{$$} = 'multipart'$}
+			\State \textbf{continue}
+		\EndIf
+		\If{$\Call{part.get}{'Content-Disposition'} = None$}
+			\State \textbf{continue}
+		\EndIf
+		
+		\State $filename \gets \Call{part.get\_filename}{$$}$
+		\If{$filename$ nem üres}
+			\State letölti az állományt
+		\EndIf
+	\EndFor
+\EndFunction
+\end{algorithmic}
 
 A harmadik osztály a $MenuHandler$, amely segítségével más feladatot is adhatunk a kliensnek a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás. Ennek az osztálynak egy attribútumja van: a kapcsolat. Ez a kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
 \begin{itemize}
@@ -269,6 +375,17 @@ Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy
 \label{fig:ctormenu}
 \end{figure}
 
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self,connection$}
+	\State bővített osztály konstruktor hívása
+	\If{$connection\ \textbf{is}\ Server$}
+		\State $self.connection \gets connection$
+	\Else
+		\State \textbf{raise} $TypeError$
+	\EndIf
+\EndFunction
+\end{algorithmic}
+
 \subsection{Kliens}\label{subsec:client}
 A kliensnél nagyjából ugyan az a felállítás, mint a szerver oldalon. Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva, lásd Figure \ref{fig:sysname}. Ez után létre van hozva a ``Client'' osztály, amelynek négy attribútumja van: ip cím, port, a kliens és a gép ip címje. Példányosításkor a szerver ip címét kell megadni. A kliens attribútum megmondja, hogy milyen kapcsolatot hozunk létre, ebben az esetben TCP, mert a szerver is TCP.
 \subsubsection{Client osztály}\label{subsubsec:clinetclass}
@@ -278,6 +395,14 @@ A kliensnél nagyjából ugyan az a felállítás, mint a szerver oldalon. Elős
 \caption{ctor Client}
 \label{ctorclient}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self,ip\_address,port$}
+	\State $self.ip\_address \gets ip\_address$
+	\State $self.port \gets port$
+	\State $self.client \gets$ TCP kapcsolat
+\EndFunction
+\end{algorithmic}
 A kapcsolat létesítésében a $connect$ függvény játszik szerepet. A $socket$ modul $gethostname$ függvényét alkalmazva megkapjuk a gép ip címjét, amely csak egy lokális ip cím. A darwin rendszereknél hozzá kell fűzni a ``.local'' karakterláncot, másképp egy exception lép fel.
 \begin{figure}[H]
 \centering
@@ -285,6 +410,23 @@ A kapcsolat létesítésében a $connect$ függvény játszik szerepet. A $socke
 \caption{connect Clinet}
 \label{fig:connectclient}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{connect}{$self$}
+	\State kapcsolódik a szerverhez
+	\try
+		\State $self.pc\_ip \gets$ számítógép ip címe
+	\catch{socket.gaierror}
+		\try
+			\State $self.pc\_ip \gets$ számítógép ip címe + '.local'
+		\catch
+			\State $self.pc\_ip \gets$ 'Unknown'
+		\endtry
+	\catch{}
+		\State $self.pc\_ip \gets$ 'Unknown'
+	\endtry
+\EndFunction
+\end{algorithmic}
 
 \subsubsection{KeyLoggerClient osztály}\label{subsubsec:keyloggerclientclass}
 Ez az osztály valósítsa meg a lenyomott billentyűk kezelését. Hat attribútumot tartalmazó osztály: a kapcsolat, gmail cím, gmail jelszó, gmail api, gmail port és a lenyomott billentyűt tartalmazó változó.
@@ -294,6 +436,21 @@ Ez az osztály valósítsa meg a lenyomott billentyűk kezelését. Hat attribú
 \caption{ctor KeyLoggerClient}
 \label{fig:ctorkeyloggerclient}
 \end{figure}
+
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self,connection,email\_address,email\_password$}
+	\State $self.email\_address \gets email\_address$
+	\State $self.email\_password \gets email\_password$
+	\State $self.smtp\_alias \gets\ 'smtp.gmail.com'$
+	\State $self.smtp\_port \gets 587$
+	\State $self.keys \gets None$
+	\If{$connection\ \textbf{is}\ Client$}
+		\State $self.connection \gets connection$
+	\Else
+		\State \textbf{raise} $TypeError$
+	\EndIf
+\EndFunction
+\end{algorithmic}
 Az első adat nem követi a megállapított protokolt. Ez az adat tartalmazza a kliens rendszerének információit:
 \begin{itemize}
 \item system name
@@ -319,6 +476,14 @@ Ezek után el lesz indítva egy halgató, amely lehalgatja a számítógéphez c
 \label{fig:onrelease}
 \end{figure}
 
+\begin{algorithmic}[H]
+\State $keyboard\_listener \gets \Call{Listener}{$on\_release$}$
+\State $keyboard\_listener.\Call{start}{$$}$
+\Function{on\_release}{$self,key$}
+	\State $self.keys \gets key$
+\EndFunction
+\end{algorithmic}
+
 A billentyűzet lehalgató után egy végtelen ciklusban felépítődik az adat, amit a kapcsolaton keresztül elküld. Minden adatépítés után a $keys$ változó a $None$ értéket veszi fel. Adatépítésre és küldésre csak akkor kerül sor, ha a $keys$ változó nem $None$.
 \begin{figure}[H]
 \centering
@@ -326,6 +491,15 @@ A billentyűzet lehalgató után egy végtelen ciklusban felépítődik az adat,
 \caption{adatépítés}
 \label{fig:databuild}
 \end{figure}
+\begin{algorithmic}[H]
+\If{$self.keys \neq None$}
+	\State $date\_time \gets \Call{get\_time}{$$}$
+	\State $key \gets \Call{str}{$self.keys$}.\Call{replace}{$''`'',''''$}$
+	\State $data \gets [''char'', date\_time, key]$
+	\State $self.keys \gets None$
+	\State $data \gets \Call{str}{$data$}$
+\EndIf
+\end{algorithmic}
 \justify{A $get\_time$ függvény visszatéríti az adott időt ``nap/hónap/év | óra:perc:másodperc'' formátumban.}
 \begin{figure}[H]
 \centering
@@ -333,6 +507,11 @@ A billentyűzet lehalgató után egy végtelen ciklusban felépítődik az adat,
 \caption{get\_time}
 \label{fig:gettime}
 \end{figure}
+\begin{algorithmic}[H]
+\Function{get\_time}{}
+	\State $date\_time \gets$ dd/mm/yyyy $|$ HH:MM:SS formátumban az idő
+\EndFunction
+\end{algorithmic}
 \justify{A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: ENTER, SPACE, F1, F2, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.}
 
 Ha a kapcsolat felbomlott, akkor e-mail-en keresztül küldi tovább az adatokat óránként. Itt lépnek érvénybe a gmail cím, a jelszó, a gmail api, és a gmail port, lásd Figure \ref{fig:ctorkeyloggerclient}. Az adat felépítése ugyan úgy zajlik, mint eddig, lásd Figure \ref{fig:databuild}. Ebben az esetben a lenyomott billentyűket összegyűjtjük egy állományba és azt csatoljuk később az e-mail-hez a képernyőképpel együtt. Egy e-mail felépítése python-ban:
@@ -342,12 +521,32 @@ Ha a kapcsolat felbomlott, akkor e-mail-en keresztül küldi tovább az adatokat
 \caption{e-mail törzse}
 \label{fig:emailbody}
 \end{figure}
+\begin{algorithmic}[H]
+\State $msg \gets \Call{MIMEMultipart}{$$}$
+\State $msg['From'] \gets email\_address$
+\State $msg['To'] \gets email\_address$
+\State $msg['Subject'] \gets 'Keylogger result'$
+\State $body \gets date\_time$
+\State $body \gets \Call{MIMEText}{$body,'plain'$}$
+\State $msg.\Call{attach}{$body$}$
+\end{algorithmic}
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture17}
 \caption{e-mail csatolmányok}
 \label{fig:emailattach}
 \end{figure}
+\begin{algorithmic}[H]
+\State $file\_attachment \gets \Call{MIMEBase}{$'application','octet-stream'$}$
+\State $image\_attachment \gets \Call{MIMEBase}{$'application','octet-stream'$}$
+\State $file\_attachment.\Call{set\_payload}{$fájl tartalma$}$
+\State base64 kódolás
+\State hozzácsatolás az e-mail-hez
+\State képernyőkép készítés
+\State $image\_attachment.\Call{set\_payload}{$fájl tartalma$}$
+\State base64 kódolás
+\State hozzácsatolás az e-mail-hez
+\end{algorithmic}
 Miután felépítettük az e-mail-t, kell csatlakozni a gmail szerverhez és elküldeni azt. Ha az e-mail sikeresen el lett küldve, akkor az az állomány, amelybe a lenyomott billentyűket mentettük, törlésre kerül, hogy ne küldjük el ugyan azt mégegyszer. A $content$ változó tartalmazza a teljes e-mail-t a csatolmányokkal együtt.
 \begin{figure}[H]
 \centering
@@ -355,6 +554,13 @@ Miután felépítettük az e-mail-t, kell csatlakozni a gmail szerverhez és elk
 \caption{e-mail küldés}
 \label{fig:sendemail}
 \end{figure}
+\begin{algorithmic}[H]
+\State $content \gets$ üzenet karakterlánc formátumban
+\State kapcsolat létesítés a gmail szerverrel
+\State bejelentkezés
+\State e-mail küldés
+\State fájlok törlése
+\end{algorithmic}
 
 \subsubsection{MenuHandlerClient osztály}\label{subsubsec:menuhandlerclinet}
 A $MenuHandlerClient$ osztály foglalkozik az opciók fogadásával, és az opciók által elvégzett feladatokkal. Ez az osztály egy külön szálon kell, hogy fusson, máskülönben blokkolná a fő szálat, ahol a billentyűzetet hallgató osztály fut, lasd \pageref{subsubsec:keyloggerclientclass}. oldal 4.2.2, ezért a $Thread$ osztályból származtatjuk.
@@ -364,6 +570,16 @@ A $MenuHandlerClient$ osztály foglalkozik az opciók fogadásával, és az opci
 \caption{ctor MenuHandlerClient}
 \label{fig:ctormenuhandlerclient}
 \end{figure}
+\begin{algorithmic}[H]
+\Function{\_\_init\_\_}{$self,connection$}
+	\State bővített osztály konstruktor hívása
+	\If{$connection\ \textbf{is}\ Client$}
+		\State $self.connection \gets connection$
+	\Else
+		\State \textbf{raise} $TypeError$
+	\EndIf
+\EndFunction
+\end{algorithmic}
 A szervertől kapott opciók döntik el, hogy milyen adatot épít fel, és küldi el a program:
 \begin{itemize}
 \item 1 - képernyőkép
@@ -390,6 +606,36 @@ A szervertől kapott opciók döntik el, hogy milyen adatot épít fel, és kül
 \label{fig:audio}
 \end{figure}
 
+\begin{algorithmic}[H]
+\If{\Call{take\_screenshot}{$temp\_path$}}
+	\If{$screenshot.png$ fájl létezik}
+		\State $data.\Call{append}{$fájl tartalma$}$
+	\Else
+		\State $data.\Call{append}{$'Error'$}$
+	\EndIf
+\Else
+	\State $data.\Call{append}{$'Error'$}$
+\EndIf
+\If{\Call{take\_webcam\_picture}{$temp\_path$}}
+	\If{$wc\_picture.png$ fájl létezik}
+		\State $data.\Call{append}{$fájl tartalma$}$
+	\Else
+		\State $data.\Call{append}{$'Error'$}$
+	\EndIf
+\Else
+	\State $data.\Call{append}{$'Error'$}$
+\EndIf
+\If{\Call{record\_audio}{$temp\_path$}}
+	\If{$rec\_audio.wav$ fájl létezik}
+		\State $data.\Call{append}{$fájl tartalma$}$
+	\Else
+		\State $data.\Call{append}{$'Error'$}$
+	\EndIf
+\Else
+	\State $data.\Call{append}{$'Error'$}$
+\EndIf
+\end{algorithmic}
+
 A Figure \ref{fig:image} $take\_screenshot$ függvénye fogja megcsinálni a képernyőképet. Ugyan ez érvényes a Figure \ref{fig:wcpic} $take\_webcam\_picture$ és a Figure \ref{fig:audio} $record\_audio$ függvényekre is:
 \begin{figure}[H]
 \centering
@@ -397,20 +643,74 @@ A Figure \ref{fig:image} $take\_screenshot$ függvénye fogja megcsinálni a ké
 \caption{take\_screenshot}
 \label{fig:takeimage}
 \end{figure}
+\begin{algorithmic}[H]
+\Function{take\_screenshot}{$save\_path$}
+	\try
+		\State képernyőkép készítése
+	\catch{}
+		\State \Return $False$
+	\endtry
+	\State \Return $True$
+\EndFunction
+\end{algorithmic}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture24}
 \caption{take\_webcam\_picture}
 \label{fig:takewcpic}
 \end{figure}
+\begin{algorithmic}[H]
+\Function{take\_webcam\_picture}{$save\_path$}
+	\State kamera előkészítése
+	\If{sikeres kamera megnyitás}
+		\State elment egy képet
+		\State \Return $True$
+	\EndIf
+	\State \Return $False$
+\EndFunction
+\end{algorithmic}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture25}
 \caption{record\_audio}
 \label{fig:recordaud}
 \end{figure}
+\begin{algorithmic}[H]
+\Function{record\_audio}{$save\_path$}
+	\State $1024$ bájtos részek
+	\State $int16$ formátum
+	\State $2$ csatorna
+	\State $44100 hz$ hullámhossz
+	\State $10$ másodperces időintervalum
+	\try
+		\State hangfelvétel készítése
+		\State hangfelvétel lementése
+	\catch{}
+		\State \Return $False$
+	\endtry
+	\State \Return $True$
+\EndFunction
+\end{algorithmic}
+A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán ($2 = 0$ és $1$) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni.
 
 \subsection{GUI}\label{subsec:gui}
+A GUI akkor lép működésbe, amikor a kliens csatlakozott a szerverhez, és addig funkcionál, amíg be nem zárják. Van egy $Date\ \&\ Time$ és egy $Characters$ mezője. Az első oszlop tartalmazza az idő béjeget, hogy mikor volt egy bizonyos karakter megnyomva. A második oszlop a lenyomott karaktereket taartalmazza kezdésben. Három gomb találhato az ablak tetején: $PC\ Information$, $Characters$ és $Words$.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/GUI\ final}
+\caption{GUI}
+\label{fig:gui}
+\end{figure}
+Ha a $PC\ Information$ gomb kerül megnyomásra, akkor felugrik egy másik ablak, amely tartalmazza a felhasználó (target) redszerinformációit, lásd \pageref{subsubsec:keyloggerclientclass} oldal.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/Capture28}
+\caption{PC Information button}
+\label{fig:pcinfo}
+\end{figure}
+A $Characters$ és a $Words$ gombok a megjelenítésért felelnek. Ahogyan a nevük is mondja, a $Characters$ gomb csak a karaktereket mutatja, míg a $Words$ gomb felépíti a szavakat, és azokat mutatja. 
 
 \section{A rendszer felhasználása (szoftverek és hardverek esetében)}\label{sec:useage}
 
