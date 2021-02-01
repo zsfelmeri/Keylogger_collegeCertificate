@@ -30,17 +30,16 @@ subvert the intended function of the system”,
 
 KEYLOGGER types:
 Wireless keylogger:
-	Wireless keylogger exploits Bluetooth interfaces to transfer captured data to a log file up to the distance of 100M.
+	Wireless keylogger exploits Bluetooth interfaces to transfer captured data to a log file up to the distance of 100M. The primary target of this wireless keylogger is to intercept transmitted packet from wireless keyboard that uses 27 MHz RF connection of encrypted RF transported keystroke character. However, the bad news of this wireless keylogger needs receiver/antenna relatively closed to the target area work.
 
 Hardware keylogger:
-	Hardware keylogger is physical device located between the keyboard and the computer.
+	Hardware keylogger is physical device located between the keyboard and the computer. There are two connection methods; keyloggers can be connected between the keyboard and computer directly. The second method does not require physical connection to the PC, but installation of keylogger circuit into the keyboard standard. This method has advantages that users cannot monitor keyloggers physically.
 	
 Software keylogger:
 	Software keylogger intercept data travelling along the keyboard and the operating system. It collects keystroke events, stores them in a remote location, and then transmits to the attacker who installed the keylogger.
 	
 Acoustic keylogger:
-	Unlike hardware keylogger, Acoustic keylogger on analysis and captures the sound of individual keystrokes. Special equipment is required to listen to the sound of the user’s typing
-	
+	Unlike hardware keylogger, Acoustic keylogger on analysis and captures the sound of individual keystrokes. Special equipment is required to listen to the sound of the user’s typing. Parabolic microphones are utilized to record a long distance, so this microphone is used to pick up the keyboard sound from hundred feet away of targeted area or work.
 	
 ----------------------------------------------------------------------------------------------------
 @article{tuli2013system,
