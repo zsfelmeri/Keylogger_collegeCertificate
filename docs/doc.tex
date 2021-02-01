@@ -5,6 +5,7 @@
 \date{}
 
 \usepackage{graphicx}
+\usepackage{multicol}
 \usepackage{float}
 \usepackage{ragged2e}
 \usepackage{setspace}
@@ -157,8 +158,96 @@ Témaként a keylogger-t, vagy teljes nevén keystrokelogger-t, dolgoztam ki, am
 Célom az volt, hogy egy támadó szerepkörébe képzeljem magam, ez által jobban megismerkedni egy támadó gondolatmenetével, hogy a későbbiekben fel tudjam használni ezt a tudást nagyobb rendszerek védelme érdekében.
 
 \section{Elméleti megalapozás és bibliográfiai tanulmány (a téma pontos körülhatárolása érdekében végzett dokumentálódás)}\label{sec:bibl}
+%mi az a keylogger
+%mi a problema, mit akar megoldani
+%kell definialni az adatot
+%elkuldes
+%kategorizalas
+
+\subsection{Definíció}
+[1] ``Keyloggers are type of a rootkit malware that capture typed keystroke events of the keyboard and save into log file, therefore, it is able to intercept sensitive information such as usernames, PINs, and passwords. Malware is termed by numerous names, such as malicious code (MC), malicious software and malcode.''
+
+[2] Numerous [20], McGraw and Morrisett [21] define malicious code as ``any code added, changed, or removed from a software system in order to intentionally cause harm or subvert the intended function of the system.''
+
+\subsection{Keylogger típusok}
+A keylogger-ek négy fő kategóriára oszthatók: hardware, acoustic, wireless és software. Bár ezeknek különvöző a használati módjuk és az információ szerzési módszereik, egy közös dolgon osztoznak: lementik az ellopott információt és adatot egy log állományba.
+
+\subsubsection{Wireless keylogger}
+A wireless keylogger kihasználja a Bluetooth interfészeket, hogy a rögzített adatokat 100 méteres körzetben továbbítsa. Elsődleges célja az átvitt csomagok lehallgatása wireless billentyűzetről. Hátránya, hogy szükséges egy fogadó/antenna relatív közel a célpont munkakörnyékéhez.
+
+\subsubsection{Hardware keylogger}
+A hardware keylogger egy olyan fizikai eszköz, amely a billentyűzet és a számítógép között helyezkedik el. Kétféle csatlakozási módszer létezik: a keyloggerek közvetlenül összekapcsolhatók a billentyűzet és a számítógép között. A második módszer nem fizikai kapcsolatot igényel a számítógéppel, hanem a keylogger áramkör telepítését a billentyűzetbe. Ennek a módszernek az az előnye, hogy a felhasználók nem figyelhetik fizikailag a keylogger-t.
+
+\subsubsection{Software keylogger}
+A software keylogger elfogja a billentyűzet és az operációs rendszer mentén haladó adatokat. Gyűjti a billentyű karaktereit egy állományba, majd továbbítja a támadónak, aki telepítette a keylogger-t.
+
+\subsubsection{Acoustic keylogger}
+A hardware keylogger-rel ellentétben az acoustic keylogger elemzésekor rögzíti az egyes billentyűleütések hangját. Különleges felszerelés szükséges a felhasználó gépelés hangjának meghallgatásához. Parabolikus mikrofonokat használnak nagy távolság alapuló rögzítésre, ezért ezt a mikrofont arra használják, hogy a billentyűzet hangját 30 méter távolságból vegye fel a célzott helyről.
+
 
 \section{A rendszer specifikációi és architektúrája (szoftverek és hardverek esetében)}\label{sec:specs_and_arch}
+%virtualis gepek -> meresek, hany kliensd bir el
+%kiserletek, grafikonok
+%kovetelmeny specs - func, nem func
+%architektura osszes lenyeges komponens
+
+\subsection{Nem funkcionális követelmények}
+A szoftver működik windows, linux és darwin rendszerek alatt, a verzió nem befolyásolja. A rendszeren szükséges telepíteni a python 3.x verzióját, mivel olyan modulok vannak használatban, amelyeket a python 2.x nem ismer. Ez egy olyan szoftver, amelyet törvényes és törvénytelen dolgogra is lehet használni. Törvényesen például monitorizálni a céges alkalmazottak munka időszakában lebonyolított tevékenységeket. Törvénytelen például, ha valaki arra használja, hogy ellopjon bizalmas információkat személyektől. Ez a használón múlik, hogy melyik utat választja.
+
+A python 3.x verzióhoz szükséges modulok a futtatáshoz:
+\begin{multicols}{2}
+\begin{itemize}
+\item pynput = 1.6.8
+\item pyautogui
+\item pyaudio
+\item wave
+\item socket
+\item opencv
+\item getpass
+\item os
+\item sys
+\item threading
+\item datetime
+\item smtplib
+\item email
+\item imaplib
+\item shutil
+\item platform
+\item tkinter
+\item logging
+\item pyinstaller
+\end{itemize}
+\end{multicols}
+\cleardoublepage
+A \textbf{pynput} modul a billentyűzet és az egér eseménykezelését teszi lehetővé. Egy régebbi verzióját kell használni ($1.6.8$), mert a legújabb ($1.7.2$) nem kompatibilis a fordító programokkal.
+
+A \textbf{pyautogui} modullal képernyőképet lehet készíteni, és azt elmenti egy fájlba a rendszeren. A végrehajtásához szükséges, hogy a felhasznéló képernyőképet tudjon készíteni önmagénak.
+
+A \textbf{pyaudio} és a \textbf{wave} modulok a hangfelvétel készítésében használandók. A \textbf{pyaudio} egy listát állít elő a hanganyaggal, ahogyan azt ábrázolni lehet binárisan, míg a \textbf{wave} ebből a lisából egy $.wav$ kiterjesztésű állományt készít. Ehez szükséges, hogy a felhasználónak legyen mikrofonja, ami csatlakoztatva van a számítógéphez.
+
+A hálózati kapcsolat megteremtéséhez a \textbf{socket} modul segít. Ez meghatározza a kapcsolat milyenségét, hogy hányan csatlakozhatnak a szerverhez és hogy a szerver meddig várjon a kliensre.
+
+Az \textbf{opencv} modul képek vagy videók feldolgozásában használható, például webkamerakép készítésére.
+
+A \textbf{getpass}, \textbf{os}, \textbf{sys}, \textbf{shutil} és \textbf{platform} modulok a rendszerfüggvények elérését biztosítja. A rendszerinformációit függvények használata, mint például a processzor specifikációi, a bejelentkezett felhasználo felhasználóneve, a számítógép neve, a rendszer verziószáma stb.
+
+A \textbf{threading} modul segítségével új, párhuzamos szálakat hoszhatunk létre. Ez segít több feladat elvégzésében egymást nem blokkolva.
+
+A \textbf{datetime} modullal le lehet kérni az aktuális időt, olyan formátumban amilyenben a használó szeretné. %https://www.programiz.com/python-programming/datetime/strftime
+
+Az \textbf{smtplib}, \textbf{imaplib} és \textbf{email} modulok segítsígével lehet kapcsolódni a gmail szerveréhez üzenet küldés vagy fogadás céljából. Az \textbf{imaplib} modullal lehet kapcsolatot teremteni olvasásra, míg az \textbf{smtplib} modullal írásra, azaz küldésre. Az \textbf{email} modul tartalmazza azokat az osztályokat, amelyek szükségesek egy email objektum létrehozásában és kódolásában.
+
+A \textbf{tkinter} modul a GUI elkészítésére használandó, ez felel a megjelenítésben.
+
+A \textbf{logging} modul segítségével visszajelzéseket adunk a szoftvertől a felhasználónak, hogy lehessen követni az aktuális feladat menetét. Ehez szükséges egy $logging.conf$ állomány, maely béállítja a loggolási opciókat.
+
+A \textbf{pyinstaller} modul egy fordító program, amely python kódból futtatható fájlt készít. Lefordításra csak a kliens kerül, mert azt kell az áldozat rendszerére telepíteni, úgy, hogy a háttérben fusson. Ezt be lehet állítani a $w$ opcióval windows és OS X rendszereken, míg *NIX rendszereken nem veszi számításba ezt az opciót. A $onefile$ opció összesűríti egy futtathatóvá, ez által lehetővé teszi, hogy ne kelljen más szükséges állományokat is telepíteni az áldozat rendszerére. Be lehet állítani a futtatható fájl nevét ($name$ opció) és ikonját is ($icon$ opció).
+
+%Teljesítmény...
+
+%Karbantarthatóság...
+
+\subsection{Funkcionális követelmények}
 
 \section{A részletes tervezés}\label{sec:plan}
 A projekt három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
