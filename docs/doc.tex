@@ -248,15 +248,40 @@ A \textbf{pyinstaller} modul egy fordító program, amely python kódból futtat
 %Karbantarthatóság...
 
 \subsection{Funkcionális követelmények}
-
-\section{A részletes tervezés}\label{sec:plan}
-A projekt három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
+A szoftver három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/class\ diagram}
 \caption{osztály diagram}
 \label{fig:classdia}
 \end{figure}
+A Figure \ref{fig:classdia}-en látható az osztályok és az elhatárolt komponensek is. A \textbf{KeyLogger}, \textbf{Server} és \textbf{MenuHandler} osztályok egy komponens, amelyek a szerverhez tartoznak, a \textbf{KeyLoggerClient}, \textbf{Client} és \textbf{MenuHandlerClient} osztályok egy komponens, amelyek a klienshez tartoznak, a \textbf{GUIWindow} osztály egy komponens, amely a GUI-hoz tartozik.
+
+A \textbf{Server} és a \textbf{Client} osztályok hozzák létre a kapcsolatot, ennek a feltétele, hogy a szerver hamarabb el kell legyen indítva mint a kliens. A kapcsolat létesítése után elindul mindkét komponensnél a keylogger, amely szükséges, hogy az információt elküldje és fogadja. A szerfer komponens fogja fogadni azt amit a kliens komponens küld, és azt egy log állományba írja. Az információ a szervernél tartalmazza a billentyű karaktereit, a képernyőképet, a webkamera képet és a hangfelvételt. A karakterek kivételével a többi opciót a \textbf{MenuHandler} osztály fogja igazítani. A szerver küld a kliensnek egy opciót, amely lehet kepernyőkép, webkamerakép vagy hangfelvétel, ezt a kliens komponens \textbf{MenuHandlerClient} osztály fogadja és megpróbálja végrehajtani a feladatot. Ha sikerül elküldi a szervernek, ha nem, akkor egy hibaüzenetet küld, vagy megszakítsa a kapcsolatot. A kapcsolat megszakítésa után a kliens e-mail-t küld oránként, amelyben az addig lementett karakterek és egy képernyőkép van csatolmányként. Mindkét komponensnél a menüt kezlelő osztályok külön szálon kell fussanak, hogy ne blokkolják a fő szálat. Ez által megoldva, hogy párhuzamosan a karakter küldéssel lehet küldeni a többi adatot is.
+
+\subsection{Architektúra}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/infectpc\ diagram}
+\caption{hacker infects target's PC}
+\label{fig:infectpcdia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/character\ transfer\ diagram}
+\caption{Character transfer diagram}
+\label{fig:chartransferdia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/menu\ diagram}
+\caption{menu diagram}
+\label{fig:menudia}
+\end{figure}
+\section{A részletes tervezés}\label{sec:plan}
+
 \subsection{Szerver}\label{subsec:server}
 Előszőr, hogy működjön a gyakori operációs rendszereken (Windows, Linux, MacOS) meg kell nézni, hogy melyiken futtatjuk. Ezt a platform modul system függvény segítségével tudjuk megnézni:
 \begin{figure}[H]
@@ -372,7 +397,7 @@ A $type$ mező megmondja, hogy milyen típusu adat fog jönni az $information$ m
 A $time$ mezőben egy időbéjeg található, amely megmondja, hogy a csomag mikor érkezett. Ez 11 bájt lehet. Formátuma: ``nap\_óra\_perc\_másodperc''.\\
 Az $information$ mezőben vannak azok az adatok amelyeket a szerver fel kell dolgozzon. Ezt a ennek a mezőnek nem lehet pontos méretet adni, mert nem tudjuk előre megmondani, hogy mekkora adatot küld, kivétel a karakter. A python nyelvben nincsenek korlátok ebből a szempontból.
 
-A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot. A $data$ változó tartalmazza a protokill által található információt.
+A továbbiakban egy végtelen ciklust alkalmazva az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot. A $data$ változó tartalmazza a protokoll által található információt.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/Capture3}
