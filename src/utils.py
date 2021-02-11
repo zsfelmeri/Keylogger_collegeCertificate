@@ -13,7 +13,7 @@ Gets the system information
 def get_system_information(system_name):
 	uname = {}
 	uname["system"] = platform.uname().system
-	uname["domain_name"] = platform.uname().node
+	uname["device_name"] = platform.uname().node
 	uname["release"] = platform.uname().release
 	uname["version"] = platform.uname().version
 	uname["architecture"] = platform.uname().machine

