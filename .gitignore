@@ -14,5 +14,9 @@ logs/*
 *.toc
 *.lof
 *.lot
+*.bcf
+*.blg
+*.bbl
+*.run.xml
 docs/articles/*
 images/Capture*
