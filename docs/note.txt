@@ -51,7 +51,6 @@ Acoustic keylogger:
   pages={106--111},
   year={2013}
 }
-V2I3201322.pdf
 
 
 Keylogging programs, commonly known as keyloggers, are a type of malware that maliciously track user input from the keyboard in an attempt to retrieve personal and private information. Keystroke logging, also known as key logging, is the capture of typed characters/number. The data captured can include document content, passwords, user ID’s, and other potentially sensitive bits of
@@ -81,3 +80,14 @@ A log is a record of the events occurring within an organization’s systems and
 
 
 Malware detection is often viewed as being static or dynamic. Static detection involves signature-based pattern recognition while dynamic detection involves behavioraland operational-based monitoring. Static detection requires malware detection software to monitor a system for recognizable malicious signatures or checksums. These signatures are essentially sequences of machine instructions that correspond to suspicious activity performed by a program on the host machine [12]. There are two significant but related problems with this technique: (a) the malware detection program needs to be constantly updated with new malware definitions and (b) no protection is provided against malware whose signature is not present in the repository. This is highly relevant to keylogging malware because they typically do not have a unique signature. Therefore, dynamic detection techniques must be employed to detect keylogging malware.
+----------------------------------------------------------------------------------------------------
+
+@article{butler2006rˆ2,
+  title={Rˆ2: The exponential growth of rootkit techniques},
+  author={Butler, Jamie and Arbaugh, Bill and Petroni, Nick},
+  journal={BlackHat USA},
+  volume={2006},
+  year={2006}
+}
+
+rootkit = spyware
