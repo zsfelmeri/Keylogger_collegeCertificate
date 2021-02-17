@@ -8,6 +8,18 @@ class GUIWindow:
 		self.window.resizable(False, False)
 		self.is_characters = True
 		self.tmp_word = ""
+		self.num_lk = {
+			'<96>': 0,
+			'<97>': 1,
+			'<98>': 2,
+			'<99>': 3,
+			'<100>': 4,
+			'<101>': 5,
+			'<102>': 6,
+			'<103>': 7,
+			'<104>': 8,
+			'<105>': 9
+		}
 
 
 	def run(self):
@@ -74,7 +86,7 @@ class GUIWindow:
 
 	#Reads in the logged words from the 'log.csv' file and shows them in the main window
 	def read_words(self):
-		if os.path.isfile("../logs.log.csv"):
+		if os.path.isfile("../logs/log.csv"):
 			file = open("../logs/log.csv", "r")
 			word = ""
 			date = ""
@@ -87,10 +99,12 @@ class GUIWindow:
 				tmp[0] = tmp[0].strip()
 				date = tmp[0]
 				tmp[1] = tmp[1].strip()
-				if (tmp[1].isalpha or tmp[1].isnumeric or tmp[1] in '~!@#$%^&*()_-+=[]{}\\|;:\'",.></?') and len(tmp[1]) == 1:
+				if tmp[1].isalnum() or tmp[1] in '~!@#$%^&*()_-+=[]{}\\|;:\'\",.></?':
 					word += tmp[1]
-				elif word != "":
-					self.insert_listbox(tmp[0], word)
+				elif tmp[1] in self.num_lk.keys():
+					word += str(self.num_lk[tmp[1]])
+				elif tmp[1] in ['Key.space', 'Key.enter'] and word != "":
+					self.insert_listbox(date, word)
 					word = ""
 
 			if word != "":

