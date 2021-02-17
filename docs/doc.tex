@@ -512,6 +512,7 @@ def get_attachments(self, msg):
 			handler.write(part.get_payload(decode=True))
 \end{lstlisting}
 
+\subsubsection{MenuHandler osztály}\label{subsubsec:menuhandler}
 A harmadik osztály a $MenuHandler$, amely segítségével más feladatot is adhatunk a kliensnek a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás. Ennek az osztálynak egy attribútumja van: a kapcsolat. Ez a kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
 \begin{itemize}
 \item 1) Take screenshot - képernyőkép
