@@ -121,8 +121,8 @@ Specializarea: \textbf{\underline{Calculatoare}} & & \\
 \hline
 \end{tabular}
 \begin{tabular}{|p{0.475\textwidth} | p{0.475\textwidth}|}
-Coordonator științific: & Candidat: Felmeri Zsot\\
-Dr. Szántó Zoltán & Anul absolvirii: 2021\\
+Coordonator științific: & Candidat: \textbf{Felmeri Zsot}\\
+\textbf{ș.l. dr. ing. Szántó Zoltán} & Anul absolvirii: \textbf{2021}\\
 \hline
 \end{tabular}
 \begin{tabular}{|p{0.982\textwidth}|}
@@ -170,6 +170,7 @@ Facultatea de Științe Tehnice și Umaniste din Târgu Mureș\\[5pt]
 
 \vspace{4em}
 \doublespacing
+%szotagolas rossz
 \large Subsemnata/ul \dotuline{FELMERI ZSOLT}, absolvent(ă) al/a specializării \dotuline{INFORMATICĂ}, promoţia \dotuline{2021} cunoscând prevederile Legii Educaţiei Naţionale 1/2011 şi a Codului de etică şi deontologie profesională a Universităţii Sapientia cu privire la furt intelectual declar pe propria răspundere că prezenta lucrare de licenţă/proiect de diplomă/disertaţie se bazează pe activitatea personală, cercetarea/proiectarea este efectuată de mine, informaţiile şi datele preluate din literatura de specialitate sunt citate în mod corespunzător.
 
 \vspace{15em}
@@ -204,7 +205,7 @@ Semnătura…………………}
 \doublespacing
 
 \large Subsemnata/Subsemnatul ......................................................., funcţia ……………, titlul ştiinţific ………………… declar pe propria răspundere că ........................................., absolvent al specializării ............................ a întocmit prezenta lucrare sub îndrumarea mea.
-\par În urma verificării formei finale constat că lucrarea de licenţă/proiectul de diplomă/disertaţia corespunde cerințelor de formă şi conținut aprobate de Consiliul Facultăţii de Științe Tehnice și Umaniste din Târgu Mureș în baza reglementărilor Universităţii Sapientia. Luând în considerare şi Raportul generat din aplicaţia antiplagiat ''Turnitin'' consider că sunt îndeplinite cerințele referitoare la originalitatea lucrării impuse de Legea educației naționale nr. 1/2011 şi de Codul de etică şi deontologie profesională a Universităţii Sapientia, şi ca atare sunt de acord cu prezentarea şi susținerea lucrării în fața comisiei de examen de licență/diplomă/disertaţie.
+\par În urma verificării formei finale constat că lucrarea de licenţă/proiectul de diplomă/disertaţia corespunde cerințelor de formă şi conținut aprobate de Consiliul Facultăţii de Științe Tehnice și Umaniste din Târgu Mureș în baza reglementărilor Universităţii Sapientia. Luând în considerare şi Raportul generat din aplicaţia antiplagiat ''Turnitin'' consider că sunt îndeplinite cerințele referitoare la originalitatea lucrării impuse de Legea educației naționale nr. 1/2011 şi de Codul de etică şi de ontologie profesională a Universităţii Sapientia, şi ca atare sunt de acord cu prezentarea şi susținerea lucrării în fața comisiei de examen de licență/diplomă/disertaţie.
 
 \vspace{5em}
 \begin{flushleft}
@@ -250,10 +251,6 @@ Data:}
 
 \hyphenchar\font=-1
 \sloppy
-%\tolerance=1
-%\emergencystretch=\maxdimen
-%\hyphenpenalty=10000
-%\hbadness=10000
 
 \section{Bevezető}\label{sec:intro}
 Világunk egyre inkább a digitalizálódás fele halad. Ennek következtében már a legtöbb embernek birtokában van legalább egy számítógép, ami lehet hordozható laptop vagy asztali gép. Mivel az emberek 2021-ben rendelkeznek digitális ujjlenyomattal, ezért az adatok bisztonsága előtérbe kerül. Egy ilyen eszköz, amely az adatokkal dolgozik, a keylogger. A keylogger egy olyan szoftver vagy hardver, amely a számítógéphez csatlakoztatott billentyűzet naplózására használandó. A dolgozatban a legnagyobb szerepben a szoftver alapú keylogger részesül. Ugyanakkor, a szoftver kivitelezésénél a támadó szemszöge kerül előtérbe, akinek az a célja, hogy adatokat feltünésmentesen tudjon eltulajdonítani.
@@ -268,7 +265,6 @@ A következő fejezetben részletes bemutatásra kerülnek a keyloggerek tipusai
 
 \subsection{Célkitűzés}
 %bullet formatum
-%Célom az volt, hogy egy támadó szerepkörébe képzeljem magam, ez által jobban megismerkedni egy támadó gondolatmenetével, hogy a későbbiekben fel tudjam használni ezt a tudást nagyobb rendszerek védelme érdekében.
 
 \section{Elméleti megalapozás és bibliográfiai tanulmány (a téma pontos körülhatárolása érdekében végzett dokumentálódás)}\label{sec:bibl}
 \subsection{Definíció}
@@ -276,22 +272,23 @@ A következő fejezetben részletes bemutatásra kerülnek a keyloggerek tipusai
 
 Numerous, McGraw és Morrisett a következő képpen definiálták a rosszindulatú kódot: \cite{ahmed2014survey} ``bármely kód, amelyet hozzáadtak, megváltoztattak vagy eltávolítottak egy szoftverrendszerből annak érdekében, hogy szándékozan kárt okozzanak vagy felforgassák a rendszer tervezett funkcióját.''
 
-%target pc
-%usecase dia -> infect pc - use pc - report
-Ahoz, hogy tovább lehessen lépni, definiálni kell a támadót és az éldozatot. A támadó az a személy, aki eljuttatja a rosszindulatú szoftvert az áldozat számítógépére. Ez megtörténhet különböző eszközökkel, mint például e-mail vagy USB. Az áldozatnak nincs egyéb dolga mint, hogy használja a saját gépét, ezzel kapcsolatot létesítve a támadóval. A Figure \ref{fig:infectpcdia}-en látható a támadási fázis, és a Figure \ref{fig:chartransferdia} tartalmazza az áldozat számítógéppel való interakcióját, és ezt hogyan látja a támadó.
+Egy általános keylogger use-case diagramja a Figure \ref{fig:genkeylogger}-en látható. Ennek főbb mozzanatai: az áldozat gépének megfertőzése, az áldozat számítógéppel való interakciója, adatgyűjtés és az adatok megtekintése.
+
+A szoftver eljuttatása az áldozat gépére különböző eszközök segítségével történhet, mint például e-mail, USB Rubber Ducky vagy hálózati szerver. E-mail-en keresztül csatolmányban lehetne elküldeni, de az e-mail szerverek blokkolják a futtatható fájlok küldését, mert tartalmazhat malcode-ot. Ezért egy letöltő linket szoktak küldeni, tehát a hálózati szerver az e-mail-lel együtt dolgozik.
+
+A USB rubber ducky egy speciális USB, amit a számítógép billentyűzetként ismer fel. Léteznek úgynevezett ducky szkriptek, amelyeket bináris állományként a Windows NT rendszerek automatikusan lefuttatnak. A bináris állomány úgy hajtódik végre mintha billentyűzettel pötyögnénk be a szöveget csak sokkal gyorsabban kerül kivitelezésre.
+
+A billentyűzet, a mouse használatát és az áldozat mindennapi tevékenységét a számítógéppel nevezzük a számítógéppel való interakciónak.
+
+A köztes elem, amely összeköti a két felet az az internet. A két fél a világ bármelyik felén lehet, mert a kapcsolat létesítését nem befolyásolja. A szoftver tartalmazhat több kapcsolatot is, de általában csak egyet szokott tartalmazni.
+
+Az adatgyűjtés során az információk egy, a szoftver által generált, naplóállományba mentődnek el. A több kapcsolatot kialakító szoftvernél figyelembe kell venni, hogy a különböző gépektől elküldött adat ne egymáson, azaz minden információ egy állományhoz tartozzon, hanem külön legyenek elmentve a kiértékelés szempontjából. Az adatgyűjtés lehet lokálist vagy globális. Lokálisró akkor beszélünk, ha csak egy alkalmazás használatakór kerül elmentésre az adat. A globális adatgyűjtés a rendszer teljes használatát átkarolja.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/infectpc\ diagram2}
-\caption{Támadási fázis}
-\label{fig:infectpcdia}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/character\ transfer\ diagram}
-\caption{Karakterek elküldése}
-\label{fig:chartransferdia}
+\includegraphics[width=400pt]{../images/general\ keylogger}
+\caption{Általános keylogger}
+\label{fig:genkeylogger}
 \end{figure}
 
 \subsection{Keylogger típusok}
@@ -301,24 +298,20 @@ Az alacsony, kernel szintű keyloggerek általában ``rootware''-ként valósuln
 
 A keyloggerek négy fő kategóriára oszthatók: hardver, wireless, akusztikus és szoftver \cite{ahmed2014survey}. Bár ezeknek különböző a használati módjuk és az információ szerzési módszereik, egy közös dolgon osztoznak: lementik az ellopott információt vagy adatot egy log állományba.
 
-%hardveres
 \subsubsection{Wireless keylogger}
-\cite{ahmed2014survey} A wireless keylogger kihasználja a Bluetooth interfészeket, hogy a rögzített adatokat 100 méteres körzetben továbbítsa. Elsődleges célja az átvitt csomagok lehallgatása wireless billentyűzetről. Hátránya, hogy szükséges egy fogadó/antenna relatív közel a célpont munkakörnyékéhez.
+A wireless keylogger kihasználja a Bluetooth interfészeket, hogy a rögzített adatokat 100 méteres körzetben továbbítsa. Elsődleges célja az átvitt csomagok lehallgatása wireless billentyűzetről. Hátránya, hogy szükséges egy fogadó/antenna relatív közel a célpont munkakörnyékéhez.
 
 \subsubsection{Hardver keylogger}
-\cite{ahmed2014survey} A hardver keylogger egy olyan fizikai eszköz, amely a billentyűzet és a számítógép között helyezkedik el. Kétféle csatlakozási módszer létezik: a keyloggerek közvetlenül összekapcsolhatók a billentyűzet és a számítógép között. A második módszer nem igényel fizikai kapcsolatot a számítógéppel, hanem egy keylogger áramkör telepítését igényli a billentyűzetbe. Ennek a módszernek az az előnye, hogy a felhasználók nem figyelhetik fizikailag a keyloggert.
+A hardver keylogger egy olyan fizikai eszköz, amely a billentyűzet és a számítógép között helyezkedik el. Kétféle csatlakozási módszer létezik: a keyloggerek közvetlenül összekapcsolhatók a billentyűzet és a számítógép között. A második módszer nem igényel fizikai kapcsolatot a számítógéppel, hanem egy keylogger áramkör telepítését igényli a billentyűzetbe. Ennek a módszernek az az előnye, hogy a felhasználók nem figyelhetik fizikailag a keyloggert.
 
 \subsubsection{Szoftver keylogger}
-\cite{ahmed2014survey} A szoftver keylogger elfogja a billentyűzet és az operációs rendszer mentén haladó adatokat. Gyűjti a billentyű karaktereit egy állományba, majd továbbítja a támadónak, aki telepítette a keyloggert.
+A szoftver keylogger elfogja a billentyűzet és az operációs rendszer mentén haladó adatokat. Gyűjti a billentyű karaktereit egy állományba, majd továbbítja a támadónak, aki telepítette a keyloggert.
 
-%harveres
 \subsubsection{Akusztikus keylogger}
-\cite{ahmed2014survey} A hardware keylogger-rel ellentétben az acoustic keylogger elemzésekor rögzíti az egyes billentyűleütések hangját. Különleges felszerelés szükséges a felhasználó gépelés hangjának meghallgatásához. Parabolikus mikrofonokat használnak nagy távolság alapuló rögzítésre, ezért ezt a mikrofont arra használják, hogy a billentyűzet hangját 30 méter távolságból vegye fel a célzott helyről.
+A hardware keylogger-rel ellentétben az acoustic keylogger elemzésekor rögzíti az egyes billentyűleütések hangját. Különleges felszerelés szükséges a felhasználó gépelés hangjának meghallgatásához. Parabolikus mikrofonokat használnak nagy távolság alapuló rögzítésre, ezért ezt a mikrofont arra használják, hogy a billentyűzet hangját 30 méter távolságból vegye fel a célzott helyről.
 
-\subsection{Anti keylogger}
-%osszekoto mondat
-%ha vannak keyloggerek akkor szukseg van 
-\cite{wood2010keyloggers} A rosszindulatú programok észlelését gyakran satikusan vagy dinamikusan nézik. A statikus észlelés magába foglalja az aláírás alapú mintázatfelismerést, míg a dinamikus észlelés viselkedésbeli és működési alapú megfigyelést jelent. A statikus felismeréshez rosszindulatú programok észlelésére van szükség a rendszer figyelése érdekében, hogy a felismerhető rosszindulatú aláírásokat vagy `checksum'-okat kiszűrje. Ezek az aláírások lényegében oszlyan gépi utasítások szekvenciái, amelyek megfelelnek a program által a gazdagépen végrehajtott gyanús tevékenységnek. Két jelentős probléma merül fel ezzel a technikával:
+\subsection{Keyloggerek elleni védelem}
+Mivel létezik a rossz akarat, a kártevés akarata, ezért szükség van ezek kivédésére is. A rossz indulattal használt keyloggereket nagymértékben ellenőrizték és tettek ellenük, de napjainkban egyre több ilyen szoftver készül. Ezért lehetetlen az összeset megakadájozni. \cite{wood2010keyloggers} A rosszindulatú programok észlelését gyakran satikusan vagy dinamikusan nézik. A statikus észlelés magába foglalja az aláírás alapú mintázatfelismerést, míg a dinamikus észlelés viselkedésbeli és működési alapú megfigyelést jelent. A statikus felismeréshez rosszindulatú programok észlelésére van szükség a rendszer figyelése érdekében, hogy a felismerhető rosszindulatú aláírásokat vagy `checksum'-okat kiszűrje. Ezek az aláírások lényegében oszlyan gépi utasítások szekvenciái, amelyek megfelelnek a program által a gazdagépen végrehajtott gyanús tevékenységnek. Két jelentős probléma merül fel ezzel a technikával:
 \begin{itemize}
 \item a rosszindulatú programfelismerőt folyamatosan frissíteni kell az új rosszindulatú programokkal
 \item nincs védelem a rosszindulatú programok ellen, amelyek aláírása nem ismert
@@ -333,12 +326,110 @@ Az utóbbi a rosszindulatú keyloggerekre erősen vonatkozik, mivel nincs egyedi
 
 \cleardoublepage
 \section{A rendszer specifikációi és architektúrája (szoftverek és hardverek esetében)}\label{sec:specs_and_arch}
-%virtualis gepek -> meresek, hany kliensd bir el
+%virtualis gepek -> meresek, hany klienst bir el
 %kiserletek, grafikonok
 %kovetelmeny specs - func, nem func
 %architektura osszes lenyeges komponens
 
-\subsection{Nem funkcionális követelmények}
+\subsection{Felhasználói követelmények}
+% figure 2 -> figure 1 az en rendszeremre specifikusan
+% use case activity diagramja
+%user needs
+%what the user does with the system | activities that users must be able to perform
+%\noindent - internet $=>$ connection\\
+%- uses the menu: 1)screenshot 2)webcam picture 3)record audio 4)exit\\
+
+%lehetoseg van kerni screenshot, adat kuldes egy oraban
+%passziv felhasznalo -> target olyan ertelemben h nem tud errol
+
+A rendszernek két típusú felhasználója van: egy aktív és egy passzív. A Figure \ref{fig:specifickeylogger} mutatja a személyreszabott rendszer use case diagramját.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/specific\ keylogger}
+\caption{Személyreszabott keylogger}
+\label{fig:specifickeylogger}
+\end{figure}
+
+A passzív felhasználó az ábrán levő áldozatot (target) jelképezi. A szoftver az áldozat tudta nélkül kell, hogy fusson az operációs rendszeren, miközben az áldozat folyamatosan használja a számítógépjét.
+
+A támadó (hacker) tölti be az aktív felhasználó szerepkörét. Legelső lépése a szoftver eljutatása az áldozat gépére. Az eljuttatáshoz használható a USB rubber ducky, amiből többet is lehet készíteni és elszórni például egy autó parkolóban, mert egy kíváncsi természetű ember mindig akad. A USB eszközök elszórása után a hacker feladata, hogy elindítsa a szoftver másik felét, hogy a kapcsolat létre tudjon jönni.
+
+A kapcsolat létrejötte után, a támadónak lehetősége van megtekinteni az áldozat rendszerének az információit, mint például a számítógép neve, processzor információ, bejelentkezett felhasználó felhasználóneve, a használaatban levő operációs rendszer neve, verziószáma és arhitektúrája. Ha az áldozat használta a billentyűzetet, akkor a támadó megtekintheti az áldozat által lenyomott billentyűket karakterek vagy szavak formátumában.
+
+A támadónak lehetősége van további információ szerzésre, ahogyan azt a Figure \ref{fig:menudia} tartalmazza, mégpedig képernyőkép (screenshot), webkamerakép (webcam picture) és hangfelvétel (audio recording) formátumban.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/menu\ diagram}
+\caption{menü diagram}
+\label{fig:menudia}
+\end{figure}
+Ha a támadó úgy látja jónak, lehetősége adódik a kapcsolat felbontására. A kapcsolat felbontása után a billentyűzet eseményei az áldozat rendszerére mentődnek el egy állományba, és óránkánt e-mail küldésével továbbítja ezt az állományt a támadónak egy képernyőképpel együtt.
+
+%nem ide jon
+% fork alol jon ki
+% szet kell szedni
+% hamis ag + collect data
+%nem kell a menu
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=400pt]{../images/userreq\ diagram}
+%\caption{Felhasználói aktivitás}
+%\label{fig:useractivitydia}
+%\end{figure}
+
+\subsection{Rendszer követelmények}
+%what the system “shall do.”
+%can my pc run it?
+
+\subsubsection{Funkcionális követelmények} %milyen inputra milyen output
+%menu options
+%logging
+Az aktív felhasználó szemszögéből a Figure \ref{fig:seqdia} szemlélteti a rendszer működési elvét. A szerver és a kliens kapcsolódása után, a támadónak igénye lehet használni a GUI-t és a parancssoron megjelenő menüt. Amint a kapcsolat létrejött a GUI automatikusan elindul, és valós időben adódnak hozzá az adatok.
+
+A GUI segít a megszerzett adatok megjelenítésében. Itt három opció lehetséges: rendszerinformáció megtekintése, karakterek, illetve a karakterekből alkotott szavak megtekintése. Az alábbi opciókat gombnyomásra előhívhatja a felhasználó.
+
+A rendszerinformáció megtekintésében a felhasználónak szükséges rákattintania a $PC Information$ gombra. Ez által egy új ablak ugrik fel, ahol az információk megjelenítésre kerülnek. Az adatok az elmentett fájlból kiolvasva kerülnek az ablak megjelenítő részébe. Ez az ablak bármikor előhívható vagy bezárható, amíg a GUI alkalmazás fut.
+
+A GUI automatikus elinulása után a karaktereket a lementett naplóállományból olvassa ki és jeleníti meg egy legördülő listában, ha létezik ez az állomány. Különben egy üres lista jelenik meg. A szavakat is meg lehet nézni, amelyek úgy épülnek fel, hogy a karakterek egy karakterláncba fűződnek amíg egy $ENTER$ vagy egy $SPACE$ elválasztó karakter nem következik. Megjelenítésüket a karaktereknek és a szavaknak lehet váltogatni tetszés szerint a $Characters$ és a $Words$ gombokat alkalmazva.
+
+Mivel a GUI egy egyedül álló alkalmazás, ezért be lehet zárni, és nem befolyásolja az adatgyűjtést. A parancssoron megjelenő menü arra szolgál, hogy a szerver kérést küldjön a kliens fele. A kérések a következők lehetnek: képernyőkép (screenshot), webkamerakép (webcam picture), hangfelvétel (audio recording) és kapcsolat bezárás. A kérés közben megjelenik, a folyamat ütemezési információja. Például, ha egy képernyőképet kér a felhasználó, akkor megjelenik a folyamat kezdéséhez járuló szöveg, és a befejezésénél a végéhez járuló szöveg, hogy követhető legyen az adatátvitel. A menüpontokat számok formátumban kell megadni a parancssoron:
+\begin{itemize}
+\item 1 = screenshot
+\item 2 = webcam picure
+\item 3 = audio recording
+\item 4 = connection closure
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/connected\ system}
+\caption{A kpcsolatot létesített rendszer}
+\label{fig:seqdia}
+\end{figure}
+
+%A szoftver három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
+%%reszletes tervezes
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=400pt]{../images/class\ diagram}
+%\caption{osztály diagram}
+%\label{fig:classdia}
+%\end{figure}
+%A Figure \ref{fig:classdia}-en látható az osztályok és az elhatárolt komponensek is. A \textbf{KeyLogger}, \textbf{Server} és \textbf{MenuHandler} osztályok egy komponens, amelyek a szerverhez tartoznak, a \textbf{KeyLoggerClient}, \textbf{Client} és \textbf{MenuHandlerClient} osztályok egy komponens, amelyek a klienshez tartoznak, a \textbf{GUIWindow} osztály egy komponens, amely a GUI-hoz tartozik.
+%
+%A \textbf{Server} és a \textbf{Client} osztályok hozzák létre a kapcsolatot, ennek a feltétele, hogy a szerver hamarabb el kell legyen indítva mint a kliens. A kapcsolat létesítése után elindul mindkét komponensnél a keylogger, amely szükséges, hogy az információt elküldje és fogadja. A szerfer komponens fogja fogadni azt amit a kliens komponens küld, és azt egy log állományba írja. Az információ a szervernél tartalmazza a billentyű karaktereit, a képernyőképet, a webkamera képet és a hangfelvételt. A karakterek kivételével a többi opciót a \textbf{MenuHandler} osztály fogja igazítani. A szerver küld a kliensnek egy opciót, amely lehet kepernyőkép, webkamerakép vagy hangfelvétel, ezt a kliens komponens \textbf{MenuHandlerClient} osztály fogadja és megpróbálja végrehajtani a feladatot. Ha sikerül elküldi a szervernek, ha nem, akkor egy hibaüzenetet küld, vagy megszakítsa a kapcsolatot. A kapcsolat megszakítésa után a kliens e-mail-t küld oránként, amelyben az addig lementett karakterek és egy képernyőkép van csatolmányként. Mindkét komponensnél a menüt kezlelő osztályok külön szálon kell fussanak, hogy ne blokkolják a fő szálat. Ez által megoldva, hogy párhuzamosan a karakter küldéssel lehet küldeni a többi adatot is.
+%
+%Szükséges egy eszköz, amely segítségével a futtatható fájlt el lehet juttatni a célpont számítógépére. Lehetséges eszközök a kivitelezésre:
+%\begin{itemize}
+%\item USB Rubber Ducky
+%\item Elküldeni egy e-mail formában
+%\end{itemize}
+%A USB Rubber Ducky egy olyan usb eszköz, amely segítségével, a számítógéphez való csatlakoztatás után, automatikusan ún. $ducky\ szkripteket$ lehet futtatni. Ezt az eszközt a gép billentyűzetként ismeri fel és a begépelt szkriptet lefuttatja a rendszer, mivel azt hiszi, hogy a billentyűzetet használták. Ehez az eszközhöz és az e-mail-hez is szükséges egy lokális szervert futtatni, amiről a futtatható fájl (a keylogger) letöltődik. A python 3.x \textbf{http.server} moduljával létre lehet hozni egy ilyen szervert. Ahoz, hogy ne csak ugyanazon a hálozaton működjön, ahoz meg kell nyitni egy portot a router-en, és azt a portot meg kell adni argumentumként a szerver létrehozásánál és a publikus ip címmel kell a szerverhez csatlakozni:
+%\begin{lstlisting}{language=Bash}
+%python3 -m http.server [port]
+%\end{lstlisting}
+
+\subsubsection{Nem funkcionális követelmények}
 A szoftver működik windows, linux és darwin rendszerek alatt, a verzió nem befolyásolja. A rendszeren szükséges telepíteni a python 3.x verzióját, mivel olyan modulok vannak használatban, amelyeket a python 2.x nem ismer. Ez egy olyan szoftver, amelyet törvényes és törvénytelen dolgogra is lehet használni. Törvényesen például monitorizálni a céges alkalmazottak munka időszakában lebonyolított tevékenységeket. Törvénytelen például, ha valaki arra használja, hogy ellopjon bizalmas információkat személyektől. Ez a használón múlik, hogy melyik utat választja.
 
 A python 3.x verzióhoz szükséges modulok a futtatáshoz:
@@ -394,30 +485,7 @@ A \textbf{pyinstaller} modul egy fordító program, amely python kódból futtat
 
 %Karbantarthatóság...
 
-\subsection{Funkcionális követelmények}
-A szoftver három fő komponensből épül fel: szerver, kliens és GUI. Ezen felül található egy mellék állomány, amelyben a szerver és a kliens számára hasznos fuggvények vannak implementálva.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/class\ diagram}
-\caption{osztály diagram}
-\label{fig:classdia}
-\end{figure}
-A Figure \ref{fig:classdia}-en látható az osztályok és az elhatárolt komponensek is. A \textbf{KeyLogger}, \textbf{Server} és \textbf{MenuHandler} osztályok egy komponens, amelyek a szerverhez tartoznak, a \textbf{KeyLoggerClient}, \textbf{Client} és \textbf{MenuHandlerClient} osztályok egy komponens, amelyek a klienshez tartoznak, a \textbf{GUIWindow} osztály egy komponens, amely a GUI-hoz tartozik.
-
-A \textbf{Server} és a \textbf{Client} osztályok hozzák létre a kapcsolatot, ennek a feltétele, hogy a szerver hamarabb el kell legyen indítva mint a kliens. A kapcsolat létesítése után elindul mindkét komponensnél a keylogger, amely szükséges, hogy az információt elküldje és fogadja. A szerfer komponens fogja fogadni azt amit a kliens komponens küld, és azt egy log állományba írja. Az információ a szervernél tartalmazza a billentyű karaktereit, a képernyőképet, a webkamera képet és a hangfelvételt. A karakterek kivételével a többi opciót a \textbf{MenuHandler} osztály fogja igazítani. A szerver küld a kliensnek egy opciót, amely lehet kepernyőkép, webkamerakép vagy hangfelvétel, ezt a kliens komponens \textbf{MenuHandlerClient} osztály fogadja és megpróbálja végrehajtani a feladatot. Ha sikerül elküldi a szervernek, ha nem, akkor egy hibaüzenetet küld, vagy megszakítsa a kapcsolatot. A kapcsolat megszakítésa után a kliens e-mail-t küld oránként, amelyben az addig lementett karakterek és egy képernyőkép van csatolmányként. Mindkét komponensnél a menüt kezlelő osztályok külön szálon kell fussanak, hogy ne blokkolják a fő szálat. Ez által megoldva, hogy párhuzamosan a karakter küldéssel lehet küldeni a többi adatot is.
-
-Szükséges egy eszköz, amely segítségével a futtatható fájlt el lehet juttatni a célpont számítógépére. Lehetséges eszközök a kivitelezésre:
-\begin{itemize}
-\item USB Rubber Ducky
-\item Elküldeni egy e-mail formában
-\end{itemize}
-A USB Rubber Ducky egy olyan usb eszköz, amely segítségével, a számítógéphez való csatlakoztatás után, automatikusan ún. $ducky\ szkripteket$ lehet futtatni. Ezt az eszközt a gép billentyűzetként ismeri fel és a begépelt szkriptet lefuttatja a rendszer, mivel azt hiszi, hogy a billentyűzetet használták. Ehez az eszközhöz és az e-mail-hez is szükséges egy lokális szervert futtatni, amiről a futtatható fájl (a keylogger) letöltődik. A python 3.x \textbf{http.server} moduljával létre lehet hozni egy ilyen szervert. Ahoz, hogy ne csak ugyanazon a hálozaton működjön, ahoz meg kell nyitni egy portot a router-en, és azt a portot meg kell adni argumentumként a szerver létrehozásánál és a publikus ip címmel kell a szerverhez csatlakozni:
-%\begin{algorithmic}[H]
-%\State $python3\ -m\ http.server\ <port>$
-%\end{algorithmic}
-
 \section{A részletes tervezés}\label{sec:plan}
-
 \subsection{Szerver}\label{subsec:server}
 Előszőr, hogy működjön a gyakori operációs rendszereken (Windows, Linux, MacOS) meg kell nézni, hogy melyiken futtatjuk. Ezt a platform modul system függvény segítségével tudjuk megnézni:
 
@@ -520,13 +588,7 @@ A harmadik osztály a $MenuHandler$, amely segítségével más feladatot is adh
 \item 3) Record audio - audio felvétel
 \item 4) Exit - bezárja a TCP kapcsolatot
 \end{itemize}
-Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy üzenetet ír ki: ``Wrong option!'', vagy ha csak lenyomjuk az ENTER karaktert, akkor egyszerűen új sórba ugrik. A Figure \ref{fig:menudia} tartalmazza az opciók kezelését. A támadó kérhet képernyőképet, webkameraképet vagy egy 10  másodperces hangfelvételt. Ezek az adatok elküldésre kerülnek a TCP kapcsolaton.
-\begin{figure}[H]
-\centering
-\includegraphics[width=400pt]{../images/menu\ diagram}
-\caption{menu diagram}
-\label{fig:menudia}
-\end{figure}
+Természetesen le van kezelve, ha nem 1-től 4-ig adunk meg számokat, akkor egy üzenetet ír ki: ``Wrong option!'', vagy ha csak lenyomjuk az ENTER karaktert, akkor egyszerűen új sórba ugrik.
 
 \subsection{Kliens}\label{subsec:client}
 %atfogalmazni
@@ -754,6 +816,13 @@ A GUI akkor lép működésbe, amikor a kliens csatlakozott a szerverhez, és ad
 \label{fig:gui}
 \end{figure}
 Ha a $PC\ Information$ gomb kerül megnyomásra, akkor felugrik egy másik ablak, amely tartalmazza a felhasználó (target) redszerinformációit, lásd \pageref{subsubsec:keyloggerclientclass} oldal. A $Characters$ és a $Words$ gombok a megjelenítésért felelnek. Ahogyan a nevük is mondja, a $Characters$ gomb csak a karaktereket mutatja, míg a $Words$ gomb felépíti a szavakat, és azokat jeleníti meg. Egy szó végét a $SPACE$ vagy az $ENTER$ karakterek jelentik.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/character\ transfer\ diagram}
+\caption{Karakterek elküldése}
+\label{fig:chartransferdia}
+\end{figure}
 
 \section{A rendszer felhasználása \ (szoftverek és hardverek esetében)}\label{sec:useage}
 
