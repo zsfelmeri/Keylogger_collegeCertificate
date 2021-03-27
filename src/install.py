@@ -5,8 +5,9 @@ if len(sys.argv) != 2:
 	sys.exit(1)
 
 system_name = platform.system().lower()
-architecture = platform.architecture()
+architecture = platform.architecture()[0]
 whl_installed = False
+python_version = ''.join(platform.python_version().split('.')[:2])
 
 pyaudio_wheels32 = [
 	"PyAudio‑0.2.11‑cp39‑cp39‑win32.whl",
@@ -42,40 +43,37 @@ if system_name == 'windows':
 		subprocess.check_call([sys.executable, "-m", "pip", "install", whl])
 
 
+	py_whl = None
 	if architecture == '32bit':
 		for whl in pyaudio_wheels32:
-			try:
-				download_thread = threading.Thread(target=download_wheel, args=(whl,))
-				download_thread.start()
-				download_thread.join()
-
-				install_thread = threading.Thread(target=install_wheel, args=(whl,))
-				install_thread.start()
-				install_thread.join()
-
-				os.remove(whl)
-			except subprocess.CalledProcessError as err:
-				print(err)
+			if python_version in whl:
+				py_whl = whl
+				break
 	elif architecture == '64bit':
 		for whl in pyaudio_wheels64:
-			try:
-				download_thread = threading.Thread(target=download_wheel, args=(whl,))
-				download_thread.start()
-				download_thread.join()
+			if python_version in whl:
+				py_whl = whl
 
-				install_thread = threading.Thread(target=install_wheel, args=(whl,))
-				install_thread.start()
-				install_thread.join()
+	if py_whl is not None:
+		try:
+			download_thread = threading.Thread(target=download_wheel, args=(py_whl,), daemon=True)
+			download_thread.start()
+			download_thread.join()
 
-				os.remove(whl)
-			except subprocess.CalledProcessError as err:
-				print(err)
+			install_thread = threading.Thread(target=install_wheel, args=(py_whl,), daemon=True)
+			install_thread.start()
+			install_thread.join()
+
+			os.remove(py_whl)
+			whl_installed = True
+		except subprocess.CalledProcessError as err:
+			print(err)
 elif system_name == 'darwin':
 	def download_brew():
 		subprocess.check_call(["/bin/bash", "-c", "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"])
 
 	try:
-		download_thread = threading.Thread(target=download_brew)
+		download_thread = threading.Thread(target=download_brew, daemon=True)
 		download_thread.start()
 		download_thread.join()
 

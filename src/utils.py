@@ -4,6 +4,22 @@ import cv2
 from datetime import datetime
 import pyaudio, wave
 
+
+'''
+Returns the name of the operating system and the temporary folder's location
+'''
+def get_system_name_and_path():
+	sys_name = platform.system().lower()
+	temp_path = None
+
+	if sys_name == 'windows':
+		temp_path = f"C:/Users/{getpass.getuser()}/AppData/Local/Temp/"
+	elif sys_name == 'linux' or sys_name == 'darwin':
+		temp_path = "/tmp/"
+
+	return (sys_name, temp_path)
+
+
 '''
 Gets the system information
 

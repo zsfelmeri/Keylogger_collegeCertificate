@@ -8,6 +8,7 @@ class GUIWindow:
 		self.window.resizable(False, False)
 		self.is_characters = True
 		self.tmp_word = ""
+		self.gui_running = None
 		self.num_lk = {
 			'<96>': 0,
 			'<97>': 1,
@@ -50,6 +51,7 @@ class GUIWindow:
 		scrollbar.config(command = self.listbox.yview)
 		scrollbar.grid(column = 3, row = 3, pady = 10, padx = (0,10), sticky = "ns")
 
+		self.gui_running = True
 		self.window.mainloop()
 
 

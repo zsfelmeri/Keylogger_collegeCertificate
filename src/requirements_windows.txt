@@ -61,7 +61,7 @@ scipy==1.5.4
 selenium==3.141.0
 simple-http-server==0.5.5
 six==1.15.0
-smtplib
+secure-smtplib==0.1.1
 soupsieve==2.0.1
 subprocess.run==0.0.8
 tk==0.1.0
