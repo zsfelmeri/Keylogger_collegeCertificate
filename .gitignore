@@ -19,4 +19,5 @@ logs/*
 *.bbl
 *.run.xml
 docs/articles/*
+docs/images/*
 images/Capture*
