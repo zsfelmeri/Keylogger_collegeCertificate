@@ -94,7 +94,7 @@
 
 \newcommand{\temavezetoAfokozat}{Egyetemi tan\'ar}% Első konzulens neve
 \newcommand{\temavezetoAfokozatRo}{Profesor universitar}
-\newcommand{\temavezetoAfokozatEn}{Full Professor}
+\newcommand{\temavezetoAfokozatEn}{Lecturer} %Full Professor
 \newcommand{\temavezetoB}{} % Második konzulens neve; hagyd üresen, ha egy konzulensed van.
 \newcommand{\cimHu}{Keylogger} % Cím
 \newcommand{\cimRO}{Keylogger}
@@ -375,7 +375,7 @@ A \emph{tkinter} modul a GUI elkészítésére használandó, ez felel a megjele
 
 A \emph{logging} modul segítségével visszajelzéseket adunk a szoftvertől a felhasználónak, hogy lehessen követni az aktuális feladat menetét. Ehez szükséges egy $logging.conf$ állomány, maely béállítja a loggolási opciókat.
 
-A \emph{pyinstaller} modul egy fordító program, amely python kódból futtatható fájlt készít. Lefordításra csak a kliens kerül, mert azt kell az áldozat rendszerére telepíteni, úgy, hogy a háttérben fusson. Ezt be lehet állítani a $w$ opcióval windows és OS X rendszereken, míg *NIX rendszereken nem veszi számításba ezt az opciót. A $onefile$ opció összesűríti egy futtathatóvá, ez által lehetővé teszi, hogy ne kelljen más szükséges állományokat is telepíteni az áldozat rendszerére. Be lehet állítani a futtatható fájl nevét ($name$ opció) és ikonját is ($icon$ opció).
+A \emph{pyinstaller} modul egy fordító program, amely python kódból futtatható fájlt készít. Lefordításra csak a kliens kerül, mert azt kell az áldozat rendszerére telepíteni, úgy, hogy a háttérben fusson. Ezt be lehet állítani a $w$ opcióval Windows rendszereken, míg *NIX rendszereken nem veszi számításba ezt az opciót. A $onefile$ opció összesűríti egy futtathatóvá, ez által lehetővé teszi, hogy ne kelljen más szükséges állományokat is telepíteni az áldozat rendszerére. Be lehet állítani a futtatható fájl nevét ($name$ opció) és ikonját is ($icon$ opció).
 
 %Teljesítmény...
 
@@ -404,7 +404,7 @@ Ha nem a három operációs rendszer közé tartozik, akkor kilép a program. It
 A Hacker oldalon három osztály talalható (Communication, Keylogger, MenuHandler) és ehhez még hozzácsatolódik a GUI rész is, lásd ábra \ref{fig:serverclassdia}. A Hacker alkalmazás futását nem befolyásolja a GUI működése.
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/serverclass diagram}
+\includegraphics[width=400pt]{../images/hackerclassdiagram}
 \caption{Hacker oldali osztály diagram}
 \label{fig:serverclassdia}
 \end{figure}
@@ -548,7 +548,7 @@ A Target oldal is három osztályt tartalmaz, mint a Hacker oldal, ha nem vessz�
 Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre van hozva a ``Communication'' osztály, amelynek négy attribútumja van: egy ip cím, két port (egy a PUB SUB kapcsolatnak és egy a REQ REP kapcsolatnak) és a ZeroMQ által létrehozott kontextus. Példányosításkor az ip címnek egy helytartót (*) kell megadni, vagy a lokális ip címet.
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/clientclass diagram}
+\includegraphics[width=400pt]{../images/targetclassdiagram}
 \caption{Target oldali osztály diagram}
 \label{fig:clientclassdia}
 \end{figure}
@@ -603,7 +603,7 @@ def get_time():
 \end{lstlisting}
 A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: $ENTER$, $SPACE$, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.
 
-A hálózaton közlekedő adatokat meg lehet nézni a wireshark szoftverrel. Észre lehet venni, hogy az adatok emberileg olvashatóak (ábra \ref{fig:packetcapture}), ezéer a python base64 modulját alkalmazva kódoljuk a küldendő adatokat.
+A hálózaton közlekedő adatokat meg lehet nézni a wireshark szoftverrel, amelyet csomagok analizálására használnak. Észre lehet venni, hogy az adatok emberileg olvashatóak (ábra \ref{fig:packetcapture}), ezért a python base64 modulját alkalmazva kódoljuk a küldendő adatokat.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/wiresharkcapture}
