@@ -74,7 +74,6 @@ class MenuHandlerHacker(threading.Thread):
 
 			# replies
 			if option in ['1', '2', '3']:
-				# data = self.connection.socket_interact.recv_string()
 				data = self.connection.socket_interact.recv()
 				data = pickle.loads(data)
 				data = b64decode(data).decode()

