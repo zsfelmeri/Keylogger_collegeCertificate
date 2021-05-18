@@ -44,7 +44,7 @@ def get_system_information(system_name):
 				break
 	elif system_name == 'darwin':
 		os.environ['PATH'] = os.environ['PATH'] + os.pathsep + '/usr/sbin'
-		uname["processor"] = subprocess.check_output('sysctl -n machdep.cpu.brand_string').strip()
+		uname["processor"] = subprocess.check_output('sysctl -n machdep.cpu.brand_string', shell=True).strip().decode()
 
 	info = [uname, [os.getlogin(), getpass.getuser()]]
 	return info
