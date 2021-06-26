@@ -8,11 +8,17 @@
 %----------------------------------------------------------------------------
 
 \chapter*{Kivonat}
+Dolgozatom témája egy szoftver alapú keylogger megvalosítása, amelynek több funkcionalitásai vannak, mint egy átlagos keyloggernek. Mint tudjuk a körülöttünk levő világban szinte minden épületben található legalább egy számítógép vagy egy gép, amelyen egy operációs rendszer fut. Ezért kell odafigyelni, hogy ne kerüljünk virtuális támadás áldozatául.
 
+Ahogyan beléptünk az Internet világába egyre nagyobb a rosszindulatú szoftverek általi fenyegetés. Ezért arra törekedtem, hogy egy támadó, azaz hacker, szemszögéből fejlesszem a keyloggert. Viszont nem csak a támadó szemszögéből voltam érdekelt, hanem azzal is szembe akartam nézni, hogy hogyan lehet ezeket megelőzni. Tehát a virus elhárító programok (anti-virus) hogyan előzik meg a keyloggerek telepítését a rendszereken. Kutatásom alkalmával észrevettem, hogy a keyloggereket vállalatoknál is alkalmazzák a számítógépes rendszerek monitorizálásánál.
+
+Tervezés alatt két nagy részre kellett osztani dolgozatot. Tehát két szoftvert kellett tervezni, mivel az egyik a hacker oldalán üzemel és monitorizál, a másik pedig az áldozat operációs rendszrén lesz telepítve. A hacker oldal fogadja az adatokat, és az áldozat oldala küldi azokat. Az adatok a hálózaton közlekednek, ezért érdemes a csomagokat titkosítani. Például egy jól monitorizált rendszer esetén a hálózaton közlekedő csomagokat követni lehet. A titkosítás célja, hogy ne tudja bárki értelmezni a csomag tartalmát.
+
+Tesztelésre a gyakori operációs rendszereket használtam, úgy virtuális gépeken, mint valós gépeken egyaránt. Célom az volt, hogy az áldozat számára érzékeny adatokat fogjak el, például jelszavakat. Következtetésképpen megállapítjuk, hogy melyik operációs rendszeren lehet megszerezni a bejelentkezési jelszavát a felhasználónak, és hogy melyeken nem sikerül ez.
 
 \vspace*{2cm}
 
-\noindent \textbf{Kulcsszavak:} 
+\noindent \textbf{Kulcsszavak:}  keylogger, malware, hacker
 \vfill
 \selectlanguage{romanian}
 
@@ -20,12 +26,18 @@
 % Abstract in Romanian
 %----------------------------------------------------------------------------
 \chapter*{Rezumat}
+Tema tezei este implementarea unui keylogger bazat pe software care are mai multe funcționalități decât un keylogger universal. La nivel mondial, există cel puțin un calculator sau o mașină care funcționează cu ajutorul unui sistem de operare în aproape fiecare clădire. Prin urmare, trebuie să se acordăm atenție pentru a nu fi victima unui atac virtual.
 
+După ce am intrat în lumea Internetului există o amenințare mare, creștând cu timpul, din partea malware-ului. Prin uramre, am încercat să dezvolt un keylogger bazat pe software din perspectiva unui atacator, adică a unui hacker. Însă, eram interesat de perspectiva unui atacator, dar am vrut și să înțeleg cum pot preveni software-urile acestea. Astfel, programele antivirus împiedică instalarea keylogger-urilor pe sisteme. În timpul cercetărilor mele, am observat că keylogger-urile sunt folosite și în companii pentru a-și monitoriza sistemele de calculatoare.
+
+În timpul planificării, proiectul era împărțit în două părți. Așadar, trebuia să proiectez două programe: unul va rula pe partea hackerului și va monitoriza apăsările tastei victimei, iar celălalt va fi instalat pe sistemul de operare a victimei. Software-ul în partea victimei trimite datele, iar partea de hacker le primește. Datele se deplasează prin rețea, deci este o idee bună să criptăm pachetele. De exemplu, pachetele pot fi urmărite în rețea de sisteme bine monitorizate. Scopul criptării este de a împiedica pe oricine să interpete conținutul unui pachet.
+
+Am folosit sisteme de operare obișnuite pentru testare, atât pe mașini virtuale, cât și pe mașini reale. Scopul meu era de a prinde date sensibile de la victimă, cum ar fi parolele. În concluzie, stabilim că pe ce sistem de operare este posibil să se obțină parola de conectare de la utilizator și pe ce sisteme de operare eșuează acest proces.
 
 \vspace*{2cm}
 
 
-\noindent \textbf{Cuvinte de cheie:} 
+\noindent \textbf{Cuvinte de cheie:} keylogger, malware, hacker
 
 \vfill
 \selectlanguage{english}
@@ -35,12 +47,17 @@
 % Abstract in English
 %----------------------------------------------------------------------------
 \chapter*{Abstract}
+The aim of my thesis is the implementation of a software-based keylogger which has more functionalities than an avrage keylogger. Worldwide there is at least one computer or machine running an operating system in almost every building, as we know. Therefor, care must be taken in order not to be a victim of a virtual attack.
 
+After we entered the world of the Internet, there is a growing threat from malware. Therefore, I tried to develop a software-based keylogger from the persppective of an attacker, i.e hacker. However, I was not only interested in the perspective of an attacker, but I also wanted how I can prevent them. So anti-virus programs prevent keyloggers from being installed on systems. During my research, I noticed that keyloggers are also used in companies to monitor their computer systems.
 
+During planning, the project had to be divided into two parts. So two softwares had to be designed: one will run on the hacker's side and monitor the victim's keystrokes and the other one ill be installed on the victim's operating system. The victim side sends the data and the hacker side receives it. The data travels over the network, so it is a good idea to encrypt the packets. For example, with well-monitored system packets traveling on the network can be tracked. The purpose of encryption is to prevent anyone from interpeting the content of a package.
+
+I used common operating systems for testing, both on virtual machines and real machines as well. My goal was to capture sensitive data from the victim such as passwords. In conclusion, we determine that on which operating system it is possible to obtain the login password from the user and on which operating systems this process fails.
 
 \vspace*{2cm}
 
-\noindent \textbf{Keywords:} 
+\noindent \textbf{Keywords:} keylogger, malware, hacker
 
 \vfill
 \dolgozatnyelve

