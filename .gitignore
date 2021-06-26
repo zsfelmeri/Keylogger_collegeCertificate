@@ -1,5 +1,6 @@
 */__pycache__/*
 src/screenshot*
+src/UpdateLinux
 logs/*
 *.exe
 *.iso
@@ -20,4 +21,3 @@ logs/*
 *.run.xml
 docs/articles/*
 docs/images/*
-images/Capture*
