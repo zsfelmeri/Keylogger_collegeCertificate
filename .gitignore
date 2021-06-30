@@ -1,5 +1,7 @@
 */__pycache__/*
 src/screenshot*
+src/audio*
+src/webcam*
 src/UpdateLinux
 logs/*
 *.exe
