@@ -20,6 +20,7 @@ logs/*
 *.bcf
 *.blg
 *.bbl
+*.vrb
 *.run.xml
 docs/articles/*
 docs/images/*
