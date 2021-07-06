@@ -66,18 +66,23 @@
 \end{frame}
 
 \section{Keylogger in general}
-\begin{frame}
+\begin{frame}{What is a keylogger?}
 \includegraphics[width=307pt]{../images/keyloggerimg}
 \end{frame}
 
 \begin{frame}{Malware}
 \begin{columns}[onlytextwidth]
 	\column{0.45\textwidth}
-	malware = malicious software\\
-	malware\\
-	\hspace{1.75em}\rotatebox[origin=c]{180}{$\Lsh$} keylogger
+	\only<2->{malware = malicious software
+	}\\
+	\only<3->{
+		malware\\
+		\hspace{1.75em}\rotatebox[origin=c]{180}{$\Lsh$} keylogger
+	}
 	\column{0.65\textwidth} \vspace{0.5em}
-	\includegraphics[scale=0.35]{../images/keylogger08132013}
+	\only<1->{
+		\includegraphics[scale=0.35]{../images/keylogger08132013}
+	}
 \end{columns}
 \end{frame}
 
@@ -124,27 +129,28 @@
 \section{Requirements specification}
 \begin{frame}{Requirements specification}
 \begin{itemize}
-	\item Infect PC
-	\item Gather intel
-	\item Transmit intel
+	\only<1->{\item Infect PC}
+	\only<2->{\item Gather intel}
+	\only<3->{\item Transmit intel}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{Requirements specification}
-\vspace{2.5em}
-\includegraphics[scale=0.62]{../images/general keylogger}
+%\vspace{2.5em}
+%\includegraphics[scale=0.62]{../images/general keylogger}
+\includegraphics[width=307pt, height=210pt]{../images/specific keylogger}
 \end{frame}
 
 \begin{frame}{Requirements specification}
 \begin{itemize}
-	\item Intercept the keypress
-	\item Send gathered data
-	\item Send email
-	\item Hacker menu: screenshot, webcam picture, audio recording
-	\item GUI
-	\item Cross-platform software
-	\item Executable file
-	\item USB Rubber Ducky
+	\only<1->{\item Intercept the keystroke}
+	\only<2->{\item Send gathered data}
+	\only<3->{\item Send email}
+	\only<4->{\item Hacker menu: screenshot, webcam picture, audio recording}
+	\only<5->{\item GUI}
+	\only<6->{\item Cross-platform software}
+	\only<7->{\item Executable file}
+	\only<8->{\item USB Rubber Ducky}
 \end{itemize}
 \end{frame}
 
@@ -154,9 +160,9 @@
 \includegraphics[width=307pt, height=210pt]{../images/component diagram}
 \end{frame}
 
-\begin{frame}{Architecture}
-\includegraphics[width=307pt, height=210pt]{../images/specific keylogger}
-\end{frame}
+%\begin{frame}{Architecture}
+%\includegraphics[width=307pt, height=210pt]{../images/specific keylogger}
+%\end{frame}
 
 
 \section{Implementation insights}
@@ -209,22 +215,25 @@ if email.message_from_string(data[0][1].decode())['from'] == self.email_address:
 \end{frame}
 
 \begin{frame}[fragile]{Create the executable}
+\only<2->{
 \begin{multicols}{2}
 	\begin{itemize}
 		\item pyinstaller = 4.1
 		\item pynput = 1.6.8
 		\item zmq = 21.0.1
 	\end{itemize}
-\end{multicols}
+\end{multicols}}
 \begin{lstlisting}[language=Python]
 pyinstaller --onefile -w --name ``CTF Loader2.exe'' --icon ``../images/keylogger.ico'' TargetApp.pyw
 \end{lstlisting}
+\only<3->{
 \begin{itemize}
 	\item --onefile = create one-file bundled executable
-	\item -w = do not provide a console window for standard I/O
-	\item --name = name to assign to the bundled app
-	\item --icon = apply icon to the executable
+	\only<4->{\item -w = do not provide a console window for standard I/O}
+	\only<5->{\item --name = name to assign to the bundled app}
+	\only<6->{\item --icon = apply icon to the executable}
 \end{itemize}
+}
 \end{frame}
 
 \begin{frame}[fragile]{Ducky Script}
@@ -260,14 +269,14 @@ python HackerApp.py
 \begin{columns}
 	\column{0.45\textwidth}
 	\begin{itemize}
-		\item Windows
-		\item Linux
-		\item Mac
+		\only<1->{\item Windows}
+		\only<2->{\item Linux}
+		\only<3->{\item Mac}
 	\end{itemize}
 	\column{0.65\textwidth}
-	\includegraphics[scale=0.05]{../images/windows10img} \hspace{2em}
-	\includegraphics[scale=0.05]{../images/linuximg}\\ \hspace{2.5em}
-	\includegraphics[scale=0.55]{../images/macosimg}
+	\only<1->{\includegraphics[scale=0.05]{../images/windows10img} \hspace{2em}}
+	\only<2->{\includegraphics[scale=0.05]{../images/linuximg}\\ \hspace{2.5em}}
+	\only<3->{\includegraphics[scale=0.55]{../images/macosimg}}
 \end{columns}
 \end{frame}
 
@@ -278,13 +287,15 @@ python HackerApp.py
 	\item Mac OS Catalina 10.15 (VM)
 \end{itemize}
 \vspace{2em}
-What was my aim?
+\only<2->{What was my aim?}
+\only<3->{
 \begin{itemize}
 	\item to intercept the user's password
 	\begin{itemize}
 		\item success on Linux
 	\end{itemize}
 \end{itemize}
+}
 \end{frame}
 
 
